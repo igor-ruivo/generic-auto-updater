@@ -27,9 +27,10 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.progressBar2 = new System.Windows.Forms.ProgressBar();
-            this.button1 = new System.Windows.Forms.Button();
+            this.starter = new System.Windows.Forms.Button();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.loggerDisplay = new System.Windows.Forms.Label();
+            this.downloaderDisplay = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,15 +57,16 @@
             this.progressBar2.Size = new System.Drawing.Size(588, 12);
             this.progressBar2.TabIndex = 2;
             // 
-            // button1
+            // starter
             // 
-            this.button1.Enabled = false;
-            this.button1.Location = new System.Drawing.Point(523, 218);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(77, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "Start M2Bob!";
-            this.button1.UseVisualStyleBackColor = true;
+            this.starter.Enabled = false;
+            this.starter.Location = new System.Drawing.Point(523, 218);
+            this.starter.Name = "starter";
+            this.starter.Size = new System.Drawing.Size(77, 23);
+            this.starter.TabIndex = 3;
+            this.starter.Text = "Start M2Bob!";
+            this.starter.UseVisualStyleBackColor = true;
+            this.starter.Click += new System.EventHandler(this.starter_Click);
             // 
             // linkLabel1
             // 
@@ -80,20 +82,29 @@
             // loggerDisplay
             // 
             this.loggerDisplay.AutoSize = true;
-            this.loggerDisplay.Location = new System.Drawing.Point(12, 140);
+            this.loggerDisplay.Location = new System.Drawing.Point(9, 143);
             this.loggerDisplay.Name = "loggerDisplay";
-            this.loggerDisplay.Size = new System.Drawing.Size(39, 13);
+            this.loggerDisplay.Size = new System.Drawing.Size(82, 13);
             this.loggerDisplay.TabIndex = 5;
-            this.loggerDisplay.Text = "display";
+            this.loggerDisplay.Text = "Starting patch...";
+            // 
+            // downloaderDisplay
+            // 
+            this.downloaderDisplay.AutoSize = true;
+            this.downloaderDisplay.Location = new System.Drawing.Point(9, 178);
+            this.downloaderDisplay.Name = "downloaderDisplay";
+            this.downloaderDisplay.Size = new System.Drawing.Size(0, 13);
+            this.downloaderDisplay.TabIndex = 6;
             // 
             // PatcherMainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(612, 253);
+            this.Controls.Add(this.downloaderDisplay);
             this.Controls.Add(this.loggerDisplay);
             this.Controls.Add(this.linkLabel1);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.starter);
             this.Controls.Add(this.progressBar2);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.pictureBox1);
@@ -111,9 +122,10 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.ProgressBar progressBar2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button starter;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Label loggerDisplay;
+        private System.Windows.Forms.Label downloaderDisplay;
     }
 }
 

@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace M2BobPatcher.FileSystem {
     class FileSystemExplorer : IFileSystemExplorer {
@@ -49,8 +50,9 @@ namespace M2BobPatcher.FileSystem {
                        .ToUpperInvariant();
         }
 
-        void IFileSystemExplorer.RequestWriteFile(string path, string resource, bool overwrite) {
+        void IFileSystemExplorer.RequestWriteFile(string path, string resource, bool overwrite, Action<Label, string> loggerFunction, Label log) {
             if (overwrite || !File.Exists(path)) {
+                loggerFunction(log, path);
                 FileInfo file = new FileInfo(path);
                 file.Directory.Create();
                 File.WriteAllBytes(path, WebClientDownloader.DownloadData(resource));
