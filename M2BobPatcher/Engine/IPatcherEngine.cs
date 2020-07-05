@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace M2BobPatcher.Engine {
     interface IPatcherEngine {
-        bool hasMetadataFile();
-        void generateMetadataFile();
-        void downloadServerMetadataFile();
-        string[] compareMetadata();
-        void download();
+        void patch();
+        void repair();
     }
 }

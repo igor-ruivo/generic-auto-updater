@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace M2BobPatcher.TextResources {
-    public static class FilePaths {
-        public static readonly string METADATA_FILE_PATH = "./Resources/Patcher/metadata.dat";
+    public static class PatchIgnore {
+        public static readonly string[] IGNORED_FILES = { 
+            "./Resources/Userdata" 
+        };
     }
 }

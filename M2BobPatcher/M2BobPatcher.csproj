@@ -32,6 +32,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>M2Bob_Icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Downloaders\WebClientDownloader.cs" />
     <Compile Include="Engine\IPatcherEngine.cs" />
     <Compile Include="Engine\PatcherEngine.cs" />
     <Compile Include="FileSystem\FileSystemExplorer.cs" />
@@ -58,8 +65,8 @@
     </Compile>
     <Compile Include="Patcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TextResources\FilePaths.cs" />
-    <Compile Include="TextResources\MainWindow.cs" />
+    <Compile Include="Resources\TextResources\PatchIgnore.cs" />
+    <Compile Include="Resources\TextResources\MainWindow.cs" />
     <EmbeddedResource Include="PatcherMainWindow.resx">
       <DependentUpon>PatcherMainWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -72,6 +79,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -86,7 +94,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BinaryResources\M2Bob_Icon.ico" />
+    <Folder Include="Hash\" />
+    <Folder Include="Resources\BinaryResources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="M2Bob_Icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

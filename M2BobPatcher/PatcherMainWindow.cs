@@ -18,7 +18,6 @@ namespace M2BobPatcher {
 
         private void setupWindowProperties() {
             this.Text = string.Format(MainWindow.MAIN_WINDOW_TITLE, MainWindow.CURRENT_VERSION);
-            this.Icon = new Icon("../../BinaryResources/M2Bob_icon.ico");
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
         }
@@ -26,6 +25,7 @@ namespace M2BobPatcher {
         private void loadWindow(object sender, EventArgs e) {
             setupWindowProperties();
             IPatcherEngine engine = new PatcherEngine();
+            engine.patch();
         }
     }
 }

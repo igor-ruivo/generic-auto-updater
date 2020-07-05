@@ -17,24 +17,37 @@ namespace M2BobPatcher.Engine {
             logicalProcessorsCount = Environment.ProcessorCount;
         }
 
-        string[] IPatcherEngine.compareMetadata() {
+        /**1. ask server for metadata file with all files' full path + name + extension and their sizes and their md5
+          *2. download files not present locally (check this by name)
+          *3. generateMetadata for all files locally (which also exist in server info)
+          *4. compare generatedMetadata with the one obtained from 1.
+          *5. download files which metadata differs
+          */
+        void IPatcherEngine.patch() {
+            //downloadServerMetadataFile();
+            generateMetadata();
+            
+        }
+
+        void IPatcherEngine.repair() {
             throw new NotImplementedException();
         }
 
-        void IPatcherEngine.download() {
+        private string[] compareMetadata() {
             throw new NotImplementedException();
         }
 
-        void IPatcherEngine.downloadServerMetadataFile() {
+        private void download() {
             throw new NotImplementedException();
         }
 
-        void IPatcherEngine.generateMetadataFile() {
+        private void downloadServerMetadataFile() {
             throw new NotImplementedException();
         }
 
-        bool IPatcherEngine.hasMetadataFile() {
-            return explorer.fileExists(FilePaths.METADATA_FILE_PATH);
+        private void generateMetadata() {
+            string[] dummyArray = {};
+            explorer.generateMetadata(dummyArray, logicalProcessorsCount);
         }
     }
 }

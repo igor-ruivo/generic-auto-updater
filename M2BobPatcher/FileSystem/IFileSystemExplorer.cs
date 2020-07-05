@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace M2BobPatcher.FileSystem {
     interface IFileSystemExplorer {
-        bool fileExists(string path);
+        void generateMetadata(string[] filesPaths, int logicalProcessorsCount);
     }
 }
