@@ -3,6 +3,7 @@ using M2BobPatcher.Hash;
 using M2BobPatcher.Resources.TextResources;
 using M2BobPatcher.TextResources;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,14 +20,14 @@ namespace M2BobPatcher.FileSystem {
             CurrentDirectory = Environment.CurrentDirectory;
         }
 
-        Dictionary<string, FileMetadata> IFileSystemExplorer.GenerateLocalMetadata(string[] filesPaths) {
-            Dictionary<string, FileMetadata> metadata = new Dictionary<string, FileMetadata>(filesPaths.Length);
+        ConcurrentDictionary<string, FileMetadata> IFileSystemExplorer.GenerateLocalMetadata(string[] filesPaths, int concurrencyLevel) {
+            ConcurrentDictionary<string, FileMetadata> metadata = new ConcurrentDictionary<string, FileMetadata>(filesPaths.Length, concurrencyLevel);
             Parallel.ForEach(filesPaths, (currentPath) => {
                 // This shouldn't be needed, since UserData isn't even in the server. But I think it's a cool feature.
                 if (FileShouldBeIgnored(currentPath))
                     return;
                 metadata[currentPath] = new FileMetadata(currentPath, Md5HashFactory.NormalizeMd5(Md5HashFactory.GeneratedMd5HashFromFile(currentPath)));
-            }); 
+            });
             return metadata;
         }
 
@@ -48,8 +49,8 @@ namespace M2BobPatcher.FileSystem {
                        .ToUpperInvariant();
         }
 
-        void IFileSystemExplorer.RequestWriteFile(string path, string resource) {
-            if (!File.Exists(path)) {
+        void IFileSystemExplorer.RequestWriteFile(string path, string resource, bool overwrite) {
+            if (overwrite || !File.Exists(path)) {
                 FileInfo file = new FileInfo(path);
                 file.Directory.Create();
                 File.WriteAllBytes(path, WebClientDownloader.DownloadData(resource));

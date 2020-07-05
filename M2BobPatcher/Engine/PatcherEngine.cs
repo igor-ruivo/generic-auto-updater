@@ -5,6 +5,7 @@ using M2BobPatcher.Resources.Configs;
 using M2BobPatcher.Resources.TextResources;
 using M2BobPatcher.TextResources;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace M2BobPatcher.Engine {
     class PatcherEngine : IPatcherEngine {
 
         private IFileSystemExplorer Explorer;
-        private Dictionary<string, FileMetadata> LocalMetadata;
+        private ConcurrentDictionary<string, FileMetadata> LocalMetadata;
         private Dictionary<string, FileMetadata> ServerMetadata;
         private string PatchDirectory;
         private int LogicalProcessorsCount;
@@ -35,7 +36,7 @@ namespace M2BobPatcher.Engine {
             GenerateServerMetadata(DownloadServerMetadataFile());
             DownloadMissingContent();
             GenerateLocalMetadata();
-            //DownloadOutdatedContent();
+            DownloadOutdatedContent();
         }
 
         void IPatcherEngine.Repair() {
@@ -47,12 +48,15 @@ namespace M2BobPatcher.Engine {
         }
 
         private void DownloadOutdatedContent() {
-            throw new NotImplementedException();
+            foreach (KeyValuePair<string, FileMetadata> entry in ServerMetadata) {
+                if (!entry.Value.Hash.Equals(LocalMetadata[entry.Key].Hash))
+                    Explorer.RequestWriteFile(entry.Key, PatchDirectory + entry.Key, true);
+            }
         }
 
         private void DownloadMissingContent() {
             foreach (string file in ServerMetadata.Keys)
-                Explorer.RequestWriteFile(file, PatchDirectory + file);
+                Explorer.RequestWriteFile(file, PatchDirectory + file, false);
         }
 
         private string DownloadServerMetadataFile() {
@@ -60,7 +64,7 @@ namespace M2BobPatcher.Engine {
         }
 
         private void GenerateLocalMetadata() {
-            LocalMetadata = Explorer.GenerateLocalMetadata(ServerMetadata.Keys.ToArray());
+            LocalMetadata = Explorer.GenerateLocalMetadata(ServerMetadata.Keys.ToArray(), LogicalProcessorsCount / 2);
         }
 
         private void GenerateServerMetadata(string serverMetadata) {
