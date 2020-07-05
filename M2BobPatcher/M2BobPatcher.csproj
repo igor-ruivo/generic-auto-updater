@@ -55,8 +55,11 @@
     <Compile Include="Downloaders\WebClientDownloader.cs" />
     <Compile Include="Engine\IPatcherEngine.cs" />
     <Compile Include="Engine\PatcherEngine.cs" />
+    <Compile Include="FileSystem\FileMetadata.cs" />
     <Compile Include="FileSystem\FileSystemExplorer.cs" />
+    <Compile Include="FileSystem\IFileMetadata.cs" />
     <Compile Include="FileSystem\IFileSystemExplorer.cs" />
+    <Compile Include="Hash\Md5HashFactory.cs" />
     <Compile Include="PatcherMainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -65,7 +68,10 @@
     </Compile>
     <Compile Include="Patcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources\TextResources\PatchIgnore.cs" />
+    <Compile Include="Resources\Configs\EngineConfigs.cs" />
+    <Compile Include="Resources\Configs\DownloaderConfigs.cs" />
+    <Compile Include="Resources\Configs\PatchIgnore.cs" />
+    <Compile Include="Resources\TextResources\DownloaderResources.cs" />
     <Compile Include="Resources\TextResources\MainWindow.cs" />
     <EmbeddedResource Include="PatcherMainWindow.resx">
       <DependentUpon>PatcherMainWindow.cs</DependentUpon>
@@ -94,7 +100,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Hash\" />
     <Folder Include="Resources\BinaryResources\" />
   </ItemGroup>
   <ItemGroup>

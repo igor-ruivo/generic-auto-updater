@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace M2BobPatcher.FileSystem {
-    interface IFileSystemExplorer {
-        Dictionary<string, FileMetadata> GenerateLocalMetadata(string[] filesPaths);
+    interface IFileMetadata {
     }
 }

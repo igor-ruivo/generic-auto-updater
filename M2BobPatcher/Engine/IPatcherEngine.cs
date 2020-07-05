@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace M2BobPatcher.Engine {
     interface IPatcherEngine {
-        void patch();
-        void repair();
+        void Patch();
+        void Repair();
     }
 }

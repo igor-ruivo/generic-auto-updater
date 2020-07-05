@@ -25,7 +25,7 @@ namespace M2BobPatcher {
         private void loadWindow(object sender, EventArgs e) {
             setupWindowProperties();
             IPatcherEngine engine = new PatcherEngine();
-            engine.patch();
+            engine.Patch();
         }
     }
 }
