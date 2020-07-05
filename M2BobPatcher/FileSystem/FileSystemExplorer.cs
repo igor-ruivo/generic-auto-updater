@@ -1,4 +1,6 @@
-﻿using M2BobPatcher.Hash;
+﻿using M2BobPatcher.Downloaders;
+using M2BobPatcher.Hash;
+using M2BobPatcher.Resources.TextResources;
 using M2BobPatcher.TextResources;
 using System;
 using System.Collections.Generic;
@@ -11,7 +13,7 @@ using System.Threading.Tasks;
 namespace M2BobPatcher.FileSystem {
     class FileSystemExplorer : IFileSystemExplorer {
 
-        private string CurrentDirectory;
+        private static string CurrentDirectory;
 
         public FileSystemExplorer() {
             CurrentDirectory = Environment.CurrentDirectory;
@@ -20,11 +22,10 @@ namespace M2BobPatcher.FileSystem {
         Dictionary<string, FileMetadata> IFileSystemExplorer.GenerateLocalMetadata(string[] filesPaths) {
             Dictionary<string, FileMetadata> metadata = new Dictionary<string, FileMetadata>(filesPaths.Length);
             Parallel.ForEach(filesPaths, (currentPath) => {
+                // This shouldn't be needed, since UserData isn't even in the server. But I think it's a cool feature.
                 if (FileShouldBeIgnored(currentPath))
                     return;
-                metadata[currentPath] = new FileMetadata(currentPath,
-                    Md5HashFactory.NormalizeMd5(Md5HashFactory.GeneratedMd5HashFromFile(currentPath)));
-                //Console.WriteLine($"Processing {currentPath} on thread {Thread.CurrentThread.ManagedThreadId}");
+                metadata[currentPath] = new FileMetadata(currentPath, Md5HashFactory.NormalizeMd5(Md5HashFactory.GeneratedMd5HashFromFile(currentPath)));
             }); 
             return metadata;
         }
@@ -37,14 +38,23 @@ namespace M2BobPatcher.FileSystem {
             return false;
         }
 
-        private string ResolvePath(string relativePath) {
+        private static string ResolvePath(string relativePath) {
             return Path.Combine(CurrentDirectory, relativePath);
         }
 
-        public string NormalizePath(string path) {
+        public static string NormalizePath(string path) {
             return Path.GetFullPath(new Uri(ResolvePath(path)).LocalPath)
                        .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
                        .ToUpperInvariant();
+        }
+
+        void IFileSystemExplorer.RequestWriteFile(string path, string resource) {
+            if (!File.Exists(path)) {
+                FileInfo file = new FileInfo(path);
+                file.Directory.Create();
+                File.WriteAllBytes(path, WebClientDownloader.DownloadData(resource));
+                Console.WriteLine(FileSystemExplorerResources.FILE_WRITTEN_TO_DISK, ResolvePath(path));
+            }
         }
     }
 }

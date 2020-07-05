@@ -36,7 +36,27 @@ namespace M2BobPatcher.Downloaders {
         }
 
         public static byte[] DownloadData(string address) {
-            throw new NotImplementedException();
+            byte[] data = null;
+            using (WebClient client = new WebClient()) {
+                int tries = 0;
+                for (; tries < DownloaderConfigs.MAX_DOWNLOAD_RETRIES_PER_FILE; tries++) {
+                    try {
+                        data = client.DownloadData(address);
+                    }
+                    catch (WebException) {
+                        Thread.Sleep(DownloaderConfigs.INTERVAL_MS_BETWEEN_DOWNLOAD_RETRIES);
+                        continue;
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine(DownloaderResources.ERROR_WHILE_DOWNLOADING_FILE, address);
+                        Console.WriteLine(e.ToString());
+                    }
+                    break;
+                }
+                if (tries == DownloaderConfigs.MAX_DOWNLOAD_RETRIES_PER_FILE)
+                    Console.WriteLine(DownloaderResources.TIMEOUT_DOWNLOADING_FILE, address);
+            }
+            return data;
         }
     }
 }

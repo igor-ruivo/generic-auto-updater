@@ -72,6 +72,7 @@
     <Compile Include="Resources\Configs\DownloaderConfigs.cs" />
     <Compile Include="Resources\Configs\PatchIgnore.cs" />
     <Compile Include="Resources\TextResources\DownloaderResources.cs" />
+    <Compile Include="Resources\TextResources\FileSystemExplorerResources.cs" />
     <Compile Include="Resources\TextResources\MainWindow.cs" />
     <EmbeddedResource Include="PatcherMainWindow.resx">
       <DependentUpon>PatcherMainWindow.cs</DependentUpon>

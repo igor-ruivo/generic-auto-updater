@@ -6,6 +6,7 @@ using M2BobPatcher.Resources.TextResources;
 using M2BobPatcher.TextResources;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,9 +15,10 @@ namespace M2BobPatcher.Engine {
     class PatcherEngine : IPatcherEngine {
 
         private IFileSystemExplorer Explorer;
-        private int LogicalProcessorsCount;
         private Dictionary<string, FileMetadata> LocalMetadata;
         private Dictionary<string, FileMetadata> ServerMetadata;
+        private string PatchDirectory;
+        private int LogicalProcessorsCount;
 
         public PatcherEngine() {
             Explorer = new FileSystemExplorer();
@@ -31,8 +33,9 @@ namespace M2BobPatcher.Engine {
           */
         void IPatcherEngine.Patch() {
             GenerateServerMetadata(DownloadServerMetadataFile());
+            DownloadMissingContent();
             GenerateLocalMetadata();
-            
+            //DownloadOutdatedContent();
         }
 
         void IPatcherEngine.Repair() {
@@ -43,8 +46,13 @@ namespace M2BobPatcher.Engine {
             throw new NotImplementedException();
         }
 
-        private void Download() {
+        private void DownloadOutdatedContent() {
             throw new NotImplementedException();
+        }
+
+        private void DownloadMissingContent() {
+            foreach (string file in ServerMetadata.Keys)
+                Explorer.RequestWriteFile(file, PatchDirectory + file);
         }
 
         private string DownloadServerMetadataFile() {
@@ -52,20 +60,12 @@ namespace M2BobPatcher.Engine {
         }
 
         private void GenerateLocalMetadata() {
-            string[] dummyArray = {
-                "C:\\git\\M2BobPatcher\\M2BobPatcher\\bin\\Debug\\M2Bob.exe",
-                "C:\\git\\M2BobPatcher\\M2BobPatcher\\bin\\Debug\\Resources\\Scripts\\data4.dat",
-                "C:\\git\\M2BobPatcher\\M2BobPatcher\\bin\\Debug\\Resources\\Scripts\\data1.dat",
-                "C:\\git\\M2BobPatcher\\M2BobPatcher\\bin\\Debug\\Resources\\Scripts\\data2.dll",
-                "C:\\git\\M2BobPatcher\\M2BobPatcher\\bin\\Debug\\Resources\\Userdata\\settingsdata.bob"
-            };
             LocalMetadata = Explorer.GenerateLocalMetadata(ServerMetadata.Keys.ToArray());
-            //DebugPrintMetadata();
         }
 
         private void GenerateServerMetadata(string serverMetadata) {
             string[] metadataByLine = serverMetadata.Trim().Split(new[] { "\n" }, StringSplitOptions.None);
-            //string remoteFileDir = metadataByLine[0];
+            PatchDirectory = metadataByLine[0];
             int numberOfRemoteFiles = (metadataByLine.Length - 1) / 2;
             ServerMetadata = new Dictionary<string, FileMetadata>(numberOfRemoteFiles);
             for (int i = 1; i < metadataByLine.Length; i += 2) {
