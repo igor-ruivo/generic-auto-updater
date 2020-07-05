@@ -6,6 +6,7 @@ using M2BobPatcher.UI;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -26,11 +27,14 @@ namespace M2BobPatcher.Engine {
         }
 
         void IPatcherEngine.Patch() {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             GenerateServerMetadata(DownloadServerMetadataFile());
             DownloadMissingContent();
             GenerateLocalMetadata();
             DownloadOutdatedContent();
-            Finish();
+            sw.Stop();
+            Finish(sw.Elapsed);
         }
 
         private void DownloadOutdatedContent() {
@@ -97,9 +101,9 @@ namespace M2BobPatcher.Engine {
             UI.RegisterProgress(40, false);
         }
 
-        private void Finish() {
+        private void Finish(TimeSpan elapsed) {
             UI.Log(PatcherEngineResources.FINISHED, true);
-            UI.Log(PatcherEngineResources.ALL_FILES_ANALYZED, false);
+            UI.Log(String.Format(PatcherEngineResources.ALL_FILES_ANALYZED, elapsed.ToString("hh\\:mm\\:ss")), false);
             UI.Toggle(true);
         }
     }

@@ -6,6 +6,6 @@
         public static readonly string GENERATING_LOCAL_METADATA = "Step 4 of 5: Generating local metadata.";
         public static readonly string PARSING_SERVER_METADATA = "Step 2 of 5: Parsing server metadata.";
         public static readonly string FINISHED = "Everything up to date. You can now start M2Bob!";
-        public static readonly string ALL_FILES_ANALYZED = "All files analyzed.";
+        public static readonly string ALL_FILES_ANALYZED = "All files analyzed in {0}.";
     }
 }
