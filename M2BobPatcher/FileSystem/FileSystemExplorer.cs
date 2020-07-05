@@ -4,13 +4,8 @@ using M2BobPatcher.Resources.TextResources;
 using M2BobPatcher.TextResources;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace M2BobPatcher.FileSystem {
     class FileSystemExplorer : IFileSystemExplorer {
@@ -50,14 +45,18 @@ namespace M2BobPatcher.FileSystem {
                        .ToUpperInvariant();
         }
 
-        void IFileSystemExplorer.RequestWriteFile(string path, string resource, bool overwrite, Action<Label, string> loggerFunction, Label log) {
-            if (overwrite || !File.Exists(path)) {
-                loggerFunction(log, path);
-                FileInfo file = new FileInfo(path);
-                file.Directory.Create();
-                File.WriteAllBytes(path, WebClientDownloader.DownloadData(resource));
-                Console.WriteLine(FileSystemExplorerResources.FILE_WRITTEN_TO_DISK, ResolvePath(path));
-            }
+        bool IFileSystemExplorer.FileExists(string file) {
+            return File.Exists(file);
+        }
+
+        void IFileSystemExplorer.RequestWriteFile(string path, string resource, Action<string, bool> loggerFunction, bool throughCommonLogger, Action<int, bool> progressFunction) {
+            loggerFunction(path, throughCommonLogger);
+            FileInfo file = new FileInfo(path);
+            file.Directory.Create();
+            Task<byte[]> data = WebClientDownloader.DownloadData(resource, progressFunction);
+            data.Wait();
+            File.WriteAllBytes(path, data.Result);
+            Console.WriteLine(FileSystemExplorerResources.FILE_WRITTEN_TO_DISK, ResolvePath(path));
         }
     }
 }

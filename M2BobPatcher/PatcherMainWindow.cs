@@ -1,16 +1,10 @@
-﻿using M2BobPatcher.TextResources;
-using M2BobPatcher.Engine;
+﻿using M2BobPatcher.Engine;
+using M2BobPatcher.TextResources;
+using M2BobPatcher.UI;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Diagnostics;
-using System.Threading;
 
 namespace M2BobPatcher {
     public partial class PatcherMainWindow : Form {
@@ -26,7 +20,7 @@ namespace M2BobPatcher {
 
         private void loadWindow(object sender, EventArgs e) {
             setupWindowProperties();
-            IPatcherEngine engine = new PatcherEngine(loggerDisplay, downloaderDisplay, starter);
+            IPatcherEngine engine = new PatcherEngine(new UIComponents(loggerDisplay, downloaderDisplay, starter, fileProgressBar, wholeProgressBar));
             Task.Factory.StartNew(() => engine.Patch());
         }
 
@@ -36,6 +30,10 @@ namespace M2BobPatcher {
 
         private void starter_Click(object sender, EventArgs e) {
             Process.Start(MainWindow.M2BOB_STARTER);
+        }
+
+        private void author_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+            System.Diagnostics.Process.Start(MainWindow.AUTHOR_WEBSITE);
         }
     }
 }

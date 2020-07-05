@@ -1,17 +1,13 @@
 ﻿using M2BobPatcher.Downloaders;
 using M2BobPatcher.FileSystem;
-using M2BobPatcher.Hash;
 using M2BobPatcher.Resources.Configs;
 using M2BobPatcher.Resources.TextResources;
-using M2BobPatcher.TextResources;
+using M2BobPatcher.UI;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace M2BobPatcher.Engine {
     class PatcherEngine : IPatcherEngine {
@@ -19,29 +15,17 @@ namespace M2BobPatcher.Engine {
         private IFileSystemExplorer Explorer;
         private ConcurrentDictionary<string, FileMetadata> LocalMetadata;
         private Dictionary<string, FileMetadata> ServerMetadata;
-        private Label LoggerDisplay;
-        private Label FileLoggerDisplay;
-        private Button Starter;
+        private UIComponents UI;
         private string PatchDirectory;
         private int LogicalProcessorsCount;
 
-        delegate void SetTextCallback(Label output, string text);
-        delegate void SetToggleCallback(Button button, bool state);
 
-        public PatcherEngine(Label loggerDisplay, Label fileLoggerDisplay, Button starter) {
+        public PatcherEngine(UIComponents ui) {
             Explorer = new FileSystemExplorer();
             LogicalProcessorsCount = Environment.ProcessorCount;
-            LoggerDisplay = loggerDisplay;
-            FileLoggerDisplay = fileLoggerDisplay;
-            Starter = starter;
+            UI = ui;
         }
 
-        /**1. ask server for metadata file with all files' full path + name + extension and their sizes and their md5
-          *2. download files not present locally (check this by name)
-          *3. generateMetadata for all files locally (which also exist in server info)
-          *4. compare generatedMetadata with the one obtained from 1.
-          *5. download files which metadata differs
-          */
         void IPatcherEngine.Patch() {
             GenerateServerMetadata(DownloadServerMetadataFile());
             DownloadMissingContent();
@@ -50,36 +34,58 @@ namespace M2BobPatcher.Engine {
             Finish();
         }
 
-        void IPatcherEngine.Repair() {
-            throw new NotImplementedException();
+        private void DownloadOutdatedContent() {
+            UI.Log(PatcherEngineResources.DOWNLOADING_OUTDATED_CONTENT, true);
+            List<string> outdatedContent = CalculateOutdatedContent();
+            for (int i = 0; i < outdatedContent.Count; i++) {
+                Explorer.RequestWriteFile(outdatedContent[i], PatchDirectory + outdatedContent[i], UI.Log, false, UI.RegisterProgress);
+                UI.RegisterProgress(Convert.ToInt32(80 + (i + 1) / (float)outdatedContent.Count * 20), false);
+            }
+            UI.RegisterProgress(100, false);
         }
 
-        private void DownloadOutdatedContent() {
-            Log(LoggerDisplay, PatcherEngineResources.DOWNLOADING_OUTDATED_CONTENT);
-            foreach (KeyValuePair<string, FileMetadata> entry in ServerMetadata) {
+        private List<string> CalculateMissingContent() {
+            List<string> missingFiles = new List<string>();
+            foreach (string file in ServerMetadata.Keys)
+                if (!Explorer.FileExists(file))
+                    missingFiles.Add(file);
+            return missingFiles;
+        }
+
+        private List<string> CalculateOutdatedContent() {
+            List<string> outdatedFiles = new List<string>();
+            foreach (KeyValuePair<string, FileMetadata> entry in ServerMetadata)
                 if (!entry.Value.Hash.Equals(LocalMetadata[entry.Key].Hash))
-                    Explorer.RequestWriteFile(entry.Key, PatchDirectory + entry.Key, true, Log, FileLoggerDisplay);
-            }
+                    outdatedFiles.Add(entry.Key);
+            return outdatedFiles;
         }
 
         private void DownloadMissingContent() {
-            Log(LoggerDisplay, PatcherEngineResources.DOWNLOADING_MISSING_CONTENT);
-            foreach (string file in ServerMetadata.Keys)
-                Explorer.RequestWriteFile(file, PatchDirectory + file, false, Log, FileLoggerDisplay);
+            UI.Log(PatcherEngineResources.DOWNLOADING_MISSING_CONTENT, true);
+            List<string> missingContent = CalculateMissingContent();
+            for(int i = 0; i < missingContent.Count; i++) {
+                Explorer.RequestWriteFile(missingContent[i], PatchDirectory + missingContent[i], UI.Log, false, UI.RegisterProgress);
+                UI.RegisterProgress(Convert.ToInt32(40 + (i + 1) / (float)missingContent.Count * 20), false);
+            }
+            UI.RegisterProgress(60, false);
         }
 
         private string DownloadServerMetadataFile() {
-            Log(LoggerDisplay, PatcherEngineResources.DOWNLOADING_SERVER_METADATA);
-            return WebClientDownloader.DownloadString(EngineConfigs.M2BOB_PATCH_METADATA);
+            UI.Log(PatcherEngineResources.DOWNLOADING_SERVER_METADATA, true);
+            Task<byte[]> data = WebClientDownloader.DownloadData(EngineConfigs.M2BOB_PATCH_METADATA, UI.RegisterProgress);
+            data.Wait();
+            UI.RegisterProgress(20, false);
+            return System.Text.Encoding.Default.GetString(data.Result);
         }
 
         private void GenerateLocalMetadata() {
-            Log(LoggerDisplay, PatcherEngineResources.GENERATING_LOCAL_METADATA);
+            UI.Log(PatcherEngineResources.GENERATING_LOCAL_METADATA, true);
             LocalMetadata = Explorer.GenerateLocalMetadata(ServerMetadata.Keys.ToArray(), LogicalProcessorsCount / 2);
+            UI.RegisterProgress(80, false);
         }
 
         private void GenerateServerMetadata(string serverMetadata) {
-            Log(LoggerDisplay, PatcherEngineResources.PARSING_SERVER_METADATA);
+            UI.Log(PatcherEngineResources.PARSING_SERVER_METADATA, true);
             string[] metadataByLine = serverMetadata.Trim().Split(new[] { "\n" }, StringSplitOptions.None);
             PatchDirectory = metadataByLine[0];
             int numberOfRemoteFiles = (metadataByLine.Length - 1) / 2;
@@ -89,49 +95,13 @@ namespace M2BobPatcher.Engine {
                 string fileMd5 = metadataByLine[i + 1];
                 ServerMetadata[filename] = new FileMetadata(filename, fileMd5);
             }
+            UI.RegisterProgress(40, false);
         }
 
         private void Finish() {
-            Log(LoggerDisplay, PatcherEngineResources.FINISHED);
-            Log(FileLoggerDisplay, PatcherEngineResources.ALL_FILES_ANALYZED);
-            Toggle(Starter, true);
-        }
-
-        private void Log(Label output, string message) {
-            SetOutputText(output, message);
-        }
-
-        public void Toggle(Button button, bool state) {
-            SetToggleState(button, state);
-        }
-
-        private void SetOutputText(Label output, string text) {
-            if (output.InvokeRequired) {
-                SetTextCallback d = new SetTextCallback(SetOutputText);
-                output.Invoke(d, new object[] { output, text });
-            }
-            else
-                output.Text = text;
-        }
-
-        private void SetToggleState(Button button, bool state) {
-            if (button.InvokeRequired) {
-                SetToggleCallback d = new SetToggleCallback(SetToggleState);
-                button.Invoke(d, new object[] { button, state });
-            }
-            else
-                button.Enabled = state;
-        }
-
-        private void DebugPrintMetadata() {
-            Console.WriteLine("Debug server:");
-            foreach (KeyValuePair<string, FileMetadata> kvp in ServerMetadata) {
-                Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value.Hash);
-            }
-            Console.WriteLine("Debug local:");
-            foreach (KeyValuePair<string, FileMetadata> kvp in LocalMetadata) {
-                Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value.Hash);
-            }
+            UI.Log(PatcherEngineResources.FINISHED, true);
+            UI.Log(PatcherEngineResources.ALL_FILES_ANALYZED, false);
+            UI.Toggle(true);
         }
     }
 }

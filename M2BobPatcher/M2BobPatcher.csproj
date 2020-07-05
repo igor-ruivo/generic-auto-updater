@@ -75,6 +75,7 @@
     <Compile Include="Resources\TextResources\FileSystemExplorerResources.cs" />
     <Compile Include="Resources\TextResources\MainWindow.cs" />
     <Compile Include="Resources\TextResources\PatcherEngineResources.cs" />
+    <Compile Include="UI\UIComponents.cs" />
     <EmbeddedResource Include="PatcherMainWindow.resx">
       <DependentUpon>PatcherMainWindow.cs</DependentUpon>
     </EmbeddedResource>
