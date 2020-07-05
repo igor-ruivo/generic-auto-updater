@@ -27,6 +27,26 @@ namespace M2BobPatcher.FileSystem {
             return metadata;
         }
 
+        void IFileSystemExplorer.RequestWriteFile(string path, string resource, Action<string, bool> loggerFunction, bool throughCommonLogger, Action<int, bool> progressFunction) {
+            loggerFunction(path, throughCommonLogger);
+            FileInfo file = new FileInfo(path);
+            file.Directory.Create();
+            Task<byte[]> data = WebClientDownloader.DownloadData(resource, progressFunction);
+            data.Wait();
+            File.WriteAllBytes(path, data.Result);
+            Console.WriteLine(FileSystemExplorerResources.FILE_WRITTEN_TO_DISK, ResolvePath(path));
+        }
+
+        bool IFileSystemExplorer.FileExists(string file) {
+            return File.Exists(file);
+        }
+
+        public static string NormalizePath(string path) {
+            return Path.GetFullPath(new Uri(ResolvePath(path)).LocalPath)
+                       .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+                       .ToUpperInvariant();
+        }
+
         private bool FileShouldBeIgnored(string path) {
             foreach (string ignoredFile in PatchIgnore.IGNORED_FILES) {
                 if (NormalizePath(path).StartsWith(NormalizePath(ignoredFile)))
@@ -37,26 +57,6 @@ namespace M2BobPatcher.FileSystem {
 
         private static string ResolvePath(string relativePath) {
             return Path.Combine(CurrentDirectory, relativePath);
-        }
-
-        public static string NormalizePath(string path) {
-            return Path.GetFullPath(new Uri(ResolvePath(path)).LocalPath)
-                       .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
-                       .ToUpperInvariant();
-        }
-
-        bool IFileSystemExplorer.FileExists(string file) {
-            return File.Exists(file);
-        }
-
-        void IFileSystemExplorer.RequestWriteFile(string path, string resource, Action<string, bool> loggerFunction, bool throughCommonLogger, Action<int, bool> progressFunction) {
-            loggerFunction(path, throughCommonLogger);
-            FileInfo file = new FileInfo(path);
-            file.Directory.Create();
-            Task<byte[]> data = WebClientDownloader.DownloadData(resource, progressFunction);
-            data.Wait();
-            File.WriteAllBytes(path, data.Result);
-            Console.WriteLine(FileSystemExplorerResources.FILE_WRITTEN_TO_DISK, ResolvePath(path));
         }
     }
 }

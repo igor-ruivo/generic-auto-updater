@@ -19,7 +19,6 @@ namespace M2BobPatcher.Engine {
         private string PatchDirectory;
         private int LogicalProcessorsCount;
 
-
         public PatcherEngine(UIComponents ui) {
             Explorer = new FileSystemExplorer();
             LogicalProcessorsCount = Environment.ProcessorCount;
@@ -63,7 +62,7 @@ namespace M2BobPatcher.Engine {
         private void DownloadMissingContent() {
             UI.Log(PatcherEngineResources.DOWNLOADING_MISSING_CONTENT, true);
             List<string> missingContent = CalculateMissingContent();
-            for(int i = 0; i < missingContent.Count; i++) {
+            for (int i = 0; i < missingContent.Count; i++) {
                 Explorer.RequestWriteFile(missingContent[i], PatchDirectory + missingContent[i], UI.Log, false, UI.RegisterProgress);
                 UI.RegisterProgress(Convert.ToInt32(40 + (i + 1) / (float)missingContent.Count * 20), false);
             }
