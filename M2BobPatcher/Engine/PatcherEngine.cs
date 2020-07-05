@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace M2BobPatcher.Engine {
     class PatcherEngine : IPatcherEngine {
@@ -18,12 +19,14 @@ namespace M2BobPatcher.Engine {
         private IFileSystemExplorer Explorer;
         private ConcurrentDictionary<string, FileMetadata> LocalMetadata;
         private Dictionary<string, FileMetadata> ServerMetadata;
+        private Label LoggerDisplay;
         private string PatchDirectory;
         private int LogicalProcessorsCount;
 
-        public PatcherEngine() {
+        public PatcherEngine(Label loggerDisplay) {
             Explorer = new FileSystemExplorer();
             LogicalProcessorsCount = Environment.ProcessorCount;
+            LoggerDisplay = loggerDisplay;
         }
 
         /**1. ask server for metadata file with all files' full path + name + extension and their sizes and their md5
@@ -37,17 +40,15 @@ namespace M2BobPatcher.Engine {
             DownloadMissingContent();
             GenerateLocalMetadata();
             DownloadOutdatedContent();
+            Log(PatcherEngineResources.FINISHED);
         }
 
         void IPatcherEngine.Repair() {
             throw new NotImplementedException();
         }
 
-        private string[] CompareMetadata() {
-            throw new NotImplementedException();
-        }
-
         private void DownloadOutdatedContent() {
+            Log(PatcherEngineResources.DOWNLOADING_OUTDATED_CONTENT);
             foreach (KeyValuePair<string, FileMetadata> entry in ServerMetadata) {
                 if (!entry.Value.Hash.Equals(LocalMetadata[entry.Key].Hash))
                     Explorer.RequestWriteFile(entry.Key, PatchDirectory + entry.Key, true);
@@ -55,19 +56,23 @@ namespace M2BobPatcher.Engine {
         }
 
         private void DownloadMissingContent() {
+            Log(PatcherEngineResources.DOWNLOADING_MISSING_CONTENT);
             foreach (string file in ServerMetadata.Keys)
                 Explorer.RequestWriteFile(file, PatchDirectory + file, false);
         }
 
         private string DownloadServerMetadataFile() {
+            Log(PatcherEngineResources.DOWNLOADING_SERVER_METADATA);
             return WebClientDownloader.DownloadString(EngineConfigs.M2BOB_PATCH_METADATA);
         }
 
         private void GenerateLocalMetadata() {
+            Log(PatcherEngineResources.GENERATING_LOCAL_METADATA);
             LocalMetadata = Explorer.GenerateLocalMetadata(ServerMetadata.Keys.ToArray(), LogicalProcessorsCount / 2);
         }
 
         private void GenerateServerMetadata(string serverMetadata) {
+            Log(PatcherEngineResources.PARSING_SERVER_METADATA);
             string[] metadataByLine = serverMetadata.Trim().Split(new[] { "\n" }, StringSplitOptions.None);
             PatchDirectory = metadataByLine[0];
             int numberOfRemoteFiles = (metadataByLine.Length - 1) / 2;
@@ -77,6 +82,10 @@ namespace M2BobPatcher.Engine {
                 string fileMd5 = metadataByLine[i + 1];
                 ServerMetadata[filename] = new FileMetadata(filename, fileMd5);
             }
+        }
+
+        private void Log(string message) {
+            LoggerDisplay.Text = message;
         }
 
         private void DebugPrintMetadata() {

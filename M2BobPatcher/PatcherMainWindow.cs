@@ -24,8 +24,12 @@ namespace M2BobPatcher {
 
         private void loadWindow(object sender, EventArgs e) {
             setupWindowProperties();
-            IPatcherEngine engine = new PatcherEngine();
+            IPatcherEngine engine = new PatcherEngine(loggerDisplay);
             engine.Patch();
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+            System.Diagnostics.Process.Start(MainWindow.M2BOB_WEBSITE);
         }
     }
 }
