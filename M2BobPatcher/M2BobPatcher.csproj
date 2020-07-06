@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\BinaryResources\M2Bob_Icon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\BinaryResources\Saki-Snowish-Apps-system-software-update.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -104,7 +104,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Resources\BinaryResources\M2Bob_Icon.ico" />
+    <Content Include="Resources\BinaryResources\Saki-Snowish-Apps-system-software-update.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
