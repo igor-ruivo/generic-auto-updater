@@ -39,7 +39,7 @@
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(145, 15);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(527, 135);
             this.pictureBox1.TabIndex = 0;
@@ -48,7 +48,7 @@
             // wholeProgressBar
             // 
             this.wholeProgressBar.Location = new System.Drawing.Point(16, 196);
-            this.wholeProgressBar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.wholeProgressBar.Margin = new System.Windows.Forms.Padding(4);
             this.wholeProgressBar.Name = "wholeProgressBar";
             this.wholeProgressBar.Size = new System.Drawing.Size(784, 15);
             this.wholeProgressBar.TabIndex = 1;
@@ -56,7 +56,7 @@
             // fileProgressBar
             // 
             this.fileProgressBar.Location = new System.Drawing.Point(16, 239);
-            this.fileProgressBar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.fileProgressBar.Margin = new System.Windows.Forms.Padding(4);
             this.fileProgressBar.Name = "fileProgressBar";
             this.fileProgressBar.Size = new System.Drawing.Size(784, 15);
             this.fileProgressBar.TabIndex = 2;
@@ -64,10 +64,10 @@
             // starter
             // 
             this.starter.Enabled = false;
-            this.starter.Location = new System.Drawing.Point(697, 268);
-            this.starter.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.starter.Location = new System.Drawing.Point(697, 267);
+            this.starter.Margin = new System.Windows.Forms.Padding(4);
             this.starter.Name = "starter";
-            this.starter.Size = new System.Drawing.Size(103, 28);
+            this.starter.Size = new System.Drawing.Size(103, 31);
             this.starter.TabIndex = 3;
             this.starter.Text = "Start M2Bob!";
             this.starter.UseVisualStyleBackColor = true;
@@ -133,7 +133,7 @@
             this.Controls.Add(this.wholeProgressBar);
             this.Controls.Add(this.pictureBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "PatcherMainWindow";
             this.Load += new System.EventHandler(this.loadWindow);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

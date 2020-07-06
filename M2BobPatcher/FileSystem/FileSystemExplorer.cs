@@ -18,12 +18,16 @@ namespace M2BobPatcher.FileSystem {
 
         ConcurrentDictionary<string, FileMetadata> IFileSystemExplorer.GenerateLocalMetadata(string[] filesPaths, int concurrencyLevel) {
             ConcurrentDictionary<string, FileMetadata> metadata = new ConcurrentDictionary<string, FileMetadata>(filesPaths.Length, concurrencyLevel);
-            Parallel.ForEach(filesPaths, (currentPath) => {
-                // This shouldn't be needed, since UserData isn't even in the server. But I think it's a cool feature.
-                if (FileShouldBeIgnored(currentPath))
-                    return;
-                metadata[currentPath] = new FileMetadata(currentPath, Md5HashFactory.NormalizeMd5(Md5HashFactory.GeneratedMd5HashFromFile(currentPath)));
-            });
+            try {
+                Parallel.ForEach(filesPaths, (currentPath) => {
+                    // This shouldn't be needed, since UserData isn't even in the server. But I think it's a cool feature.
+                    if (FileShouldBeIgnored(currentPath))
+                        return;
+                    metadata[currentPath] = new FileMetadata(currentPath, Md5HashFactory.NormalizeMd5(Md5HashFactory.GeneratedMd5HashFromFile(currentPath)));
+                });
+            } finally {
+
+            }
             return metadata;
         }
 
@@ -33,7 +37,7 @@ namespace M2BobPatcher.FileSystem {
             file.Directory.Create();
             Task<byte[]> data = WebClientDownloader.DownloadData(resource, progressFunction);
             data.Wait();
-            File.WriteAllBytes(path, data.Result);
+            File.WriteAllBytes(path, data.Result); //System.IO.DirectoryNotFoundException: 'Could not find a part of the path 'C:\git\m2bobpatcher\M2BobPatcher\bin\Debug\Resources\Maps\Waypoints\metin2_map_n_desert_01.ini'.'
             Console.WriteLine(FileSystemExplorerResources.FILE_WRITTEN_TO_DISK, ResolvePath(path));
         }
 

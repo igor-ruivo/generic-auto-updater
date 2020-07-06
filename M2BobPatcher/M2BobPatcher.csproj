@@ -55,15 +55,18 @@
     <Compile Include="Downloaders\WebClientDownloader.cs" />
     <Compile Include="Engine\IPatcherEngine.cs" />
     <Compile Include="Engine\PatcherEngine.cs" />
+    <Compile Include="ExceptionHandler\Handler.cs" />
+    <Compile Include="ExceptionHandler\IExceptionHandler.cs" />
     <Compile Include="FileSystem\FileMetadata.cs" />
     <Compile Include="FileSystem\FileSystemExplorer.cs" />
     <Compile Include="FileSystem\IFileMetadata.cs" />
     <Compile Include="FileSystem\IFileSystemExplorer.cs" />
     <Compile Include="Hash\Md5HashFactory.cs" />
-    <Compile Include="PatcherMainWindow.cs">
+    <Compile Include="Resources\TextResources\ErrorHandlerResources.cs" />
+    <Compile Include="UI\Screens\PatcherMainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PatcherMainWindow.Designer.cs">
+    <Compile Include="UI\Screens\PatcherMainWindow.Designer.cs">
       <DependentUpon>PatcherMainWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Patcher.cs" />
@@ -76,7 +79,7 @@
     <Compile Include="Resources\TextResources\MainWindow.cs" />
     <Compile Include="Resources\TextResources\PatcherEngineResources.cs" />
     <Compile Include="UI\UIComponents.cs" />
-    <EmbeddedResource Include="PatcherMainWindow.resx">
+    <EmbeddedResource Include="UI\Screens\PatcherMainWindow.resx">
       <DependentUpon>PatcherMainWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

@@ -30,6 +30,7 @@ namespace M2BobPatcher {
 
         private void starter_Click(object sender, EventArgs e) {
             Process.Start(MainWindow.M2BOB_STARTER);
+            Application.Exit();
         }
 
         private void author_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
