@@ -8,8 +8,12 @@ namespace M2BobPatcher.Hash {
 
         public static byte[] GeneratedMd5HashFromFile(string filename) {
             using (MD5 md5 = MD5.Create()) {
-                using (FileStream stream = File.OpenRead(filename)) {
-                    return md5.ComputeHash(stream);
+                try {
+                    using (FileStream stream = File.OpenRead(filename)) {
+                        return md5.ComputeHash(stream);
+                    }
+                } finally {
+
                 }
             }
         }

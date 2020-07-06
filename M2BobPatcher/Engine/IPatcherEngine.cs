@@ -1,5 +1,5 @@
 ﻿namespace M2BobPatcher.Engine {
-    interface IPatcherEngine {
+    public interface IPatcherEngine {
         void Patch();
     }
 }

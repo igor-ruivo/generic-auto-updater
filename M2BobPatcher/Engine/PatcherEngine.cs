@@ -1,4 +1,5 @@
 ﻿using M2BobPatcher.Downloaders;
+using M2BobPatcher.ExceptionHandler;
 using M2BobPatcher.FileSystem;
 using M2BobPatcher.Resources.Configs;
 using M2BobPatcher.Resources.TextResources;
@@ -7,6 +8,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,6 +16,7 @@ namespace M2BobPatcher.Engine {
     class PatcherEngine : IPatcherEngine {
 
         private IFileSystemExplorer Explorer;
+        private IExceptionHandler ExceptionHandler;
         private ConcurrentDictionary<string, FileMetadata> LocalMetadata;
         private Dictionary<string, FileMetadata> ServerMetadata;
         private UIComponents UI;
@@ -24,6 +27,7 @@ namespace M2BobPatcher.Engine {
         public PatcherEngine(UIComponents ui) {
             Explorer = new FileSystemExplorer();
             LogicalProcessorsCount = Environment.ProcessorCount;
+            ExceptionHandler = new Handler(this);
             UI = ui;
         }
 
@@ -91,7 +95,11 @@ namespace M2BobPatcher.Engine {
         }
 
         private void GenerateLocalMetadata() {
-            LocalMetadata = Explorer.GenerateLocalMetadata(ServerMetadata.Keys.ToArray(), LogicalProcessorsCount / 2);
+            try {
+                LocalMetadata = Explorer.GenerateLocalMetadata(ServerMetadata.Keys.ToArray(), LogicalProcessorsCount / 2);
+            } catch (Exception ex) {
+                ExceptionHandler.Handle(ex);
+            }
         }
 
         private void GenerateServerMetadata() {
