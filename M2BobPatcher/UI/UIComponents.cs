@@ -20,6 +20,10 @@ namespace M2BobPatcher.UI {
             FileProgressBar = fileProgressBar;
             WholeProgressBar = wholeProgressBar;
         }
+
+        public int GetProgressBarProgress() {
+            return WholeProgressBar.Value;
+        }
         public void Log(string message, bool throughCommonLogger) {
             if (throughCommonLogger)
                 SetOutputText(LoggerDisplay, message);
@@ -42,8 +46,7 @@ namespace M2BobPatcher.UI {
             if (bar.InvokeRequired) {
                 SetProgressCallback d = new SetProgressCallback(SetProgress);
                 bar.Invoke(d, new object[] { bar, progressPercentage });
-            }
-            else
+            } else
                 bar.Value = progressPercentage;
         }
 
