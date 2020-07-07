@@ -58,7 +58,6 @@
     <Compile Include="Engine\IPatcherEngine.cs" />
     <Compile Include="Engine\PatcherEngine.cs" />
     <Compile Include="ExceptionHandler\Handler.cs" />
-    <Compile Include="ExceptionHandler\IExceptionHandler.cs" />
     <Compile Include="FileSystem\FileMetadata.cs" />
     <Compile Include="FileSystem\FileSystemExplorer.cs" />
     <Compile Include="FileSystem\IFileMetadata.cs" />

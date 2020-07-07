@@ -15,7 +15,7 @@ namespace M2BobPatcher.Downloaders {
             ProgressFuncion = progressFuncion;
         }
 
-        public byte[] DownloadData(string address) {
+        public byte[] DownloadData(string address, string expectedHash) {
             Task<byte[]> data = null;
             using (WebClient client = new WebClient()) {
                 client.DownloadProgressChanged += (s, e) => {
