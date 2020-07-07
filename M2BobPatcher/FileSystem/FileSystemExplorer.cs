@@ -17,13 +17,18 @@ namespace M2BobPatcher.FileSystem {
         }
 
         ConcurrentDictionary<string, FileMetadata> IFileSystemExplorer.GenerateLocalMetadata(string[] filesPaths, int concurrencyLevel) {
-            ConcurrentDictionary<string, FileMetadata> metadata = new ConcurrentDictionary<string, FileMetadata>(filesPaths.Length, concurrencyLevel);
+            ConcurrentDictionary<string, FileMetadata> metadata;
             try {
+                Console.WriteLine("nivel de concorrência:" + concurrencyLevel);
+                metadata = new ConcurrentDictionary<string, FileMetadata>(filesPaths.Length, concurrencyLevel);
+                Console.WriteLine("ja nao passou.");
                 Parallel.ForEach(filesPaths, (currentPath) => {
                     // This shouldn't be needed, since UserData isn't even in the server. But I think it's a cool feature.
                     if (FileShouldBeIgnored(currentPath))
                         return;
-                    metadata[currentPath] = new FileMetadata(currentPath, Md5HashFactory.NormalizeMd5(Md5HashFactory.GeneratedMd5HashFromFile(currentPath)));
+                    using (FileStream stream = File.OpenRead(currentPath)) {
+                        metadata[currentPath] = new FileMetadata(currentPath, Md5HashFactory.NormalizeMd5(Md5HashFactory.GeneratedMd5HashFromStream(stream)));
+                    }
                 });
             } finally {
 
@@ -31,14 +36,14 @@ namespace M2BobPatcher.FileSystem {
             return metadata;
         }
 
-        void IFileSystemExplorer.FetchFile(string path, string resource, Action<string, bool> loggerFunction, bool throughCommonLogger, IDownloader Downloader) {
+        void IFileSystemExplorer.FetchFile(string path, string resource, Action<string, bool> loggerFunction, bool throughCommonLogger, IDownloader Downloader, string expectedHash) {
             loggerFunction(path, throughCommonLogger);
             try {
                 FileInfo file = new FileInfo(path);
                 file.Directory.Create();
-                byte[] data = Downloader.DownloadData(resource);
-                File.WriteAllBytes(path, data); //System.IO.DirectoryNotFoundException: 'Could not find a part of the path 'C:\git\m2bobpatcher\M2BobPatcher\bin\Debug\Resources\Maps\Waypoints\metin2_map_n_desert_01.ini'.'
-                Console.WriteLine(FileSystemExplorerResources.FILE_WRITTEN_TO_DISK, ResolvePath(path));
+                byte[] data = Downloader.DownloadData(resource, expectedHash);
+                File.WriteAllBytes(path, data);
+                Console.WriteLine(FileSystemExplorerResources.FILE_WRITTEN_TO_DISK, ResolvePath(path)); //temp
             }
             finally {
 

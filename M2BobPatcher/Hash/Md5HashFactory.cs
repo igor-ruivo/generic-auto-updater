@@ -6,15 +6,14 @@ namespace M2BobPatcher.Hash {
 
     static class Md5HashFactory {
 
-        public static byte[] GeneratedMd5HashFromFile(string filename) {
+        public static byte[] GeneratedMd5HashFromByteArray(byte[] array) {
             using (MD5 md5 = MD5.Create()) {
-                try {
-                    using (FileStream stream = File.OpenRead(filename)) {
-                        return md5.ComputeHash(stream);
-                    }
-                } finally {
-
-                }
+                return md5.ComputeHash(array);
+            }
+        }
+        public static byte[] GeneratedMd5HashFromStream(Stream stream) {
+            using (MD5 md5 = MD5.Create()) {
+                return md5.ComputeHash(stream);
             }
         }
 

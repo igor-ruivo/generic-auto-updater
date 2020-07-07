@@ -11,17 +11,12 @@ using M2BobPatcher.Engine;
 using M2BobPatcher.TextResources;
 
 namespace M2BobPatcher.ExceptionHandler {
-    class Handler : IExceptionHandler {
-        private IPatcherEngine Engine;
+    static class Handler {
 
-        public Handler(IPatcherEngine patcherEngine) {
-            Engine = patcherEngine;
-        }
-
-        void IExceptionHandler.Handle(Exception ex) {
+        public static void Handle(Exception ex) {
             switch (ex) {
                 case AggregateException e1:
-                    ((IExceptionHandler)this).Handle(e1.InnerExceptions.First());
+                    Handle(e1.InnerExceptions.First());
                     break;
                 case FileNotFoundException e2:
                 case DirectoryNotFoundException e3:
@@ -29,6 +24,7 @@ namespace M2BobPatcher.ExceptionHandler {
                     break;
                 case WebException e4:
                 case HttpRequestException e5:
+                case InvalidDataException e6:
                     Repatch(ErrorHandlerResources.TIMEOUT_DOWNLOADING_RESOURCE, ErrorHandlerResources.ERROR_TITLE_NETWORKING);
                     break;
                 default:
@@ -36,13 +32,13 @@ namespace M2BobPatcher.ExceptionHandler {
             }
         }
 
-        private void Repatch(string text, string caption) {
-            switch (MessageBox.Show(text, caption, MessageBoxButtons.RetryCancel, MessageBoxIcon.Error)) {
-                case DialogResult.Cancel:
+        private static void Repatch(string text, string caption) {
+            switch (MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error)) {
+                case DialogResult.OK:
                     Application.Exit();
                     break;
                 default:
-                    Engine.Patch();
+                    Application.Exit();
                     break;
             }
         }
