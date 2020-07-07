@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Downloaders\IDownloader.cs" />
     <Compile Include="Downloaders\WebClientDownloader.cs" />
     <Compile Include="Engine\IPatcherEngine.cs" />
     <Compile Include="Engine\PatcherEngine.cs" />
@@ -74,7 +75,6 @@
     <Compile Include="Resources\Configs\EngineConfigs.cs" />
     <Compile Include="Resources\Configs\DownloaderConfigs.cs" />
     <Compile Include="Resources\Configs\PatchIgnore.cs" />
-    <Compile Include="Resources\TextResources\DownloaderResources.cs" />
     <Compile Include="Resources\TextResources\FileSystemExplorerResources.cs" />
     <Compile Include="Resources\TextResources\MainWindow.cs" />
     <Compile Include="Resources\TextResources\PatcherEngineResources.cs" />
