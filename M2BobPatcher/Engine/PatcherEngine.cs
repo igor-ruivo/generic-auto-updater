@@ -31,7 +31,7 @@ namespace M2BobPatcher.Engine {
             Explorer = new FileSystemExplorer();
             LogicalProcessorsCount = Environment.ProcessorCount;
             ExceptionHandler = new Handler(this);
-            Downloader = new WebClientDownloader(UI.RegisterProgress);
+            Downloader = new HttpClientDownloader(UI.RegisterProgress);
         }
 
         void IPatcherEngine.Patch() {

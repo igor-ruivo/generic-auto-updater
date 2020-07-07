@@ -9,7 +9,7 @@ namespace M2BobPatcher.Downloaders {
 
     class WebClientDownloader : IDownloader {
 
-        Action<int, bool> ProgressFuncion;
+        private static Action<int, bool> ProgressFuncion;
 
         public WebClientDownloader(Action<int, bool> progressFuncion) {
             ProgressFuncion = progressFuncion;

@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Downloaders\IDownloader.cs" />
+    <Compile Include="Downloaders\HttpClientDownloader.cs" />
     <Compile Include="Downloaders\WebClientDownloader.cs" />
     <Compile Include="Engine\IPatcherEngine.cs" />
     <Compile Include="Engine\PatcherEngine.cs" />
