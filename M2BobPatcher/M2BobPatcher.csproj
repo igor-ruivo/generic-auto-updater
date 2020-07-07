@@ -79,9 +79,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Configs\EngineConfigs.cs" />
     <Compile Include="Resources\Configs\DownloaderConfigs.cs" />
-    <Compile Include="Resources\Configs\PatchIgnore.cs" />
     <Compile Include="Resources\TextResources\FileSystemExplorerResources.cs" />
-    <Compile Include="Resources\TextResources\MainWindow.cs" />
+    <Compile Include="Resources\TextResources\MainWindowResources.cs" />
     <Compile Include="Resources\TextResources\PatcherEngineResources.cs" />
     <EmbeddedResource Include="UI\Screens\PatcherMainWindow.resx">
       <DependentUpon>PatcherMainWindow.cs</DependentUpon>

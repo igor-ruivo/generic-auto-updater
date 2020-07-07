@@ -57,7 +57,7 @@ namespace M2BobPatcher.Downloaders {
                                 throw new InvalidDataException();
                         } else
                             if (!Md5HashFactory.NormalizeMd5(Md5HashFactory.GeneratedMd5HashFromByteArray(result)).Equals(expectedHash))
-                            throw new InvalidDataException();
+                                throw new InvalidDataException();
                         BW.ReportProgress(100, true);
                         return result;
                     }

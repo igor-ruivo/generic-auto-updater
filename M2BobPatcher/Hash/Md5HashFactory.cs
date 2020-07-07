@@ -11,6 +11,7 @@ namespace M2BobPatcher.Hash {
                 return md5.ComputeHash(array);
             }
         }
+
         public static byte[] GeneratedMd5HashFromStream(Stream stream) {
             using (MD5 md5 = MD5.Create()) {
                 return md5.ComputeHash(stream);

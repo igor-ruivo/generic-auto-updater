@@ -3,6 +3,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security;
+using System.Text;
 using System.Windows.Forms;
 using M2BobPatcher.TextResources;
 
@@ -21,10 +23,18 @@ namespace M2BobPatcher.ExceptionHandler {
                 case WebException e4:
                 case HttpRequestException e5:
                 case InvalidDataException e6:
+                case DecoderFallbackException e7:
                     Repatch(ErrorHandlerResources.TIMEOUT_DOWNLOADING_RESOURCE, ErrorHandlerResources.ERROR_TITLE_NETWORKING);
                     break;
+                case SecurityException e8:
+                case UnauthorizedAccessException e9:
+                case PathTooLongException e10:
+                case IOException e11:
+                    Repatch(ErrorHandlerResources.ERROR_IO_EXPLORER, ErrorHandlerResources.ERROR_TITLE_EXPLORER);
+                    break;
                 default:
-                    throw ex;
+                    Repatch(ErrorHandlerResources.UNKNOWN_ERROR, ErrorHandlerResources.ERROR_TITLE_UNKNOWN);
+                    break;
             }
         }
 
