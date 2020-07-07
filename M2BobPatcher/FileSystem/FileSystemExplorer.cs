@@ -36,8 +36,7 @@ namespace M2BobPatcher.FileSystem {
             return metadata;
         }
 
-        void IFileSystemExplorer.FetchFile(string path, string resource, Action<string, bool> loggerFunction, bool throughCommonLogger, IDownloader Downloader, string expectedHash) {
-            loggerFunction(path, throughCommonLogger);
+        void IFileSystemExplorer.FetchFile(string path, string resource, IDownloader Downloader, string expectedHash) {
             try {
                 FileInfo file = new FileInfo(path);
                 file.Directory.Create();

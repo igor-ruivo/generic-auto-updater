@@ -7,7 +7,7 @@ namespace M2BobPatcher.FileSystem {
 
         ConcurrentDictionary<string, FileMetadata> GenerateLocalMetadata(string[] filesPaths, int concurrencyLevel);
 
-        void FetchFile(string path, string resource, Action<string, bool> loggerFunction, bool throughCommonLogger, IDownloader Downloader, string expectedHash);
+        void FetchFile(string path, string resource, IDownloader Downloader, string expectedHash);
 
         bool FileExists(string file);
     }
