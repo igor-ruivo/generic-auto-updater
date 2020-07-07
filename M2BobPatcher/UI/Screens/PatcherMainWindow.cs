@@ -36,7 +36,7 @@ namespace M2BobPatcher {
         }
 
         private void setupWindowProperties() {
-            Text = string.Format(MainWindow.MAIN_WINDOW_TITLE, MainWindow.CURRENT_VERSION);
+            Text = string.Format(MainWindowResources.MAIN_WINDOW_TITLE, MainWindowResources.CURRENT_VERSION);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
         }
@@ -47,16 +47,16 @@ namespace M2BobPatcher {
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
-            Process.Start(MainWindow.M2BOB_WEBSITE);
+            Process.Start(MainWindowResources.M2BOB_WEBSITE);
         }
 
         private void starter_Click(object sender, EventArgs e) {
-            Process.Start(MainWindow.M2BOB_STARTER);
+            Process.Start(MainWindowResources.M2BOB_STARTER);
             Application.Exit();
         }
 
         private void author_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
-            Process.Start(MainWindow.AUTHOR_WEBSITE);
+            Process.Start(MainWindowResources.AUTHOR_WEBSITE);
         }
 
         private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e) {

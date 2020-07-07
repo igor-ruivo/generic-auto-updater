@@ -32,7 +32,6 @@ namespace M2BobPatcher.Engine {
         }
 
         void IPatcherEngine.Patch() {
-            Console.WriteLine("patching.");
             Tuple<Action, string>[] pipeline = {
                 new Tuple<Action, string>(GenerateServerMetadata,
                 PatcherEngineResources.PARSING_SERVER_METADATA),
@@ -49,8 +48,6 @@ namespace M2BobPatcher.Engine {
             for (int i = 0; i < PipelineLength; i++) {
                 CurrentStep = i;
                 BW.ReportProgress(-1, string.Format(PatcherEngineResources.STEP, i + 1, PipelineLength) + pipeline[i].Item2);
-                //UI.Log(string.Format(PatcherEngineResources.STEP, i + 1, PipelineLength) + pipeline[i].Item2, true);
-                Console.WriteLine(string.Format(PatcherEngineResources.STEP, i + 1, PipelineLength) + pipeline[i].Item2);
                 pipeline[i].Item1.Invoke();
                 BW.ReportProgress(Convert.ToInt32((i + 1) / PipelineLength * 100), false);
             }
@@ -58,17 +55,22 @@ namespace M2BobPatcher.Engine {
             Finish(sw.Elapsed);
         }
 
-        private void DownloadOutdatedContent() {
-            List<string> outdatedContent = CalculateOutdatedContent();
-            for (int i = 0; i < outdatedContent.Count; i++) {
+        private void DownloadContent(List<string> content) {
+            for (int i = 0; i < content.Count; i++) {
                 try {
-                    BW.ReportProgress(-2, outdatedContent[i]);
-                    Explorer.FetchFile(outdatedContent[i], PatchDirectory + outdatedContent[i], Downloader, ServerMetadata[outdatedContent[i]].Hash);
+                    BW.ReportProgress(-2, content[i]);
+                    Explorer.FetchFile(content[i], PatchDirectory + content[i], Downloader, ServerMetadata[content[i]].Hash);
+                    BW.ReportProgress(Convert.ToInt32(GetCurrentStepProgress() + (i + 1) / (float)content.Count * (1 / PipelineLength * 100)), false);
                 } catch (Exception ex) {
+                    if (ex is KeyNotFoundException)
+                        Handler.Handle(new Exception("KeyNotFoundException"));
                     Handler.Handle(ex);
                 }
-                BW.ReportProgress(Convert.ToInt32(GetCurrentStepProgress() + (i + 1) / (float)outdatedContent.Count * (1 / PipelineLength * 100)), false);
             }
+        }
+
+        private void DownloadOutdatedContent() {
+            DownloadContent(CalculateOutdatedContent());
         }
 
         private int GetCurrentStepProgress() {
@@ -85,33 +87,31 @@ namespace M2BobPatcher.Engine {
 
         private List<string> CalculateOutdatedContent() {
             List<string> outdatedFiles = new List<string>();
-            foreach (KeyValuePair<string, FileMetadata> entry in ServerMetadata)
-                if (!entry.Value.Hash.Equals(LocalMetadata[entry.Key].Hash))
-                    outdatedFiles.Add(entry.Key);
+            try {
+                foreach (KeyValuePair<string, FileMetadata> entry in ServerMetadata)
+                    if (!entry.Value.Hash.Equals(LocalMetadata[entry.Key].Hash))
+                        outdatedFiles.Add(entry.Key);
+            } catch (Exception ex) {
+                if (ex is KeyNotFoundException)
+                    Handler.Handle(new Exception("KeyNotFoundException"));
+                Handler.Handle(ex);
+            }
             return outdatedFiles;
         }
 
         private void DownloadMissingContent() {
-            List<string> missingContent = CalculateMissingContent();
-            for (int i = 0; i < missingContent.Count; i++) {
-                try {
-                    BW.ReportProgress(-2, missingContent[i]);
-                    Explorer.FetchFile(missingContent[i], PatchDirectory + missingContent[i], Downloader, ServerMetadata[missingContent[i]].Hash);
-                } catch (Exception ex) {
-                    Handler.Handle(ex);
-                }
-                BW.ReportProgress(Convert.ToInt32(GetCurrentStepProgress() + (i + 1) / (float)missingContent.Count * (1 / PipelineLength * 100)), false);
-            }
+            DownloadContent(CalculateMissingContent());
         }
 
         private string DownloadServerMetadataFile() {
-            byte[] data = null;
+            string metadata = null;
             try {
-                data = Downloader.DownloadData(EngineConfigs.M2BOB_PATCH_METADATA, null);
+                byte[] data = Downloader.DownloadData(EngineConfigs.M2BOB_PATCH_METADATA, null);
+                metadata = System.Text.Encoding.Default.GetString(data);
             } catch (Exception ex) {
                 Handler.Handle(ex);
             }
-            return System.Text.Encoding.Default.GetString(data);
+            return metadata;
         }
 
         private void GenerateLocalMetadata() {
@@ -127,9 +127,14 @@ namespace M2BobPatcher.Engine {
             string[] metadataByLine = serverMetadata.Trim().Split(new[] { "\n" }, StringSplitOptions.None);
             PatchDirectory = metadataByLine[0];
             int numberOfRemoteFiles = (metadataByLine.Length - 1) / 2;
-            ServerMetadata = new Dictionary<string, FileMetadata>(numberOfRemoteFiles);
-            for (int i = 1; i < metadataByLine.Length; i += 2)
-                ServerMetadata[metadataByLine[i]] = new FileMetadata(metadataByLine[i], metadataByLine[i + 1]);
+            try {
+                ServerMetadata = new Dictionary<string, FileMetadata>(numberOfRemoteFiles);
+                for (int i = 1; i < metadataByLine.Length; i += 2)
+                    ServerMetadata[metadataByLine[i]] = new FileMetadata(metadataByLine[i], metadataByLine[i + 1]);
+            }
+            catch(Exception ex) {
+                Handler.Handle(ex);
+            }
         }
 
         private void Finish(TimeSpan elapsed) {
