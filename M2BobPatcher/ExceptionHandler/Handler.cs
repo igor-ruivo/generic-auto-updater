@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -18,10 +19,15 @@ namespace M2BobPatcher.ExceptionHandler {
 
         void IExceptionHandler.Handle(Exception ex) {
             switch (ex) {
-                case FileNotFoundException e1:
-                case AggregateException e2:
+                case AggregateException e1:
+                    ((IExceptionHandler)this).Handle(e1.InnerExceptions.First());
+                    break;
+                case FileNotFoundException e2:
                 case DirectoryNotFoundException e3:
-                    Repatch(ErrorHandlerResources.AV_FALSE_POSITIVE, ErrorHandlerResources.ERROR_TITLE);
+                    Repatch(ErrorHandlerResources.AV_FALSE_POSITIVE, ErrorHandlerResources.ERROR_TITLE_AV);
+                    break;
+                case WebException e4:
+                    Repatch(ErrorHandlerResources.TIMEOUT_DOWNLOADING_RESOURCE, ErrorHandlerResources.ERROR_TITLE_NETWORKING);
                     break;
                 default:
                     throw ex;

@@ -31,14 +31,18 @@ namespace M2BobPatcher.FileSystem {
             return metadata;
         }
 
-        void IFileSystemExplorer.RequestWriteFile(string path, string resource, Action<string, bool> loggerFunction, bool throughCommonLogger, Action<int, bool> progressFunction) {
+        void IFileSystemExplorer.FetchFile(string path, string resource, Action<string, bool> loggerFunction, bool throughCommonLogger, IDownloader Downloader) {
             loggerFunction(path, throughCommonLogger);
-            FileInfo file = new FileInfo(path);
-            file.Directory.Create();
-            Task<byte[]> data = WebClientDownloader.DownloadData(resource, progressFunction);
-            data.Wait();
-            File.WriteAllBytes(path, data.Result); //System.IO.DirectoryNotFoundException: 'Could not find a part of the path 'C:\git\m2bobpatcher\M2BobPatcher\bin\Debug\Resources\Maps\Waypoints\metin2_map_n_desert_01.ini'.'
-            Console.WriteLine(FileSystemExplorerResources.FILE_WRITTEN_TO_DISK, ResolvePath(path));
+            try {
+                FileInfo file = new FileInfo(path);
+                file.Directory.Create();
+                byte[] data = Downloader.DownloadData(resource);
+                File.WriteAllBytes(path, data); //System.IO.DirectoryNotFoundException: 'Could not find a part of the path 'C:\git\m2bobpatcher\M2BobPatcher\bin\Debug\Resources\Maps\Waypoints\metin2_map_n_desert_01.ini'.'
+                Console.WriteLine(FileSystemExplorerResources.FILE_WRITTEN_TO_DISK, ResolvePath(path));
+            }
+            finally {
+
+            }
         }
 
         bool IFileSystemExplorer.FileExists(string file) {

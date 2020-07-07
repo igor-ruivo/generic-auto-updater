@@ -6,33 +6,39 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace M2BobPatcher.Downloaders {
-    class WebClientDownloader {
 
-        public static async Task<byte[]> DownloadData(string address, Action<int, bool> progressFunction) {
-            byte[] data = null;
+    class WebClientDownloader : IDownloader {
+
+        Action<int, bool> ProgressFuncion;
+
+        public WebClientDownloader(Action<int, bool> progressFuncion) {
+            ProgressFuncion = progressFuncion;
+        }
+
+        public byte[] DownloadData(string address) {
+            Task<byte[]> data = null;
             using (WebClient client = new WebClient()) {
                 client.DownloadProgressChanged += (s, e) => {
-                    progressFunction(e.ProgressPercentage, true);
+                    ProgressFuncion(e.ProgressPercentage, true);
                 };
                 int tries = 0;
-                for (; tries < DownloaderConfigs.MAX_DOWNLOAD_RETRIES_PER_FILE; tries++) {
+                while(true) {
                     try {
-                        data = await client.DownloadDataTaskAsync(new Uri(address));
+                        data = client.DownloadDataTaskAsync(new Uri(address));
+                        data.Wait();
+                        return data.Result;
                     }
-                    catch (WebException) {
-                        Thread.Sleep(DownloaderConfigs.INTERVAL_MS_BETWEEN_DOWNLOAD_RETRIES);
-                        continue;
+                    catch (Exception ex) {
+                        if (ex is WebException || ex is AggregateException) {
+                            Thread.Sleep(DownloaderConfigs.INTERVAL_MS_BETWEEN_DOWNLOAD_RETRIES);
+                            if (++tries == DownloaderConfigs.MAX_DOWNLOAD_RETRIES_PER_FILE)
+                                throw;
+                            continue;
+                        }
+                        throw;
                     }
-                    catch (Exception e) {
-                        Console.WriteLine(DownloaderResources.ERROR_WHILE_DOWNLOADING_FILE, address);
-                        Console.WriteLine(e.ToString());
-                    }
-                    break;
                 }
-                if (tries == DownloaderConfigs.MAX_DOWNLOAD_RETRIES_PER_FILE)
-                    Console.WriteLine(DownloaderResources.TIMEOUT_DOWNLOADING_FILE, address);
             }
-            return data;
         }
     }
 }
