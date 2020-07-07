@@ -60,7 +60,6 @@
   <ItemGroup>
     <Compile Include="Downloaders\IDownloader.cs" />
     <Compile Include="Downloaders\HttpClientDownloader.cs" />
-    <Compile Include="Downloaders\WebClientDownloader.cs" />
     <Compile Include="Engine\IPatcherEngine.cs" />
     <Compile Include="Engine\PatcherEngine.cs" />
     <Compile Include="ExceptionHandler\Handler.cs" />
@@ -84,7 +83,6 @@
     <Compile Include="Resources\TextResources\FileSystemExplorerResources.cs" />
     <Compile Include="Resources\TextResources\MainWindow.cs" />
     <Compile Include="Resources\TextResources\PatcherEngineResources.cs" />
-    <Compile Include="UI\UIComponents.cs" />
     <EmbeddedResource Include="UI\Screens\PatcherMainWindow.resx">
       <DependentUpon>PatcherMainWindow.cs</DependentUpon>
     </EmbeddedResource>

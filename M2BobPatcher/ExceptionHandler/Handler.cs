@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using M2BobPatcher.Engine;
 using M2BobPatcher.TextResources;
 
 namespace M2BobPatcher.ExceptionHandler {
