@@ -32,6 +32,7 @@
             this.loggerDisplay = new System.Windows.Forms.Label();
             this.downloaderDisplay = new System.Windows.Forms.Label();
             this.author = new System.Windows.Forms.LinkLabel();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -119,6 +120,11 @@
             this.author.VisitedLinkColor = System.Drawing.Color.Black;
             this.author.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.author_LinkClicked);
             // 
+            // backgroundWorker1
+            // 
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+            // 
             // PatcherMainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -152,6 +158,7 @@
         private System.Windows.Forms.Label loggerDisplay;
         private System.Windows.Forms.Label downloaderDisplay;
         private System.Windows.Forms.LinkLabel author;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
 

@@ -3,15 +3,12 @@ using M2BobPatcher.ExceptionHandler;
 using M2BobPatcher.FileSystem;
 using M2BobPatcher.Resources.Configs;
 using M2BobPatcher.Resources.TextResources;
-using M2BobPatcher.UI;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 
 namespace M2BobPatcher.Engine {
     class PatcherEngine : IPatcherEngine {
@@ -20,16 +17,18 @@ namespace M2BobPatcher.Engine {
         private static ConcurrentDictionary<string, FileMetadata> LocalMetadata;
         private static IDownloader Downloader;
         private static Dictionary<string, FileMetadata> ServerMetadata;
-        private static UIComponents UI;
+        private static BackgroundWorker BW;
         private static string PatchDirectory;
         private static int LogicalProcessorsCount;
-        private static double PipelineLength;
+        private static int CurrentStep;
+        private static float PipelineLength;
 
-        public PatcherEngine(UIComponents ui) {
-            UI = ui;
+        public PatcherEngine(BackgroundWorker bw) {
+            BW = bw;
             Explorer = new FileSystemExplorer();
             LogicalProcessorsCount = Environment.ProcessorCount;
-            Downloader = new HttpClientDownloader(UI.RegisterProgress);
+            Downloader = new HttpClientDownloader(BW);
+            CurrentStep = -1;
         }
 
         void IPatcherEngine.Patch() {
@@ -48,10 +47,12 @@ namespace M2BobPatcher.Engine {
             Stopwatch sw = new Stopwatch();
             sw.Start();
             for (int i = 0; i < PipelineLength; i++) {
-                UI.Log(string.Format(PatcherEngineResources.STEP, i + 1, PipelineLength) + pipeline[i].Item2, true);
+                CurrentStep = i;
+                BW.ReportProgress(-1, string.Format(PatcherEngineResources.STEP, i + 1, PipelineLength) + pipeline[i].Item2);
+                //UI.Log(string.Format(PatcherEngineResources.STEP, i + 1, PipelineLength) + pipeline[i].Item2, true);
                 Console.WriteLine(string.Format(PatcherEngineResources.STEP, i + 1, PipelineLength) + pipeline[i].Item2);
                 pipeline[i].Item1.Invoke();
-                UI.RegisterProgress(Convert.ToInt32((i + 1) / PipelineLength * 100), false);
+                BW.ReportProgress(Convert.ToInt32((i + 1) / PipelineLength * 100), false);
             }
             sw.Stop();
             Finish(sw.Elapsed);
@@ -59,16 +60,20 @@ namespace M2BobPatcher.Engine {
 
         private void DownloadOutdatedContent() {
             List<string> outdatedContent = CalculateOutdatedContent();
-            int currentProgress = UI.GetProgressBarProgress();
             for (int i = 0; i < outdatedContent.Count; i++) {
                 try {
-                    Explorer.FetchFile(outdatedContent[i], PatchDirectory + outdatedContent[i], UI.Log, false, Downloader, ServerMetadata[outdatedContent[i]].Hash);
+                    BW.ReportProgress(-2, outdatedContent[i]);
+                    Explorer.FetchFile(outdatedContent[i], PatchDirectory + outdatedContent[i], Downloader, ServerMetadata[outdatedContent[i]].Hash);
                 }
                 catch (Exception ex) {
                     Handler.Handle(ex);
                 }
-                UI.RegisterProgress(Convert.ToInt32(currentProgress + (i + 1) / (float)outdatedContent.Count * (1 / PipelineLength * 100)), false);
+                BW.ReportProgress(Convert.ToInt32(GetCurrentStepProgress() + (i + 1) / (float)outdatedContent.Count * (1 / PipelineLength * 100)), false);
             }
+        }
+
+        private int GetCurrentStepProgress() {
+            return Convert.ToInt32(CurrentStep / PipelineLength * 100);
         }
 
         private List<string> CalculateMissingContent() {
@@ -89,15 +94,15 @@ namespace M2BobPatcher.Engine {
 
         private void DownloadMissingContent() {
             List<string> missingContent = CalculateMissingContent();
-            int currentProgress = UI.GetProgressBarProgress();
             for (int i = 0; i < missingContent.Count; i++) {
                 try {
-                    Explorer.FetchFile(missingContent[i], PatchDirectory + missingContent[i], UI.Log, false, Downloader, ServerMetadata[missingContent[i]].Hash);
+                    BW.ReportProgress(-2, missingContent[i]);
+                    Explorer.FetchFile(missingContent[i], PatchDirectory + missingContent[i], Downloader, ServerMetadata[missingContent[i]].Hash);
                 }
                 catch (Exception ex) {
                     Handler.Handle(ex);
                 }
-                UI.RegisterProgress(Convert.ToInt32(currentProgress + (i + 1) / (float)missingContent.Count * (1 / PipelineLength * 100)), false);
+                BW.ReportProgress(Convert.ToInt32(GetCurrentStepProgress() + (i + 1) / (float)missingContent.Count * (1 / PipelineLength * 100)), false);
             }
         }
 
@@ -131,9 +136,7 @@ namespace M2BobPatcher.Engine {
         }
 
         private void Finish(TimeSpan elapsed) {
-            UI.Log(PatcherEngineResources.FINISHED, true);
-            UI.Log(string.Format(PatcherEngineResources.ALL_FILES_ANALYZED, elapsed.ToString("hh\\:mm\\:ss")), false);
-            UI.Toggle(true);
+            BW.ReportProgress(-2, string.Format(PatcherEngineResources.ALL_FILES_ANALYZED, elapsed.ToString("hh\\:mm\\:ss")));
         }
     }
 }
