@@ -1,12 +1,10 @@
-﻿using M2BobPatcher.Engine;
-using M2BobPatcher.Resources.TextResources;
-using M2BobPatcher.TextResources;
-using M2BobPatcher.UI;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using M2BobPatcher.Engine;
+using M2BobPatcher.Resources.TextResources;
+using M2BobPatcher.TextResources;
 
 namespace M2BobPatcher {
     public partial class PatcherMainWindow : Form {
@@ -17,9 +15,9 @@ namespace M2BobPatcher {
         }
 
         private void BackgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e) {
-            if(e.ProgressPercentage < 0) {
+            if (e.ProgressPercentage < 0) {
                 string message = (string)e.UserState;
-                switch(e.ProgressPercentage) {
+                switch (e.ProgressPercentage) {
                     case -1:
                         loggerDisplay.Text = message;
                         break;
@@ -29,8 +27,7 @@ namespace M2BobPatcher {
                     default:
                         break;
                 }
-            }
-            else {
+            } else {
                 if ((bool)e.UserState)
                     fileProgressBar.Value = e.ProgressPercentage;
                 else

@@ -1,14 +1,11 @@
-﻿using M2BobPatcher.Hash;
-using M2BobPatcher.Resources.Configs;
-using M2BobPatcher.Resources.TextResources;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.IO;
-using System.Net;
 using System.Net.Http;
-using System.Security.Policy;
 using System.Threading;
 using System.Threading.Tasks;
+using M2BobPatcher.Hash;
+using M2BobPatcher.Resources.Configs;
 
 namespace M2BobPatcher.Downloaders {
 
@@ -50,18 +47,17 @@ namespace M2BobPatcher.Downloaders {
                         }
                         while (isMoreToRead);
                         byte[] result = ms.ToArray();
-                        if(expectedHash == null) {
+                        if (expectedHash == null) {
                             // check if result sanity
                             // assume it's the server's metadata file.
                             Uri uriResult;
                             string serverMetadata = System.Text.Encoding.Default.GetString(result);
                             string patchDirectory = serverMetadata.Trim().Split(new[] { "\n" }, StringSplitOptions.None)[0];
-                            if(!Uri.TryCreate(patchDirectory, UriKind.Absolute, out uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps))
+                            if (!Uri.TryCreate(patchDirectory, UriKind.Absolute, out uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps))
                                 throw new InvalidDataException();
-                        }
-                        else
+                        } else
                             if (!Md5HashFactory.NormalizeMd5(Md5HashFactory.GeneratedMd5HashFromByteArray(result)).Equals(expectedHash))
-                                throw new InvalidDataException();
+                            throw new InvalidDataException();
                         BW.ReportProgress(100, true);
                         return result;
                     }

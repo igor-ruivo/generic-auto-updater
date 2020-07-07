@@ -1,14 +1,14 @@
-﻿using M2BobPatcher.Downloaders;
-using M2BobPatcher.ExceptionHandler;
-using M2BobPatcher.FileSystem;
-using M2BobPatcher.Resources.Configs;
-using M2BobPatcher.Resources.TextResources;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using M2BobPatcher.Downloaders;
+using M2BobPatcher.ExceptionHandler;
+using M2BobPatcher.FileSystem;
+using M2BobPatcher.Resources.Configs;
+using M2BobPatcher.Resources.TextResources;
 
 namespace M2BobPatcher.Engine {
     class PatcherEngine : IPatcherEngine {
@@ -64,8 +64,7 @@ namespace M2BobPatcher.Engine {
                 try {
                     BW.ReportProgress(-2, outdatedContent[i]);
                     Explorer.FetchFile(outdatedContent[i], PatchDirectory + outdatedContent[i], Downloader, ServerMetadata[outdatedContent[i]].Hash);
-                }
-                catch (Exception ex) {
+                } catch (Exception ex) {
                     Handler.Handle(ex);
                 }
                 BW.ReportProgress(Convert.ToInt32(GetCurrentStepProgress() + (i + 1) / (float)outdatedContent.Count * (1 / PipelineLength * 100)), false);
@@ -98,8 +97,7 @@ namespace M2BobPatcher.Engine {
                 try {
                     BW.ReportProgress(-2, missingContent[i]);
                     Explorer.FetchFile(missingContent[i], PatchDirectory + missingContent[i], Downloader, ServerMetadata[missingContent[i]].Hash);
-                }
-                catch (Exception ex) {
+                } catch (Exception ex) {
                     Handler.Handle(ex);
                 }
                 BW.ReportProgress(Convert.ToInt32(GetCurrentStepProgress() + (i + 1) / (float)missingContent.Count * (1 / PipelineLength * 100)), false);
@@ -110,8 +108,7 @@ namespace M2BobPatcher.Engine {
             byte[] data = null;
             try {
                 data = Downloader.DownloadData(EngineConfigs.M2BOB_PATCH_METADATA, null);
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 Handler.Handle(ex);
             }
             return System.Text.Encoding.Default.GetString(data);

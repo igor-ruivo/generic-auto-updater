@@ -1,11 +1,11 @@
-﻿using M2BobPatcher.Downloaders;
-using M2BobPatcher.Hash;
-using M2BobPatcher.Resources.TextResources;
-using M2BobPatcher.TextResources;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Threading.Tasks;
+using M2BobPatcher.Downloaders;
+using M2BobPatcher.Hash;
+using M2BobPatcher.Resources.TextResources;
+using M2BobPatcher.TextResources;
 
 namespace M2BobPatcher.FileSystem {
     class FileSystemExplorer : IFileSystemExplorer {
@@ -43,8 +43,7 @@ namespace M2BobPatcher.FileSystem {
                 byte[] data = Downloader.DownloadData(resource, expectedHash);
                 File.WriteAllBytes(path, data);
                 Console.WriteLine(FileSystemExplorerResources.FILE_WRITTEN_TO_DISK, ResolvePath(path)); //temp
-            }
-            finally {
+            } finally {
 
             }
         }

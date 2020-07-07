@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using M2BobPatcher.Downloaders;
 
 namespace M2BobPatcher.FileSystem {
