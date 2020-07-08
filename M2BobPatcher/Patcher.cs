@@ -1,7 +1,7 @@
-﻿using System;
+﻿using M2BobPatcher.TextResources;
+using System;
 using System.Diagnostics;
 using System.Windows.Forms;
-using M2BobPatcher.TextResources;
 
 namespace M2BobPatcher {
     static class Patcher {
