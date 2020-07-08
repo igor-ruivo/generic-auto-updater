@@ -48,7 +48,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>pure_favicon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\BinaryResources\pure_favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -73,17 +73,17 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Downloaders\IDownloader.cs" />
     <Compile Include="Downloaders\HttpClientDownloader.cs" />
     <Compile Include="Engine\IPatcherEngine.cs" />
     <Compile Include="Engine\PatcherEngine.cs" />
+    <Compile Include="ExceptionHandler\Exceptions\DataTamperedException.cs" />
     <Compile Include="ExceptionHandler\Handler.cs" />
     <Compile Include="FileSystem\FileMetadata.cs" />
     <Compile Include="FileSystem\FileSystemExplorer.cs" />
     <Compile Include="FileSystem\IFileMetadata.cs" />
-    <Compile Include="FileSystem\IFileSystemExplorer.cs" />
     <Compile Include="Hash\Md5HashFactory.cs" />
     <Compile Include="Resources\TextResources\ErrorHandlerResources.cs" />
+    <Compile Include="Resources\Utils.cs" />
     <Compile Include="UI\Screens\PatcherMainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -124,7 +124,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="pure_favicon.ico" />
     <Content Include="Resources\BinaryResources\pure_favicon.ico" />
   </ItemGroup>
   <ItemGroup>
