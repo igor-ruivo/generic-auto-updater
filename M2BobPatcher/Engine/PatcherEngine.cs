@@ -5,6 +5,7 @@ using M2BobPatcher.FileSystem;
 using M2BobPatcher.Resources;
 using M2BobPatcher.Resources.Configs;
 using M2BobPatcher.Resources.TextResources;
+using M2BobPatcher.UI;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -45,9 +46,9 @@ namespace M2BobPatcher.Engine {
             sw.Start();
             for (int i = 0; i < PipelineLength; i++) {
                 CurrentStep = i;
-                BW.ReportProgress(-1, string.Format(PatcherEngineResources.STEP, i + 1, PipelineLength) + pipeline[i].Item2);
+                Utils.Log(BW, string.Format(PatcherEngineResources.STEP, i + 1, PipelineLength) + pipeline[i].Item2, ProgressiveWidgetsEnum.Label.InformativeLogger);
                 pipeline[i].Item1.Invoke();
-                BW.ReportProgress(Convert.ToInt32((i + 1) / PipelineLength * 100), false);
+                Utils.Progress(BW, Convert.ToInt32((i + 1) / PipelineLength * 100), ProgressiveWidgetsEnum.ProgressBar.WholeProgressBar);
             }
             Finish(sw);
         }
@@ -65,9 +66,9 @@ namespace M2BobPatcher.Engine {
         private void DownloadContent(List<string> content, bool isMissingContent) {
             LogDownloadingEvent(content.Count, isMissingContent);
             for (int i = 0; i < content.Count; i++) {
-                BW.ReportProgress(-2, content[i]);
+                Utils.Log(BW, content[i], ProgressiveWidgetsEnum.Label.DownloadLogger);
                 FileSystemExplorer.FetchFile(BW, content[i], PatchDirectory + content[i], ServerMetadata[content[i]].Hash);
-                BW.ReportProgress(Convert.ToInt32(GetCurrentStepProgress() + (i + 1) / (float)content.Count * (1 / PipelineLength * 100)), false);
+                Utils.Progress(BW, Convert.ToInt32(GetCurrentStepProgress() + (i + 1) / (float)content.Count * (1 / PipelineLength * 100)), ProgressiveWidgetsEnum.ProgressBar.WholeProgressBar);
             }
             Thread.Sleep(EngineConfigs.MS_TO_WAIT_FOR_AV_FALSE_POSITIVES);
             GenerateLocalMetadata();
@@ -113,7 +114,7 @@ namespace M2BobPatcher.Engine {
         private void LogDownloadingEvent(int nResources, bool isMissingContent) {
             if (nResources > 0) {
                 string message = isMissingContent ? PatcherEngineResources.DOWNLOADING_MISSING_CONTENT : PatcherEngineResources.DOWNLOADING_OUTDATED_CONTENT;
-                BW.ReportProgress(-1, message);
+                Utils.Log(BW, message, ProgressiveWidgetsEnum.Label.InformativeLogger);
             }
         }
 
@@ -128,7 +129,7 @@ namespace M2BobPatcher.Engine {
         private void Finish(Stopwatch sw) {
             PerformLastSanityChecks();
             sw.Stop();
-            BW.ReportProgress(-2, string.Format(PatcherEngineResources.ALL_FILES_ANALYZED, sw.Elapsed.ToString("hh\\:mm\\:ss")));
+            Utils.Log(BW, string.Format(PatcherEngineResources.ALL_FILES_ANALYZED, sw.Elapsed.ToString("hh\\:mm\\:ss")), ProgressiveWidgetsEnum.Label.DownloadLogger);
         }
     }
 }

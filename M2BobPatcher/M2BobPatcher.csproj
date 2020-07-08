@@ -83,6 +83,9 @@
     <Compile Include="FileSystem\IFileMetadata.cs" />
     <Compile Include="Hash\Md5HashFactory.cs" />
     <Compile Include="Resources\TextResources\ErrorHandlerResources.cs" />
+    <Compile Include="Resources\UIResources\IWidgetWrapper.cs" />
+    <Compile Include="Resources\UIResources\LabelWrapper.cs" />
+    <Compile Include="Resources\UIResources\ProgressBarWrapper.cs" />
     <Compile Include="Resources\Utils.cs" />
     <Compile Include="UI\Screens\PatcherMainWindow.cs">
       <SubType>Form</SubType>
@@ -97,6 +100,7 @@
     <Compile Include="Resources\TextResources\FileSystemExplorerResources.cs" />
     <Compile Include="Resources\TextResources\MainWindowResources.cs" />
     <Compile Include="Resources\TextResources\PatcherEngineResources.cs" />
+    <Compile Include="UI\ProgressiveWidgetsEnum.cs" />
     <EmbeddedResource Include="UI\Screens\PatcherMainWindow.resx">
       <DependentUpon>PatcherMainWindow.cs</DependentUpon>
     </EmbeddedResource>

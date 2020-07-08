@@ -1,4 +1,7 @@
-﻿using System;
+﻿using M2BobPatcher.Resources.UIResources;
+using M2BobPatcher.UI;
+using System;
+using System.ComponentModel;
 using System.IO;
 using System.Text;
 
@@ -19,6 +22,14 @@ namespace M2BobPatcher.Resources {
                 if (exception is ObjectDisposedException)
                     return true;
             return false;
+        }
+
+        public static void Log(BackgroundWorker bw, string message, ProgressiveWidgetsEnum.Label label) {
+            bw.ReportProgress(0, new LabelWrapper(label, message));
+        }
+
+        public static void Progress(BackgroundWorker bw, int progress, ProgressiveWidgetsEnum.ProgressBar progressBar) {
+            bw.ReportProgress(0, new ProgressBarWrapper(progressBar, progress));
         }
     }
 }
