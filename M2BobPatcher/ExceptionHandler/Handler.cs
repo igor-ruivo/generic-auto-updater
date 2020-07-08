@@ -1,4 +1,5 @@
-﻿using System;
+﻿using M2BobPatcher.TextResources;
+using System;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -6,7 +7,6 @@ using System.Net.Http;
 using System.Security;
 using System.Text;
 using System.Windows.Forms;
-using M2BobPatcher.TextResources;
 
 namespace M2BobPatcher.ExceptionHandler {
     static class Handler {

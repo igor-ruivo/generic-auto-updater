@@ -1,5 +1,5 @@
-﻿using System.Collections.Concurrent;
-using M2BobPatcher.Downloaders;
+﻿using M2BobPatcher.Downloaders;
+using System.Collections.Concurrent;
 
 namespace M2BobPatcher.FileSystem {
     interface IFileSystemExplorer {

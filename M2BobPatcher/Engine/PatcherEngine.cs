@@ -1,14 +1,14 @@
-﻿using System;
+﻿using M2BobPatcher.Downloaders;
+using M2BobPatcher.ExceptionHandler;
+using M2BobPatcher.FileSystem;
+using M2BobPatcher.Resources.Configs;
+using M2BobPatcher.Resources.TextResources;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using M2BobPatcher.Downloaders;
-using M2BobPatcher.ExceptionHandler;
-using M2BobPatcher.FileSystem;
-using M2BobPatcher.Resources.Configs;
-using M2BobPatcher.Resources.TextResources;
 
 namespace M2BobPatcher.Engine {
     class PatcherEngine : IPatcherEngine {
@@ -61,7 +61,8 @@ namespace M2BobPatcher.Engine {
                     BW.ReportProgress(-2, content[i]);
                     Explorer.FetchFile(content[i], PatchDirectory + content[i], Downloader, ServerMetadata[content[i]].Hash);
                     BW.ReportProgress(Convert.ToInt32(GetCurrentStepProgress() + (i + 1) / (float)content.Count * (1 / PipelineLength * 100)), false);
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                     if (ex is KeyNotFoundException)
                         Handler.Handle(new Exception("KeyNotFoundException"));
                     Handler.Handle(ex);
@@ -91,7 +92,8 @@ namespace M2BobPatcher.Engine {
                 foreach (KeyValuePair<string, FileMetadata> entry in ServerMetadata)
                     if (!entry.Value.Hash.Equals(LocalMetadata[entry.Key].Hash))
                         outdatedFiles.Add(entry.Key);
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 if (ex is KeyNotFoundException)
                     Handler.Handle(new Exception("KeyNotFoundException"));
                 Handler.Handle(ex);
@@ -108,7 +110,8 @@ namespace M2BobPatcher.Engine {
             try {
                 byte[] data = Downloader.DownloadData(EngineConfigs.M2BOB_PATCH_METADATA, null);
                 metadata = System.Text.Encoding.Default.GetString(data);
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 Handler.Handle(ex);
             }
             return metadata;
@@ -117,7 +120,8 @@ namespace M2BobPatcher.Engine {
         private void GenerateLocalMetadata() {
             try {
                 LocalMetadata = Explorer.GenerateLocalMetadata(ServerMetadata.Keys.ToArray(), LogicalProcessorsCount / 2);
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 Handler.Handle(ex);
             }
         }
@@ -131,7 +135,8 @@ namespace M2BobPatcher.Engine {
                 ServerMetadata = new Dictionary<string, FileMetadata>(numberOfRemoteFiles);
                 for (int i = 1; i < metadataByLine.Length; i += 2)
                     ServerMetadata[metadataByLine[i]] = new FileMetadata(metadataByLine[i], metadataByLine[i + 1]);
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 Handler.Handle(ex);
             }
         }

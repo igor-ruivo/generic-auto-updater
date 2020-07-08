@@ -1,10 +1,10 @@
-﻿using System;
+﻿using M2BobPatcher.Downloaders;
+using M2BobPatcher.Hash;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using M2BobPatcher.Downloaders;
-using M2BobPatcher.Hash;
 
 namespace M2BobPatcher.FileSystem {
     class FileSystemExplorer : IFileSystemExplorer {
@@ -24,7 +24,8 @@ namespace M2BobPatcher.FileSystem {
                         metadata[currentPath] = new FileMetadata(currentPath, Md5HashFactory.NormalizeMd5(Md5HashFactory.GeneratedMd5HashFromStream(stream)));
                     }
                 });
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 if (ex is KeyNotFoundException)
                     throw new Exception("KeyNotFoundException");
                 throw;
@@ -38,7 +39,8 @@ namespace M2BobPatcher.FileSystem {
                 file.Directory.Create();
                 byte[] data = Downloader.DownloadData(resource, expectedHash);
                 File.WriteAllBytes(path, data);
-            } finally {
+            }
+            finally {
 
             }
         }

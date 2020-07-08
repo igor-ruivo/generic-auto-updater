@@ -1,10 +1,10 @@
-﻿using System;
+﻿using M2BobPatcher.Engine;
+using M2BobPatcher.Resources.TextResources;
+using M2BobPatcher.TextResources;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
-using M2BobPatcher.Engine;
-using M2BobPatcher.Resources.TextResources;
-using M2BobPatcher.TextResources;
 
 namespace M2BobPatcher {
     public partial class PatcherMainWindow : Form {
@@ -27,7 +27,8 @@ namespace M2BobPatcher {
                     default:
                         break;
                 }
-            } else {
+            }
+            else {
                 if ((bool)e.UserState)
                     fileProgressBar.Value = e.ProgressPercentage;
                 else

@@ -1,11 +1,11 @@
-﻿using System;
+﻿using M2BobPatcher.Hash;
+using M2BobPatcher.Resources.Configs;
+using System;
 using System.ComponentModel;
 using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using M2BobPatcher.Hash;
-using M2BobPatcher.Resources.Configs;
 
 namespace M2BobPatcher.Downloaders {
 
@@ -68,7 +68,8 @@ namespace M2BobPatcher.Downloaders {
                     Task<byte[]> data = Download(address, expectedHash);
                     data.Wait();
                     return data.Result;
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                     // This kind of Exception already slept.
                     if (ex is ObjectDisposedException || ex is AggregateException && AggregateContainsObjectDisposedException((AggregateException)ex))
                         throw;
