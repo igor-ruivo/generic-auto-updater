@@ -22,59 +22,51 @@ namespace M2BobPatcher.Engine {
         private static Dictionary<string, FileMetadata> ServerMetadata;
         private static BackgroundWorker BW;
         private static string PatchDirectory;
-        private static int CurrentStep;
-        private static float PipelineLength;
 
-        private static readonly int LogicalProcessorsCount = Environment.ProcessorCount;
+        private static readonly Tuple<Action<int>, string>[] Pipeline = {
+                new Tuple<Action<int>, string>(GenerateServerMetadata,
+                PatcherEngineResources.PARSING_SERVER_METADATA),
+                new Tuple<Action<int>, string>(DownloadMissingContent,
+                PatcherEngineResources.CHECKING_MISSING_CONTENT),
+                new Tuple<Action<int>, string>(DownloadOutdatedContent,
+                PatcherEngineResources.CHECKING_OUTDATED_CONTENT)
+            };
 
         public PatcherEngine(BackgroundWorker bw) {
             BW = bw;
-            CurrentStep = -1;
         }
 
         void IPatcherEngine.Patch() {
-            Tuple<Action, string>[] pipeline = {
-                new Tuple<Action, string>(GenerateServerMetadata,
-                PatcherEngineResources.PARSING_SERVER_METADATA),
-                new Tuple<Action, string>(DownloadMissingContent,
-                PatcherEngineResources.CHECKING_MISSING_CONTENT),
-                new Tuple<Action, string>(DownloadOutdatedContent,
-                PatcherEngineResources.CHECKING_OUTDATED_CONTENT)
-            };
-            PipelineLength = pipeline.Length;
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            for (int i = 0; i < PipelineLength; i++) {
-                CurrentStep = i;
-                Utils.Log(BW, string.Format(PatcherEngineResources.STEP, i + 1, PipelineLength) + pipeline[i].Item2, ProgressiveWidgetsEnum.Label.InformativeLogger);
-                pipeline[i].Item1.Invoke();
-                Utils.Progress(BW, Convert.ToInt32((i + 1) / PipelineLength * 100), ProgressiveWidgetsEnum.ProgressBar.WholeProgressBar);
+            for (int i = 0; i < Pipeline.Length; i++) {
+                Utils.Log(BW, string.Format(PatcherEngineResources.STEP, i + 1, Pipeline.Length) + Pipeline[i].Item2, ProgressiveWidgetsEnum.Label.InformativeLogger);
+                Pipeline[i].Item1.Invoke(i);
+                Utils.Progress(BW, Convert.ToInt32((i + 1f) / Pipeline.Length * 100), ProgressiveWidgetsEnum.ProgressBar.WholeProgressBar);
             }
             Finish(sw);
         }
 
-        private void GenerateServerMetadata() {
-            string serverMetadata = DownloadServerMetadataFile();
-            string[] metadataByLine = serverMetadata.Trim().Split(new[] { "\n" }, StringSplitOptions.None);
-            PatchDirectory = metadataByLine[0];
-            int numberOfRemoteFiles = (metadataByLine.Length - 1) / 2;
-            ServerMetadata = new Dictionary<string, FileMetadata>(numberOfRemoteFiles);
-            for (int i = 1; i < metadataByLine.Length; i += 2)
-                ServerMetadata[metadataByLine[i]] = new FileMetadata(metadataByLine[i], metadataByLine[i + 1]);
-        }
-
-        private void DownloadContent(List<string> content, bool isMissingContent) {
+        private static void DownloadContent(int step, List<string> content, bool isMissingContent) {
             LogDownloadingEvent(content.Count, isMissingContent);
             for (int i = 0; i < content.Count; i++) {
                 Utils.Log(BW, content[i], ProgressiveWidgetsEnum.Label.DownloadLogger);
                 FileSystemExplorer.FetchFile(BW, content[i], PatchDirectory + content[i], ServerMetadata[content[i]].Hash);
-                Utils.Progress(BW, Convert.ToInt32(GetCurrentStepProgress() + (i + 1) / (float)content.Count * (1 / PipelineLength * 100)), ProgressiveWidgetsEnum.ProgressBar.WholeProgressBar);
+                Utils.Progress(BW, Convert.ToInt32(GetCurrentStepProgress(step) + (i + 1f) / content.Count * (1f / Pipeline.Length * 100)), ProgressiveWidgetsEnum.ProgressBar.WholeProgressBar);
             }
             Thread.Sleep(EngineConfigs.MS_TO_WAIT_FOR_AV_FALSE_POSITIVES);
             GenerateLocalMetadata();
         }
 
-        private List<string> CalculateMissingContent() {
+        private static void GenerateServerMetadata(int step) {
+            string[] metadataByLine = DownloadServerMetadataFile().Trim().Split(new[] { "\n" }, StringSplitOptions.None);
+            PatchDirectory = metadataByLine[0];
+            ServerMetadata = new Dictionary<string, FileMetadata>((metadataByLine.Length - 1) / 2);
+            for (int i = 1; i < metadataByLine.Length; i += 2)
+                ServerMetadata[metadataByLine[i]] = new FileMetadata(metadataByLine[i], metadataByLine[i + 1]);
+        }
+
+        private static List<string> CalculateMissingContent() {
             List<string> missingFiles = new List<string>();
             foreach (string file in ServerMetadata.Keys)
                 if (!FileSystemExplorer.FileExists(file))
@@ -82,7 +74,7 @@ namespace M2BobPatcher.Engine {
             return missingFiles;
         }
 
-        private List<string> CalculateOutdatedContent() {
+        private static List<string> CalculateOutdatedContent() {
             List<string> outdatedFiles = new List<string>();
             foreach (KeyValuePair<string, FileMetadata> entry in ServerMetadata)
                 if (!entry.Value.Hash.Equals(LocalMetadata[entry.Key].Hash))
@@ -90,35 +82,34 @@ namespace M2BobPatcher.Engine {
             return outdatedFiles;
         }
 
-        private string DownloadServerMetadataFile() {
-            byte[] data = HttpClientDownloader.DownloadData(BW, EngineConfigs.M2BOB_PATCH_METADATA, null);
-            return Utils.PerformPatchDirectorySanityCheck(data);
+        private static string DownloadServerMetadataFile() {
+            return Utils.PerformPatchDirectorySanityCheck(HttpClientDownloader.DownloadData(BW, EngineConfigs.M2BOB_PATCH_METADATA, null));
         }
 
-        private void GenerateLocalMetadata() {
-            LocalMetadata = FileSystemExplorer.GenerateLocalMetadata(ServerMetadata.Keys.ToArray(), LogicalProcessorsCount / 2);
+        private static void GenerateLocalMetadata() {
+            LocalMetadata = FileSystemExplorer.GenerateLocalMetadata(ServerMetadata.Keys.ToArray(), Environment.ProcessorCount / 2);
         }
 
-        private void DownloadMissingContent() {
-            DownloadContent(CalculateMissingContent(), true);
+        private static void DownloadMissingContent(int step) {
+            DownloadContent(step, CalculateMissingContent(), true);
         }
 
-        private void DownloadOutdatedContent() {
-            DownloadContent(CalculateOutdatedContent(), false);
+        private static void DownloadOutdatedContent(int step) {
+            DownloadContent(step, CalculateOutdatedContent(), false);
         }
 
-        private int GetCurrentStepProgress() {
-            return Convert.ToInt32(CurrentStep / PipelineLength * 100);
+        private static int GetCurrentStepProgress(int step) {
+            return Convert.ToInt32(step / (float)Pipeline.Length * 100);
         }
 
-        private void LogDownloadingEvent(int nResources, bool isMissingContent) {
-            if (nResources > 0) {
-                string message = isMissingContent ? PatcherEngineResources.DOWNLOADING_MISSING_CONTENT : PatcherEngineResources.DOWNLOADING_OUTDATED_CONTENT;
-                Utils.Log(BW, message, ProgressiveWidgetsEnum.Label.InformativeLogger);
-            }
+        private static void LogDownloadingEvent(int nResources, bool isMissingContent) {
+            if (nResources == 0)
+                return;
+            string message = isMissingContent ? PatcherEngineResources.DOWNLOADING_MISSING_CONTENT : PatcherEngineResources.DOWNLOADING_OUTDATED_CONTENT;
+            Utils.Log(BW, message, ProgressiveWidgetsEnum.Label.InformativeLogger);
         }
 
-        private void PerformLastSanityChecks() {
+        private static void PerformLastSanityChecks() {
             Thread.Sleep(EngineConfigs.MS_TO_WAIT_FOR_AV_FALSE_POSITIVES);
             if (CalculateOutdatedContent().Count != 0)
                 Handler.Handle(new DataTamperedException());
@@ -126,7 +117,7 @@ namespace M2BobPatcher.Engine {
                 Handler.Handle(new FileNotFoundException());
         }
 
-        private void Finish(Stopwatch sw) {
+        private static void Finish(Stopwatch sw) {
             PerformLastSanityChecks();
             sw.Stop();
             Utils.Log(BW, string.Format(PatcherEngineResources.ALL_FILES_ANALYZED, sw.Elapsed.ToString("hh\\:mm\\:ss")), ProgressiveWidgetsEnum.Label.DownloadLogger);

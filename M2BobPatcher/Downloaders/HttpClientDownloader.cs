@@ -69,7 +69,7 @@ namespace M2BobPatcher.Downloaders {
                         if (expectedHash == null)
                             Utils.PerformPatchDirectorySanityCheck(result);
                         else
-                            if (!Md5HashFactory.NormalizeMd5(Md5HashFactory.GeneratedMd5HashFromByteArray(result)).Equals(expectedHash))
+                            if (!Md5HashFactory.GeneratedMd5HashFromByteArray(result).Equals(expectedHash))
                             throw new InvalidDataException();
                         Utils.Progress(bw, 100, ProgressiveWidgetsEnum.ProgressBar.DownloadProgressBar);
                         return result;
