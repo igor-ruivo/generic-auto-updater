@@ -36,6 +36,7 @@ namespace M2BobPatcher.Downloaders {
         }
 
         private static async Task<byte[]> Download(BackgroundWorker bw, string address, string expectedHash) {
+            Utils.Progress(bw, 0, ProgressiveWidgetsEnum.ProgressBar.DownloadProgressBar);
             using (HttpResponseMessage response = HttpClient.GetAsync(address, HttpCompletionOption.ResponseHeadersRead).Result) {
                 response.EnsureSuccessStatusCode();
                 float fileSize = (float)response.Content.Headers.ContentLength;
@@ -46,7 +47,6 @@ namespace M2BobPatcher.Downloaders {
                         byte[] buffer = new byte[DownloaderConfigs.BUFFER_SIZE];
                         bool moreLeftToRead = true;
                         int lastMark = 0;
-                        Utils.Progress(bw, 0, ProgressiveWidgetsEnum.ProgressBar.DownloadProgressBar);
                         do {
                             using (var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(DownloaderConfigs.TIMEOUT_MS_WAITING_FOR_READ))) {
                                 cts.Token.Register(() => contentStream.Close());
