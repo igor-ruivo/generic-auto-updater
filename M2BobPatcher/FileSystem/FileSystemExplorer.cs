@@ -1,51 +1,31 @@
 ﻿using M2BobPatcher.Downloaders;
 using M2BobPatcher.Hash;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace M2BobPatcher.FileSystem {
-    class FileSystemExplorer : IFileSystemExplorer {
+    static class FileSystemExplorer {
 
-        private static string CurrentDirectory;
-
-        public FileSystemExplorer() {
-            CurrentDirectory = Environment.CurrentDirectory;
-        }
-
-        ConcurrentDictionary<string, FileMetadata> IFileSystemExplorer.GenerateLocalMetadata(string[] filesPaths, int concurrencyLevel) {
-            ConcurrentDictionary<string, FileMetadata> metadata;
-            try {
-                metadata = new ConcurrentDictionary<string, FileMetadata>(filesPaths.Length, concurrencyLevel);
-                Parallel.ForEach(filesPaths, (currentPath) => {
-                    using (FileStream stream = File.OpenRead(currentPath)) {
-                        metadata[currentPath] = new FileMetadata(currentPath, Md5HashFactory.NormalizeMd5(Md5HashFactory.GeneratedMd5HashFromStream(stream)));
-                    }
-                });
-            }
-            catch (Exception ex) {
-                if (ex is KeyNotFoundException)
-                    throw new Exception("KeyNotFoundException");
-                throw;
-            }
+        public static ConcurrentDictionary<string, FileMetadata> GenerateLocalMetadata(string[] filesPaths, int concurrencyLevel) {
+            ConcurrentDictionary<string, FileMetadata> metadata = new ConcurrentDictionary<string, FileMetadata>(filesPaths.Length, concurrencyLevel);
+            Parallel.ForEach(filesPaths, (currentPath) => {
+                using (FileStream stream = File.OpenRead(currentPath)) {
+                    metadata[currentPath] = new FileMetadata(currentPath, Md5HashFactory.NormalizeMd5(Md5HashFactory.GeneratedMd5HashFromStream(stream)));
+                }
+            });
             return metadata;
         }
 
-        void IFileSystemExplorer.FetchFile(string path, string resource, IDownloader Downloader, string expectedHash) {
-            try {
-                FileInfo file = new FileInfo(path);
-                file.Directory.Create();
-                byte[] data = Downloader.DownloadData(resource, expectedHash);
-                File.WriteAllBytes(path, data);
-            }
-            finally {
-
-            }
+        public static void FetchFile(BackgroundWorker bw, string path, string resource, string expectedHash) {
+            FileInfo file = new FileInfo(path);
+            file.Directory.Create();
+            byte[] data = HttpClientDownloader.DownloadData(bw, resource, expectedHash);
+            File.WriteAllBytes(path, data);
         }
 
-        bool IFileSystemExplorer.FileExists(string file) {
+        public static bool FileExists(string file) {
             return File.Exists(file);
         }
     }

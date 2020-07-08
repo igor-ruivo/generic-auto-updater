@@ -1,4 +1,5 @@
-﻿using M2BobPatcher.TextResources;
+﻿using M2BobPatcher.ExceptionHandler.Exceptions;
+using M2BobPatcher.TextResources;
 using System;
 using System.IO;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace M2BobPatcher.ExceptionHandler {
                     break;
                 case FileNotFoundException e1:
                 case DirectoryNotFoundException e2:
+                case DataTamperedException e3:
                     Repatch(ErrorHandlerResources.AV_FALSE_POSITIVE, ErrorHandlerResources.ERROR_TITLE_AV);
                     break;
                 case WebException e1:
@@ -40,14 +42,8 @@ namespace M2BobPatcher.ExceptionHandler {
         }
 
         private static void Repatch(string text, string caption) {
-            switch (MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error)) {
-                case DialogResult.OK:
-                    Application.Exit();
-                    break;
-                default:
-                    Application.Exit();
-                    break;
-            }
+            MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            Application.Exit();
         }
     }
 }

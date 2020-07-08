@@ -1,4 +1,5 @@
 ﻿using M2BobPatcher.Engine;
+using M2BobPatcher.ExceptionHandler;
 using M2BobPatcher.Resources.TextResources;
 using M2BobPatcher.TextResources;
 using System;
@@ -38,6 +39,7 @@ namespace M2BobPatcher {
 
         private void setupWindowProperties() {
             Text = string.Format(MainWindowResources.MAIN_WINDOW_TITLE, MainWindowResources.CURRENT_VERSION);
+            downloaderDisplay.Text = PatcherEngineResources.STARTING;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
         }
@@ -63,7 +65,12 @@ namespace M2BobPatcher {
         private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e) {
             BackgroundWorker bw = sender as BackgroundWorker;
             IPatcherEngine engine = new PatcherEngine(bw);
-            engine.Patch();
+            try {
+                engine.Patch();
+            }
+            catch (Exception ex) {
+                Handler.Handle(ex);
+            }
         }
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {

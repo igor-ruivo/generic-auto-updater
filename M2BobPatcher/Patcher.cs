@@ -1,4 +1,5 @@
-﻿using M2BobPatcher.TextResources;
+﻿using M2BobPatcher.ExceptionHandler;
+using M2BobPatcher.TextResources;
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -10,13 +11,18 @@ namespace M2BobPatcher {
         /// </summary>
         [STAThread]
         static void Main() {
-            if (PriorProcess() != null) {
-                MessageBox.Show(MainWindowResources.ALREADY_RUNNING, MainWindowResources.ALREADY_RUNNING_ERROR, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
+            try {
+                if (PriorProcess() != null) {
+                    MessageBox.Show(MainWindowResources.ALREADY_RUNNING, MainWindowResources.ALREADY_RUNNING_ERROR, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return;
+                }
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new PatcherMainWindow());
             }
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new PatcherMainWindow());
+            catch (Exception ex) {
+                Handler.Handle(ex);
+            }
         }
 
         public static Process PriorProcess() {
