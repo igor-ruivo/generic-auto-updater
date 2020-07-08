@@ -39,36 +39,32 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(145, 15);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.pictureBox1.Location = new System.Drawing.Point(109, 12);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(527, 135);
+            this.pictureBox1.Size = new System.Drawing.Size(395, 110);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
             // wholeProgressBar
             // 
-            this.wholeProgressBar.Location = new System.Drawing.Point(16, 196);
-            this.wholeProgressBar.Margin = new System.Windows.Forms.Padding(4);
+            this.wholeProgressBar.Location = new System.Drawing.Point(12, 159);
             this.wholeProgressBar.Name = "wholeProgressBar";
-            this.wholeProgressBar.Size = new System.Drawing.Size(784, 15);
+            this.wholeProgressBar.Size = new System.Drawing.Size(588, 12);
             this.wholeProgressBar.TabIndex = 1;
             // 
             // fileProgressBar
             // 
-            this.fileProgressBar.Location = new System.Drawing.Point(16, 239);
-            this.fileProgressBar.Margin = new System.Windows.Forms.Padding(4);
+            this.fileProgressBar.Location = new System.Drawing.Point(12, 194);
             this.fileProgressBar.Name = "fileProgressBar";
-            this.fileProgressBar.Size = new System.Drawing.Size(784, 15);
+            this.fileProgressBar.Size = new System.Drawing.Size(588, 12);
             this.fileProgressBar.TabIndex = 2;
             // 
             // starter
             // 
             this.starter.Enabled = false;
-            this.starter.Location = new System.Drawing.Point(697, 267);
-            this.starter.Margin = new System.Windows.Forms.Padding(4);
+            this.starter.Location = new System.Drawing.Point(523, 217);
             this.starter.Name = "starter";
-            this.starter.Size = new System.Drawing.Size(103, 31);
+            this.starter.Size = new System.Drawing.Size(77, 25);
             this.starter.TabIndex = 3;
             this.starter.Text = "Start M2Bob!";
             this.starter.UseVisualStyleBackColor = true;
@@ -77,10 +73,9 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(16, 281);
-            this.linkLabel1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.linkLabel1.Location = new System.Drawing.Point(12, 228);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(107, 17);
+            this.linkLabel1.Size = new System.Drawing.Size(83, 13);
             this.linkLabel1.TabIndex = 4;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "M2Bob Website";
@@ -89,30 +84,27 @@
             // loggerDisplay
             // 
             this.loggerDisplay.AutoSize = true;
-            this.loggerDisplay.Location = new System.Drawing.Point(12, 176);
-            this.loggerDisplay.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.loggerDisplay.Location = new System.Drawing.Point(9, 143);
             this.loggerDisplay.Name = "loggerDisplay";
-            this.loggerDisplay.Size = new System.Drawing.Size(108, 17);
+            this.loggerDisplay.Size = new System.Drawing.Size(82, 13);
             this.loggerDisplay.TabIndex = 5;
             this.loggerDisplay.Text = "Starting patch...";
             // 
             // downloaderDisplay
             // 
             this.downloaderDisplay.AutoSize = true;
-            this.downloaderDisplay.Location = new System.Drawing.Point(12, 219);
-            this.downloaderDisplay.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.downloaderDisplay.Location = new System.Drawing.Point(9, 178);
             this.downloaderDisplay.Name = "downloaderDisplay";
-            this.downloaderDisplay.Size = new System.Drawing.Size(0, 17);
+            this.downloaderDisplay.Size = new System.Drawing.Size(0, 13);
             this.downloaderDisplay.TabIndex = 6;
             // 
             // author
             // 
             this.author.AutoSize = true;
             this.author.LinkColor = System.Drawing.Color.Black;
-            this.author.Location = new System.Drawing.Point(341, 281);
-            this.author.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.author.Location = new System.Drawing.Point(256, 228);
             this.author.Name = "author";
-            this.author.Size = new System.Drawing.Size(144, 17);
+            this.author.Size = new System.Drawing.Size(110, 13);
             this.author.TabIndex = 7;
             this.author.TabStop = true;
             this.author.Text = "Patcher by Igor Ruivo";
@@ -127,9 +119,9 @@
             // 
             // PatcherMainWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(816, 311);
+            this.ClientSize = new System.Drawing.Size(612, 253);
             this.Controls.Add(this.author);
             this.Controls.Add(this.downloaderDisplay);
             this.Controls.Add(this.loggerDisplay);
@@ -139,7 +131,6 @@
             this.Controls.Add(this.wholeProgressBar);
             this.Controls.Add(this.pictureBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "PatcherMainWindow";
             this.Load += new System.EventHandler(this.loadWindow);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
