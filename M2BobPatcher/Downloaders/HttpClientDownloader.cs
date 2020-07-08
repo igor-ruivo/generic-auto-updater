@@ -1,6 +1,7 @@
 ﻿using M2BobPatcher.Hash;
 using M2BobPatcher.Resources;
 using M2BobPatcher.Resources.Configs;
+using M2BobPatcher.UI;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -45,7 +46,7 @@ namespace M2BobPatcher.Downloaders {
                         byte[] buffer = new byte[DownloaderConfigs.BUFFER_SIZE];
                         bool moreLeftToRead = true;
                         int lastMark = 0;
-                        bw.ReportProgress(0, true);
+                        Utils.Progress(bw, 0, ProgressiveWidgetsEnum.ProgressBar.DownloadProgressBar);
                         do {
                             using (var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(DownloaderConfigs.TIMEOUT_MS_WAITING_FOR_READ))) {
                                 cts.Token.Register(() => contentStream.Close());
@@ -58,7 +59,7 @@ namespace M2BobPatcher.Downloaders {
                                     totalReads += 1;
                                     if (totalReads % DownloaderConfigs.INFORM_PROGRESS_ONE_IN_X_READS == 0 && totalRead / fileSize * 100 > lastMark) {
                                         lastMark = Convert.ToInt32(totalRead / fileSize * 100);
-                                        bw.ReportProgress(lastMark, true);
+                                        Utils.Progress(bw, lastMark, ProgressiveWidgetsEnum.ProgressBar.DownloadProgressBar);
                                     }
                                 }
                             }
@@ -70,7 +71,7 @@ namespace M2BobPatcher.Downloaders {
                         else
                             if (!Md5HashFactory.NormalizeMd5(Md5HashFactory.GeneratedMd5HashFromByteArray(result)).Equals(expectedHash))
                             throw new InvalidDataException();
-                        bw.ReportProgress(100, true);
+                        Utils.Progress(bw, 100, ProgressiveWidgetsEnum.ProgressBar.DownloadProgressBar);
                         return result;
                     }
                 }
