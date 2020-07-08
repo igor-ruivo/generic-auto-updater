@@ -24,7 +24,7 @@ namespace M2BobPatcher.FileSystem {
                         metadata[currentPath] = new FileMetadata(currentPath, Md5HashFactory.NormalizeMd5(Md5HashFactory.GeneratedMd5HashFromStream(stream)));
                     }
                 });
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 if (ex is KeyNotFoundException)
                     throw new Exception("KeyNotFoundException");
                 throw;
