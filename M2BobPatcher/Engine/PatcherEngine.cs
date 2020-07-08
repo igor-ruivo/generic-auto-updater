@@ -131,8 +131,7 @@ namespace M2BobPatcher.Engine {
                 ServerMetadata = new Dictionary<string, FileMetadata>(numberOfRemoteFiles);
                 for (int i = 1; i < metadataByLine.Length; i += 2)
                     ServerMetadata[metadataByLine[i]] = new FileMetadata(metadataByLine[i], metadataByLine[i + 1]);
-            }
-            catch(Exception ex) {
+            } catch (Exception ex) {
                 Handler.Handle(ex);
             }
         }

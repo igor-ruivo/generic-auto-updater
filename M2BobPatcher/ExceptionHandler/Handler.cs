@@ -16,20 +16,21 @@ namespace M2BobPatcher.ExceptionHandler {
                 case AggregateException e1:
                     Handle(e1.InnerExceptions.First());
                     break;
-                case FileNotFoundException e2:
-                case DirectoryNotFoundException e3:
+                case FileNotFoundException e1:
+                case DirectoryNotFoundException e2:
                     Repatch(ErrorHandlerResources.AV_FALSE_POSITIVE, ErrorHandlerResources.ERROR_TITLE_AV);
                     break;
-                case WebException e4:
-                case HttpRequestException e5:
-                case InvalidDataException e6:
-                case DecoderFallbackException e7:
+                case WebException e1:
+                case HttpRequestException e2:
+                case InvalidDataException e3:
+                case DecoderFallbackException e4:
+                case ObjectDisposedException e5:
                     Repatch(ErrorHandlerResources.TIMEOUT_DOWNLOADING_RESOURCE, ErrorHandlerResources.ERROR_TITLE_NETWORKING);
                     break;
-                case SecurityException e8:
-                case UnauthorizedAccessException e9:
-                case PathTooLongException e10:
-                case IOException e11:
+                case SecurityException e1:
+                case UnauthorizedAccessException e2:
+                case PathTooLongException e3:
+                case IOException e4:
                     Repatch(ErrorHandlerResources.ERROR_IO_EXPLORER, ErrorHandlerResources.ERROR_TITLE_EXPLORER);
                     break;
                 default:
