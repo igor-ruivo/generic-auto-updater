@@ -1,0 +1,313 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>M2Bob - Patcher</name>
+    </assembly>
+    <members>
+        <member name="T:M2BobPatcher.Engine.IPatcherEngine">
+            <summary>
+            This interface represents the engine with all its core logic behind the AutoPatcher.
+            It contains the public API calls that an external application may access regarding it.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Engine.IPatcherEngine.Patch">
+            <summary>
+            Performs the required steps in order to try to fully patch M2Bob.
+            </summary>
+        </member>
+        <member name="T:M2BobPatcher.ExceptionHandler.Exceptions.DataTamperedException">
+            <summary>
+            The exception that is thrown whenever an external entity tampered any data it shouldn't.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.ExceptionHandler.Exceptions.DataTamperedException.#ctor">
+            <summary>
+            Initializes a new instance of the <c>DataTamperedException</c> class.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.ExceptionHandler.Exceptions.DataTamperedException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <c>DataTamperedException</c> class with a specified error message.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.ExceptionHandler.Exceptions.DataTamperedException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <c>DataTamperedException</c> class with a specified error message and a reference to the inner exception that is the cause of this exception.
+            </summary>
+        </member>
+        <member name="T:M2BobPatcher.Resources.TextResources.ErrorHandlerResources">
+            <summary>
+            The class with the description of all handled runtime errors.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.ErrorHandlerResources.ERROR_TITLE_AV">
+            <summary>
+            The title of the window triggered whenever there is a consistency error.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.ErrorHandlerResources.ERROR_TITLE_UNKNOWN">
+            <summary>
+            The title of the window triggered whenever there is an unknown error.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.ErrorHandlerResources.ERROR_TITLE_NETWORKING">
+            <summary>
+            The title of the window triggered whenever there is a network error.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.ErrorHandlerResources.ERROR_TITLE_EXPLORER">
+            <summary>
+            The title of the window triggered whenever there is an IO error.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.ErrorHandlerResources.UNKNOWN_ERROR">
+            <summary>
+            The text description of the window triggered whenever there is an unknown error.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.ErrorHandlerResources.TIMEOUT_DOWNLOADING_RESOURCE">
+            <summary>
+            The text description of the window triggered whenever there is a network error.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.ErrorHandlerResources.AV_FALSE_POSITIVE">
+            <summary>
+            The text description of the window triggered whenever there is a consistency error.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.ErrorHandlerResources.ERROR_IO_EXPLORER">
+            <summary>
+            The text description of the window triggered whenever there is an IO error.
+            </summary>
+        </member>
+        <member name="T:M2BobPatcher.Resources.TextResources.MainWindowResources">
+            <summary>
+            The class with the text resources of all main window's textual fields.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.MainWindowResources.M2BOB_WEBSITE">
+            <summary>
+            The M2Bob main website.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.MainWindowResources.AUTHOR_WEBSITE">
+            <summary>
+            The author main website.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.MainWindowResources.CURRENT_VERSION">
+            <summary>
+            The current version of the AutoPatcher.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.MainWindowResources.MAIN_WINDOW_TITLE">
+            <summary>
+            The title of the main window.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.MainWindowResources.M2BOB_STARTER">
+            <summary>
+            The M2bob launcher.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.MainWindowResources.ALREADY_RUNNING">
+            <summary>
+            The text description of the window triggered whenever there is already another instance of the AutoPatcher running.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.MainWindowResources.ALREADY_RUNNING_ERROR">
+            <summary>
+            The title of the window triggered whenever there is already another instance of the AutoPatcher running.
+            </summary>
+        </member>
+        <member name="T:M2BobPatcher.Resources.TextResources.PatcherEngineResources">
+            <summary>
+            The class with the description of all the engine's steps and sub-steps.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.PatcherEngineResources.STEP">
+            <summary>
+            The text description of the current step.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.PatcherEngineResources.CHECKING_OUTDATED_CONTENT">
+            <summary>
+            The text description of the "Checking for outdated content" step.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.PatcherEngineResources.CHECKING_MISSING_CONTENT">
+            <summary>
+            The text description of the "Checking for missing content" step.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.PatcherEngineResources.DOWNLOADING_OUTDATED_CONTENT">
+            <summary>
+            The text description of the "Downloading outdated content" step.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.PatcherEngineResources.DOWNLOADING_MISSING_CONTENT">
+            <summary>
+            The text description of the "Downloading missing content" step.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.PatcherEngineResources.GENERATING_LOCAL_METADATA">
+            <summary>
+            The text description of the "Analysing local metadata" step.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.PatcherEngineResources.PARSING_SERVER_METADATA">
+            <summary>
+            The text description of the "Parsing server metadata" step.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.PatcherEngineResources.STARTING">
+            <summary>
+            The text description that is used on both existing labels at start-up.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.PatcherEngineResources.FINISHED">
+            <summary>
+            The text description that is used on the general label when the AutoPatcher finished with success.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.TextResources.PatcherEngineResources.ALL_FILES_ANALYZED">
+            <summary>
+            The text description that is used on the downloader label when the AutoPatcher finished with success.
+            </summary>
+        </member>
+        <member name="T:M2BobPatcher.Resources.Configs.EngineConfigs">
+            <summary>
+            The class with the required configuration to be used by the engine.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.Configs.EngineConfigs.M2BOB_PATCH_ROUTER">
+            <summary>
+            M2Bob's router page, which redirects the browser to the patch metadata file.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.Configs.EngineConfigs.M2BOB_PATCH_METADATA">
+            <summary>
+            The link to M2Bob's metadata file.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.Configs.EngineConfigs.MS_TO_WAIT_FOR_AV_FALSE_POSITIVES">
+            <summary>
+            The time (in milliseconds) that the engine will spend sleeping before performing any consistency checks.
+            </summary>
+        </member>
+        <member name="T:M2BobPatcher.Resources.Configs.DownloaderConfigs">
+            <summary>
+            The class with the required configuration to be used by the downloader.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.Configs.DownloaderConfigs.MAX_DOWNLOAD_RETRIES_PER_FILE">
+            <summary>
+            The number of attempts to successfully download a file before throwing a specific Exception.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.Configs.DownloaderConfigs.INTERVAL_MS_BETWEEN_DOWNLOAD_RETRIES">
+            <summary>
+            The time (in milliseconds) that the downloader will spend sleeping before retrying a failed download.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.Configs.DownloaderConfigs.TIMEOUT_MS_WAITING_FOR_READ">
+            <summary>
+            The time (in milliseconds) that the downloader will spend waiting for the current read request to be completed before closing the stream by force, thus throwing an <c>ObjectDisposedException</c>.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.Configs.DownloaderConfigs.BUFFER_SIZE">
+            <summary>
+            The downloader's buffer size, in bytes.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Resources.Configs.DownloaderConfigs.INFORM_PROGRESS_EVERY_X_READS">
+            <summary>
+            How many logs to the UI Thread will the downloader always omit between performed reads.
+            </summary>
+        </member>
+        <member name="T:M2BobPatcher.UI.ProgressiveWidgetsEnum">
+            <summary>
+            The class with the enums containing instances' descriptions of each used Widget.
+            </summary>
+        </member>
+        <member name="T:M2BobPatcher.UI.ProgressiveWidgetsEnum.Label">
+            <summary>
+            The enum containing instances' descriptions of each used <c>Label</c>.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.UI.ProgressiveWidgetsEnum.Label.InformativeLogger">
+            <summary>
+            An instance description of the informative logger.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.UI.ProgressiveWidgetsEnum.Label.DownloadLogger">
+            <summary>
+            An instance description of the downloader logger.
+            </summary>
+        </member>
+        <member name="T:M2BobPatcher.UI.ProgressiveWidgetsEnum.ProgressBar">
+            <summary>
+            The enum containing instances' descriptions of each used <c>ProgressBar</c>.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.UI.ProgressiveWidgetsEnum.ProgressBar.WholeProgressBar">
+            <summary>
+            An instance description of the whole progress bar.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.UI.ProgressiveWidgetsEnum.ProgressBar.DownloadProgressBar">
+            <summary>
+            An instance description of the downloader progress bar.
+            </summary>
+        </member>
+        <member name="T:M2BobPatcher.PatcherMainWindow">
+            <summary>
+            The class representing the main window and all its widgets' behaviour.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.PatcherMainWindow.#ctor">
+            <summary>
+            Initializes a new instance of the main window.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.PatcherMainWindow.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.PatcherMainWindow.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:M2BobPatcher.PatcherMainWindow.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Patcher.Main">
+            <summary>
+            The main entry point for the application.
+            Only one application instance is allowed due to <c>Mutex</c> usage.
+            </summary>
+        </member>
+        <member name="T:M2BobPatcher.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:M2BobPatcher.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:M2BobPatcher.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+    </members>
+</doc>
