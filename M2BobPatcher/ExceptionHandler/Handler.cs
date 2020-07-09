@@ -1,5 +1,5 @@
 ﻿using M2BobPatcher.ExceptionHandler.Exceptions;
-using M2BobPatcher.TextResources;
+using M2BobPatcher.Resources.TextResources;
 using System;
 using System.IO;
 using System.Linq;

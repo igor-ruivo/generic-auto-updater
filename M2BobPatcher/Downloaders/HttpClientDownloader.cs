@@ -25,7 +25,7 @@ namespace M2BobPatcher.Downloaders {
                 }
                 catch (Exception ex) {
                     // This kind of Exception already slept.
-                    if (ex is ObjectDisposedException || ex is AggregateException && Utils.AggregateContainsObjectDisposedException((AggregateException)ex))
+                    if (ex is ObjectDisposedException || ex is AggregateException exception && Utils.AggregateContainsObjectDisposedException(exception))
                         throw;
                     Thread.Sleep(DownloaderConfigs.INTERVAL_MS_BETWEEN_DOWNLOAD_RETRIES);
                     if (++tries == DownloaderConfigs.MAX_DOWNLOAD_RETRIES_PER_FILE)
@@ -56,8 +56,8 @@ namespace M2BobPatcher.Downloaders {
                                 else {
                                     await ms.WriteAsync(buffer, 0, read);
                                     totalRead += read;
-                                    totalReads += 1;
-                                    if (totalReads % DownloaderConfigs.INFORM_PROGRESS_ONE_IN_X_READS == 0 && totalRead / fileSize * 100 > lastMark) {
+                                    totalReads ++;
+                                    if (totalReads % DownloaderConfigs.INFORM_PROGRESS_EVERY_X_READS == 0 && totalRead / fileSize * 100 > lastMark) {
                                         lastMark = Convert.ToInt32(totalRead / fileSize * 100);
                                         Utils.Progress(bw, lastMark, ProgressiveWidgetsEnum.ProgressBar.DownloadProgressBar);
                                     }

@@ -1,9 +1,9 @@
-﻿namespace M2BobPatcher.TextResources {
+﻿namespace M2BobPatcher.Resources.TextResources {
     public static class ErrorHandlerResources {
         public static readonly string ERROR_TITLE_AV = "Consistency Error";
         public static readonly string ERROR_TITLE_UNKNOWN = "Unknown Error";
         public static readonly string ERROR_TITLE_NETWORKING = "Network Error";
-        public static readonly string ERROR_TITLE_EXPLORER = "Error While Writing";
+        public static readonly string ERROR_TITLE_EXPLORER = "IO Error";
 
         public static readonly string UNKNOWN_ERROR = "An unknown error occurred. Please contact M2Bob staff.";
         public static readonly string TIMEOUT_DOWNLOADING_RESOURCE = "Couldn't connect to M2Bob AutoPatcher server. Please check if M2Bob website is online or check your internet connection.";

@@ -4,6 +4,6 @@
         public static readonly int INTERVAL_MS_BETWEEN_DOWNLOAD_RETRIES = 1000;
         public static readonly int TIMEOUT_MS_WAITING_FOR_READ = 10000;
         public static readonly int BUFFER_SIZE = 8192;
-        public static readonly int INFORM_PROGRESS_ONE_IN_X_READS = 10;
+        public static readonly int INFORM_PROGRESS_EVERY_X_READS = 10;
     }
 }
