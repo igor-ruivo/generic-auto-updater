@@ -207,6 +207,28 @@
             Creates a new instance of the class <c>FileMetadata</c>.
             </summary>
         </member>
+        <member name="T:M2BobPatcher.FileSystem.FileSystemExplorer">
+            <summary>
+            The class responsible for any IO related task.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.FileSystem.FileSystemExplorer.GenerateLocalMetadata(System.String[],System.Int32)">
+            <summary>
+            Returns a refreshed version of the local metadata.
+            This method accomplishes this by reading from the disk all the files whose name match those in filePaths and calculating their md5 hashes concurrently.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.FileSystem.FileSystemExplorer.FetchFile(System.ComponentModel.BackgroundWorker,System.String,System.String,System.String)">
+            <summary>
+            Tries to download and write a specific file (resource) to the disk in a defined path.
+            This method creates the respective parent directory, if needed.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.FileSystem.FileSystemExplorer.FileExists(System.String)">
+            <summary>
+            Checks if a file exists.
+            </summary>
+        </member>
         <member name="T:M2BobPatcher.FileSystem.IFileMetadata">
             <summary>
             Used to represent the metadata of a file.
