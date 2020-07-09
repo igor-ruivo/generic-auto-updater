@@ -1,9 +1,8 @@
 ﻿using M2BobPatcher.Engine;
 using M2BobPatcher.ExceptionHandler;
 using M2BobPatcher.Resources.TextResources;
-using M2BobPatcher.Resources.UIResources;
-using M2BobPatcher.TextResources;
 using M2BobPatcher.UI;
+using M2BobPatcher.UI.Wrappers;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -52,6 +51,7 @@ namespace M2BobPatcher {
 
         private void setupWindowProperties() {
             Text = string.Format(MainWindowResources.MAIN_WINDOW_TITLE, MainWindowResources.CURRENT_VERSION);
+            loggerDisplay.Text = PatcherEngineResources.STARTING;
             downloaderDisplay.Text = PatcherEngineResources.STARTING;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;

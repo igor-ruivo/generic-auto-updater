@@ -1,7 +1,6 @@
 ﻿using M2BobPatcher.ExceptionHandler;
-using M2BobPatcher.TextResources;
+using M2BobPatcher.Resources.TextResources;
 using System;
-using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace M2BobPatcher {
@@ -9,31 +8,24 @@ namespace M2BobPatcher {
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
+        static readonly System.Threading.Mutex mutex = new System.Threading.Mutex(true, string.Format("Global\\{{{0}}}", "{7A241E4E-6BA9-4F7A-8060-2BE66E9E9D60}"));
         [STAThread]
         static void Main() {
-            try {
-                if (PriorProcess() != null) {
-                    MessageBox.Show(MainWindowResources.ALREADY_RUNNING, MainWindowResources.ALREADY_RUNNING_ERROR, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return;
+            if (mutex.WaitOne(TimeSpan.Zero, true)) {
+                try {
+                    Application.EnableVisualStyles();
+                    Application.SetCompatibleTextRenderingDefault(false);
+                    Application.Run(new PatcherMainWindow());
                 }
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new PatcherMainWindow());
+                catch (Exception ex) {
+                    Handler.Handle(ex);
+                }
+                finally {
+                    mutex.ReleaseMutex();
+                }
             }
-            catch (Exception ex) {
-                Handler.Handle(ex);
-            }
-        }
-
-        public static Process PriorProcess() {
-            Process curr = Process.GetCurrentProcess();
-            Process[] procs = Process.GetProcessesByName(curr.ProcessName);
-            foreach (Process p in procs) {
-                if ((p.Id != curr.Id) &&
-                    (p.MainModule.FileName == curr.MainModule.FileName))
-                    return p;
-            }
-            return null;
+            else
+                MessageBox.Show(MainWindowResources.ALREADY_RUNNING, MainWindowResources.ALREADY_RUNNING_ERROR, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
     }
 }

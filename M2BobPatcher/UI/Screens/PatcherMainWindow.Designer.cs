@@ -86,9 +86,8 @@
             this.loggerDisplay.AutoSize = true;
             this.loggerDisplay.Location = new System.Drawing.Point(9, 143);
             this.loggerDisplay.Name = "loggerDisplay";
-            this.loggerDisplay.Size = new System.Drawing.Size(82, 13);
+            this.loggerDisplay.Size = new System.Drawing.Size(0, 13);
             this.loggerDisplay.TabIndex = 5;
-            this.loggerDisplay.Text = "Starting patch...";
             // 
             // downloaderDisplay
             // 
