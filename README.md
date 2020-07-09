@@ -40,7 +40,8 @@ The AutoPatcher will start.
 
 ## Running the tests
 
-Automated tests for this system will be added in the future.
+* Automated tests for this system will be added in the future.
+* [VirusTotal analysis](https://www.virustotal.com/gui/file/9fadc3498b16c79cbdf97a6cbf21c6293f2ecab595cde9f52cb269ee1789a82c/detection)
 
 ## Built With
 
