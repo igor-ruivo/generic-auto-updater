@@ -56,7 +56,7 @@ namespace M2BobPatcher.Downloaders {
                                 else {
                                     await ms.WriteAsync(buffer, 0, read);
                                     totalRead += read;
-                                    totalReads ++;
+                                    totalReads++;
                                     if (totalReads % DownloaderConfigs.INFORM_PROGRESS_EVERY_X_READS == 0 && totalRead / fileSize * 100 > lastMark) {
                                         lastMark = Convert.ToInt32(totalRead / fileSize * 100);
                                         Utils.Progress(bw, lastMark, ProgressiveWidgetsEnum.ProgressBar.DownloadProgressBar);
