@@ -9,7 +9,14 @@ using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace M2BobPatcher {
+    /// <summary>
+    /// The class representing the main window and all its widgets' behaviour.
+    /// </summary>
     public partial class PatcherMainWindow : Form {
+
+        /// <summary>
+        /// Initializes a new instance of the main window.
+        /// </summary>
         public PatcherMainWindow() {
             InitializeComponent();
             backgroundWorker1.WorkerReportsProgress = true;
