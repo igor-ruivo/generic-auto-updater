@@ -602,6 +602,11 @@
             Enables the starter button and displays a final message in the logger display.
             </summary>
         </member>
+        <member name="M:M2BobPatcher.PatcherMainWindow.button1_Click(System.Object,System.EventArgs)">
+            <summary>
+            Opens M2bob website whenever the respective button is clicked.
+            </summary>
+        </member>
         <member name="F:M2BobPatcher.PatcherMainWindow.components">
             <summary>
             Required designer variable.

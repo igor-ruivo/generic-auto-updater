@@ -122,5 +122,12 @@ namespace M2BobPatcher {
             starter.Enabled = true;
             loggerDisplay.Text = PatcherEngineResources.FINISHED;
         }
+
+        /// <summary>
+        /// Opens M2bob website whenever the respective button is clicked.
+        /// </summary>
+        private void button1_Click(object sender, EventArgs e) {
+            Process.Start(MainWindowResources.M2BOB_WEBSITE);
+        }
     }
 }
