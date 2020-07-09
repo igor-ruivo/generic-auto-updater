@@ -4,6 +4,32 @@
         <name>M2Bob - Patcher</name>
     </assembly>
     <members>
+        <member name="T:M2BobPatcher.Downloaders.HttpClientDownloader">
+            <summary>
+            An error-handler and user-friendly downloader class, used to download any file needed by the AutoPatcher through http.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Downloaders.HttpClientDownloader.HttpClient">
+            <summary>
+            The downloader client itself.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Downloaders.HttpClientDownloader.DownloadData(System.ComponentModel.BackgroundWorker,System.String,System.String)">
+            <summary>
+            This method tries to download a specific file (<c>address</c>) a pre-defined number of times (<c>DownloaderConfigs.MAX_DOWNLOAD_RETRIES_PER_FILE</c>).
+            It is also responsible for putting the BackgroundWorker Thread to sleep a pre-defined amount of time (<c>DownloaderConfigs.INTERVAL_MS_BETWEEN_DOWNLOAD_RETRIES</c>) between each download retry.
+            It uses the Download method for that purpose, calling it with the received arguments.
+            It waits for the returned Download's <c>Task</c> to finish before returning the downloaded content as a <c>byte[]</c>.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Downloaders.HttpClientDownloader.Download(System.ComponentModel.BackgroundWorker,System.String,System.String)">
+            <summary>
+            This method tries to return a <c>Task</c> responsible to download a specific file (<c>address</c>).
+            If it completes the download, it checks if the hash of the downloaded file equals the expected hash of that same file (expectedHash), throwing an <c>InvalidDataException</c> if it doesn't.
+            If the expected hash is null, it assumes that the downloaded file is the server metadata and executes the respective sanity check on it, throwing an <c>InvalidDataException</c> if something is wrong with it.
+            This method also logs the download progress to the respective progress bar through the BackgroundWorker (bw), whenever it assumes it is necessary.
+            </summary>
+        </member>
         <member name="T:M2BobPatcher.Engine.IPatcherEngine">
             <summary>
             This interface represents the engine with all its core logic behind the AutoPatcher.
@@ -13,6 +39,115 @@
         <member name="M:M2BobPatcher.Engine.IPatcherEngine.Patch">
             <summary>
             Performs the required steps in order to try to fully patch M2Bob.
+            </summary>
+        </member>
+        <member name="T:M2BobPatcher.Engine.PatcherEngine">
+            <summary>
+            A pipeline-action-based engine class, with all its core logic behind the AutoPatcher.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Engine.PatcherEngine.LocalMetadata">
+            <summary>
+            The LocalMetadata stores the metadata obtained from the local files.
+            It is stored in a thread-safe structure since it is going to be accessed concurrently.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Engine.PatcherEngine.ServerMetadata">
+            <summary>
+            The ServerMetadata stores the metadata obtained from the server.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Engine.PatcherEngine.BW">
+            <summary>
+            The <c>BackgroundWorker</c> instance, used to contact the UI Thread.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Engine.PatcherEngine.PatchDirectory">
+            <summary>
+            The url to the actual server directory with the M2Bob files.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Engine.PatcherEngine.Pipeline">
+            <summary>
+            A pipeline containing the steps to follow in order to try to guarantee a successful patch.
+            Every action-step knows its relative order.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Engine.PatcherEngine.#ctor(System.ComponentModel.BackgroundWorker)">
+            <summary>
+            Initializes a new instance of the <c>PatcherEngine</c> class with the specified <c>BackgroundWorker</c>.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Engine.PatcherEngine.M2BobPatcher#Engine#IPatcherEngine#Patch">
+            <summary>
+            Performs the required steps in order to try to fully patch M2Bob.
+            The time it takes for it to patch is measured through a <c>Stopwatch</c>.
+            Every current step's description is outputted to the respective <c>Label</c> in the UI Thread through the BackgroundWorker.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Engine.PatcherEngine.DownloadContent(System.Int32,System.Collections.Generic.List{System.String},System.Boolean)">
+            <summary>
+            Invokes the <c>FileSystemExplorer</c> to try to download and write a list of specific files (content) to the disk.
+            isMissingContent is true if the method is invoked as a mean to download missing content, or false if to download outdated content.
+            After the downloads and writes are completed, the local metadata is refreshed.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Engine.PatcherEngine.GenerateServerMetadata(System.Int32)">
+            <summary>
+            Invokes the <c>DownloadServerMetadataFile()</c> method, receiving a previously checked server's metadata file.
+            It then parses it, and stores its content in the ServerMetadata global variable.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Engine.PatcherEngine.CalculateMissingContent">
+            <summary>
+            Returns a list containing the server files' names that are not present locally.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Engine.PatcherEngine.CalculateOutdatedContent">
+            <summary>
+            Returns a list containing the server files' names which their md5 hash differs from the respective local files' md5 hash.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Engine.PatcherEngine.DownloadServerMetadataFile">
+            <summary>
+            Downloads and validates the server metadata file.
+            Returns it as a string.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Engine.PatcherEngine.GenerateLocalMetadata">
+            <summary>
+            Asks the FileSystemExplorer for a fresh copy of the local metadata performed in a concurrent way.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Engine.PatcherEngine.DownloadMissingContent(System.Int32)">
+            <summary>
+            Invokes <c>CalculateMissingContent()</c> and then downloads the received list of missing files.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Engine.PatcherEngine.DownloadOutdatedContent(System.Int32)">
+            <summary>
+            Invokes <c>CalculateOutdatedContent()</c> and then downloads the received list of outdated files.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Engine.PatcherEngine.GetCurrentStepProgress(System.Int32)">
+            <summary>
+            Calculates the current progress percentage, based on the received step.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Engine.PatcherEngine.LogDownloadingEvent(System.Int32,System.Boolean)">
+            <summary>
+            Informs the UI Thread that a specific type of download (missing content or outdated content) is taking progress, if that's the case.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Engine.PatcherEngine.PerformLastSanityChecks">
+            <summary>
+            Checks if there are still any missing or outdated content after successfully applying the patch,
+            throwing a new <c>FileNotFoundException</c> or <c>DataTamperedException</c> respectively if that's the case.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Engine.PatcherEngine.Finish(System.Diagnostics.Stopwatch)">
+            <summary>
+            Invokes <c>PerformLastSanityChecks()</c>, performing some last second sanity check, and stops the Stopwatch timer informing the UI Thread that the patch is completed.
             </summary>
         </member>
         <member name="T:M2BobPatcher.ExceptionHandler.Exceptions.DataTamperedException">
@@ -33,6 +168,70 @@
         <member name="M:M2BobPatcher.ExceptionHandler.Exceptions.DataTamperedException.#ctor(System.String,System.Exception)">
             <summary>
             Initializes a new instance of the <c>DataTamperedException</c> class with a specified error message and a reference to the inner exception that is the cause of this exception.
+            </summary>
+        </member>
+        <member name="T:M2BobPatcher.ExceptionHandler.Handler">
+            <summary>
+            The class responsible for all exception handling during the patch.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.ExceptionHandler.Handler.Handle(System.Exception)">
+            <summary>
+            Handles the received <c>Exception</c> based on its type.
+            Any un-cased exception triggers an unknown error prompt.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.ExceptionHandler.Handler.ShowError(System.String,System.String)">
+            <summary>
+            Informs the user, through a <c>MessageBox</c> whose text and caption are received in argument, that something went wrong while patching.
+            Exits the application terminating all Threads after the user clicks in the OK button.
+            </summary>
+        </member>
+        <member name="T:M2BobPatcher.FileSystem.FileMetadata">
+            <summary>
+            The class used to model the metadata of a file.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.FileSystem.FileMetadata.Filename">
+            <summary>
+            The file name of the file.
+            </summary>
+        </member>
+        <member name="P:M2BobPatcher.FileSystem.FileMetadata.Hash">
+            <summary>
+            The md5 hash of the file.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.FileSystem.FileMetadata.#ctor(System.String,System.String)">
+            <summary>
+            Creates a new instance of the class <c>FileMetadata</c>.
+            </summary>
+        </member>
+        <member name="T:M2BobPatcher.FileSystem.IFileMetadata">
+            <summary>
+            Used to represent the metadata of a file.
+            </summary>
+        </member>
+        <member name="T:M2BobPatcher.Hash.Md5HashFactory">
+            <summary>
+            The class used to generate and manipulate md5 hashes.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Hash.Md5HashFactory.GeneratedMd5HashFromByteArray(System.Byte[])">
+            <summary>
+            Computes the md5 hash of the received <c>byte[]</c> array and returns it as a string.
+            Invokes <c>NormalizeMd5()</c> for the conversion.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Hash.Md5HashFactory.GeneratedMd5HashFromStream(System.IO.Stream)">
+            <summary>
+            Computes the md5 hash of the received <c>Stream</c> and returns it as a string.
+            Invokes <c>NormalizeMd5()</c> for the conversion.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Hash.Md5HashFactory.NormalizeMd5(System.Byte[])">
+            <summary>
+            Converts the <c>byte[]</c> md5 hash received into a string.
             </summary>
         </member>
         <member name="T:M2BobPatcher.Resources.TextResources.ErrorHandlerResources">
@@ -175,6 +374,32 @@
             The text description that is used on the downloader label when the AutoPatcher finished with success.
             </summary>
         </member>
+        <member name="T:M2BobPatcher.Resources.Utils">
+            <summary>
+            A class with various utilities, used throughout all the patch.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Resources.Utils.PerformPatchDirectorySanityCheck(System.Byte[])">
+            <summary>
+            Performs a sanity check on the received <c>byte[]</c>, assuming it corresponds to the downloaded server metadata file.
+            Returns the received data as a string if everything goes right, and throws an <c>InvalidDataException()</c> otherwise.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Resources.Utils.AggregateContainsObjectDisposedException(System.AggregateException)">
+            <summary>
+            Checks if the received <c>AggregateException</c> contains at least one <c>ObjectDisposedException</c>.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Resources.Utils.Log(System.ComponentModel.BackgroundWorker,System.String,M2BobPatcher.UI.ProgressiveWidgetsEnum.Label)">
+            <summary>
+            Requests the UI Thread, through the BackgroundWorker (bw), to log the received message in the specified Label (label).
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.Resources.Utils.Progress(System.ComponentModel.BackgroundWorker,System.Int32,M2BobPatcher.UI.ProgressiveWidgetsEnum.ProgressBar)">
+            <summary>
+            Requests the UI Thread, through the BackgroundWorker (bw), to log the received progress in the specified ProgressBar (progressBar).
+            </summary>
+        </member>
         <member name="T:M2BobPatcher.Resources.Configs.EngineConfigs">
             <summary>
             The class with the required configuration to be used by the engine.
@@ -225,6 +450,51 @@
             How many logs to the UI Thread will the downloader always omit between performed reads.
             </summary>
         </member>
+        <member name="T:M2BobPatcher.UI.Wrappers.IWidgetWrapper">
+            <summary>
+            Used to represent a wrapper of a specific Widget.
+            </summary>
+        </member>
+        <member name="T:M2BobPatcher.UI.Wrappers.LabelWrapper">
+            <summary>
+            The class used to model the wrapper of a <c>Label</c>.
+            </summary>
+        </member>
+        <member name="P:M2BobPatcher.UI.Wrappers.LabelWrapper.Label">
+            <summary>
+            The Label's representation as an enum
+            </summary>
+        </member>
+        <member name="P:M2BobPatcher.UI.Wrappers.LabelWrapper.Value">
+            <summary>
+            The text value of the Label.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.UI.Wrappers.LabelWrapper.#ctor(M2BobPatcher.UI.ProgressiveWidgetsEnum.Label,System.String)">
+            <summary>
+            Initializes a new instance of the <c>LabelWrapper</c> class with the specified <c>ProgressiveWidgetsEnum.Label</c> and value.
+            </summary>
+        </member>
+        <member name="T:M2BobPatcher.UI.Wrappers.ProgressBarWrapper">
+            <summary>
+            The class used to model the wrapper of a <c>ProgressBar</c>.
+            </summary>
+        </member>
+        <member name="P:M2BobPatcher.UI.Wrappers.ProgressBarWrapper.ProgressBar">
+            <summary>
+            The ProgressBar's representation as an enum
+            </summary>
+        </member>
+        <member name="P:M2BobPatcher.UI.Wrappers.ProgressBarWrapper.Value">
+            <summary>
+            The progress percentage of the progress bar.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.UI.Wrappers.ProgressBarWrapper.#ctor(M2BobPatcher.UI.ProgressiveWidgetsEnum.ProgressBar,System.Int32)">
+            <summary>
+            Initializes a new instance of the <c>ProgressBarWrapper</c> class with the specified <c>ProgressiveWidgetsEnum.ProgressBar</c> and value.
+            </summary>
+        </member>
         <member name="T:M2BobPatcher.UI.ProgressiveWidgetsEnum">
             <summary>
             The class with the enums containing instances' descriptions of each used Widget.
@@ -270,6 +540,46 @@
             Initializes a new instance of the main window.
             </summary>
         </member>
+        <member name="M:M2BobPatcher.PatcherMainWindow.BackgroundWorker1_ProgressChanged(System.Object,System.ComponentModel.ProgressChangedEventArgs)">
+            <summary>
+            Deals with any ProgressChanged event trigger assuming the <c>ProgressChangedEventArgs</c>'s <c>UserState</c> is a <c>IWidgetWrapper</c>.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.PatcherMainWindow.setupWindowProperties">
+            <summary>
+            Sets up the initial main window properties.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.PatcherMainWindow.loadWindow(System.Object,System.EventArgs)">
+            <summary>
+            Loads the main window.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.PatcherMainWindow.linkLabel1_LinkClicked(System.Object,System.Windows.Forms.LinkLabelLinkClickedEventArgs)">
+            <summary>
+            Opens M2bob website whenever the respective link is clicked.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.PatcherMainWindow.starter_Click(System.Object,System.EventArgs)">
+            <summary>
+            Starts M2bob and exits the AutoPatcher when clicked.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.PatcherMainWindow.author_LinkClicked(System.Object,System.Windows.Forms.LinkLabelLinkClickedEventArgs)">
+            <summary>
+            Opens the author's website whenever the respective link is clicked.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.PatcherMainWindow.backgroundWorker1_DoWork(System.Object,System.ComponentModel.DoWorkEventArgs)">
+            <summary>
+            Supports all the engine's work in a non-UI Thread and assigns any un-handled exceptions to the Handler.
+            </summary>
+        </member>
+        <member name="M:M2BobPatcher.PatcherMainWindow.backgroundWorker1_RunWorkerCompleted(System.Object,System.ComponentModel.RunWorkerCompletedEventArgs)">
+            <summary>
+            Enables the starter button and displays a final message in the logger display.
+            </summary>
+        </member>
         <member name="F:M2BobPatcher.PatcherMainWindow.components">
             <summary>
             Required designer variable.
@@ -285,6 +595,17 @@
             <summary>
             Required method for Designer support - do not modify
             the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:M2BobPatcher.Patcher">
+            <summary>
+            The class with the entry point for the Patcher.
+            </summary>
+        </member>
+        <member name="F:M2BobPatcher.Patcher.mutex">
+            <summary>
+            The <c>Mutex</c> that provides atomic guarantee that only one application instance is running at most at any given moment.
+            Its name is the same as the assembly's GUID.
             </summary>
         </member>
         <member name="M:M2BobPatcher.Patcher.Main">

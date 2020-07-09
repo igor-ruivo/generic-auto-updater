@@ -23,8 +23,12 @@ namespace M2BobPatcher {
             backgroundWorker1.ProgressChanged += BackgroundWorker1_ProgressChanged;
         }
 
+        /// <summary>
+        /// Deals with any ProgressChanged event trigger assuming the <c>ProgressChangedEventArgs</c>'s <c>UserState</c> is a <c>IWidgetWrapper</c>.
+        /// </summary>
         private void BackgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e) {
             switch (e.UserState) {
+                // The assignment to these local variables is needed.
                 case ProgressBarWrapper c1:
                     ProgressBarWrapper pbw = (ProgressBarWrapper)e.UserState;
                     switch (pbw.ProgressBar) {
@@ -56,6 +60,9 @@ namespace M2BobPatcher {
             }
         }
 
+        /// <summary>
+        /// Sets up the initial main window properties.
+        /// </summary>
         private void setupWindowProperties() {
             Text = string.Format(MainWindowResources.MAIN_WINDOW_TITLE, MainWindowResources.CURRENT_VERSION);
             loggerDisplay.Text = PatcherEngineResources.STARTING;
@@ -64,24 +71,39 @@ namespace M2BobPatcher {
             MaximizeBox = false;
         }
 
+        /// <summary>
+        /// Loads the main window.
+        /// </summary>
         private void loadWindow(object sender, EventArgs e) {
             setupWindowProperties();
             backgroundWorker1.RunWorkerAsync();
         }
 
+        /// <summary>
+        /// Opens M2bob website whenever the respective link is clicked.
+        /// </summary>
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
             Process.Start(MainWindowResources.M2BOB_WEBSITE);
         }
 
+        /// <summary>
+        /// Starts M2bob and exits the AutoPatcher when clicked.
+        /// </summary>
         private void starter_Click(object sender, EventArgs e) {
             Process.Start(MainWindowResources.M2BOB_STARTER);
             Application.Exit();
         }
 
+        /// <summary>
+        /// Opens the author's website whenever the respective link is clicked.
+        /// </summary>
         private void author_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
             Process.Start(MainWindowResources.AUTHOR_WEBSITE);
         }
 
+        /// <summary>
+        /// Supports all the engine's work in a non-UI Thread and assigns any un-handled exceptions to the Handler.
+        /// </summary>
         private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e) {
             BackgroundWorker bw = sender as BackgroundWorker;
             IPatcherEngine engine = new PatcherEngine(bw);
@@ -93,6 +115,9 @@ namespace M2BobPatcher {
             }
         }
 
+        /// <summary>
+        /// Enables the starter button and displays a final message in the logger display.
+        /// </summary>
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
             starter.Enabled = true;
             loggerDisplay.Text = PatcherEngineResources.FINISHED;
