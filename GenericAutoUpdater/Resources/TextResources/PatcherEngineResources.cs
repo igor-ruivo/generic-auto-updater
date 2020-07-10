@@ -44,12 +44,12 @@
         public static readonly string STARTING = "Fetching server metadata.";
 
         /// <summary>
-        /// The text description that is used on the general label when the AutoPatcher finished with success.
+        /// The text description that is used on the general label when the Auto-Updater finished with success.
         /// </summary>
         public static readonly string FINISHED = "Everything up to date. You can now start the client!";
 
         /// <summary>
-        /// The text description that is used on the downloader label when the AutoPatcher finished with success.
+        /// The text description that is used on the downloader label when the Auto-Updater finished with success.
         /// </summary>
         public static readonly string ALL_FILES_ANALYZED = "All files analyzed in {0}.";
     }

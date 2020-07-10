@@ -17,7 +17,7 @@ using System.Threading;
 
 namespace GenericAutoUpdater.Engine {
     /// <summary>
-    /// A pipeline-action-based engine class, with all its core logic behind the AutoPatcher.
+    /// A pipeline-action-based engine class, with all its core logic behind the Auto-Updater.
     /// </summary>
     class PatcherEngine : IPatcherEngine {
         /// <summary>
