@@ -1,11 +1,11 @@
-﻿using M2BobPatcher.Downloaders;
-using M2BobPatcher.Hash;
+﻿using GenericAutoUpdater.Downloaders;
+using GenericAutoUpdater.Hash;
 using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace M2BobPatcher.FileSystem {
+namespace GenericAutoUpdater.FileSystem {
     /// <summary>
     /// The class responsible for any IO related task.
     /// </summary>

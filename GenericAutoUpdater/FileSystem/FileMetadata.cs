@@ -1,4 +1,4 @@
-﻿namespace M2BobPatcher.FileSystem {
+﻿namespace GenericAutoUpdater.FileSystem {
     /// <summary>
     /// The class used to model the metadata of a file.
     /// </summary>

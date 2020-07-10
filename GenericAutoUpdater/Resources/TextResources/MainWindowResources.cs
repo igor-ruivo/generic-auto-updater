@@ -1,12 +1,12 @@
-﻿namespace M2BobPatcher.Resources.TextResources {
+﻿namespace GenericAutoUpdater.Resources.TextResources {
     /// <summary>
     /// The class with the text resources of all main window's textual fields.
     /// </summary>
     public static class MainWindowResources {
         /// <summary>
-        /// The M2Bob main website.
+        /// Your main website.
         /// </summary>
-        public static readonly string M2BOB_WEBSITE = "https://your-website/";
+        public static readonly string WEBSITE = "https://your-website/";
 
         /// <summary>
         /// The author main website.
@@ -21,12 +21,12 @@
         /// <summary>
         /// The title of the main window.
         /// </summary>
-        public static readonly string MAIN_WINDOW_TITLE = "M2Bob Patcher {0}";
+        public static readonly string MAIN_WINDOW_TITLE = "Generic Auto Updater {0}";
 
         /// <summary>
-        /// The M2bob launcher.
+        /// Your client's launcher.
         /// </summary>
-        public static readonly string M2BOB_STARTER = "your-exe.exe";
+        public static readonly string STARTER = "your-exe.exe";
 
         /// <summary>
         /// The text description of the window triggered whenever there is already another instance of the AutoPatcher running.

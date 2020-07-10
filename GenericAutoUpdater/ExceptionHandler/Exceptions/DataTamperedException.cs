@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace M2BobPatcher.ExceptionHandler.Exceptions {
+namespace GenericAutoUpdater.ExceptionHandler.Exceptions {
     /// <summary>
     /// The exception that is thrown whenever an external entity tampered any data it shouldn't.
     /// </summary>

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace M2BobPatcher.Properties
+namespace GenericAutoUpdater.Properties
 {
 
 

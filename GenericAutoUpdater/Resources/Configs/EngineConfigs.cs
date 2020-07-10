@@ -1,12 +1,12 @@
-﻿namespace M2BobPatcher.Resources.Configs {
+﻿namespace GenericAutoUpdater.Resources.Configs {
     /// <summary>
     /// The class with the required configuration to be used by the engine.
     /// </summary>
     public static class EngineConfigs {
         /// <summary>
-        /// The link to M2Bob's metadata file.
+        /// The link to the server's metadata file.
         /// </summary>
-        public static readonly string M2BOB_PATCH_METADATA = "http://your-server/patchlist.txt";
+        public static readonly string PATCH_METADATA = "http://your-server/patchlist.txt";
 
         /// <summary>
         /// The time (in milliseconds) that the engine will spend sleeping before performing any consistency checks.

@@ -1,4 +1,4 @@
-﻿namespace M2BobPatcher.Resources.TextResources {
+﻿namespace GenericAutoUpdater.Resources.TextResources {
     /// <summary>
     /// The class with the description of all the engine's steps and sub-steps.
     /// </summary>
@@ -46,7 +46,7 @@
         /// <summary>
         /// The text description that is used on the general label when the AutoPatcher finished with success.
         /// </summary>
-        public static readonly string FINISHED = "Everything up to date. You can now start M2Bob!";
+        public static readonly string FINISHED = "Everything up to date. You can now start the client!";
 
         /// <summary>
         /// The text description that is used on the downloader label when the AutoPatcher finished with success.

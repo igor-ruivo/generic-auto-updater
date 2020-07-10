@@ -1,4 +1,4 @@
-﻿namespace M2BobPatcher.UI.Wrappers {
+﻿namespace GenericAutoUpdater.UI.Wrappers {
     /// <summary>
     /// The class used to model the wrapper of a <c>ProgressBar</c>.
     /// </summary>

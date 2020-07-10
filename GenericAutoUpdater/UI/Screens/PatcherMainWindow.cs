@@ -1,14 +1,14 @@
-﻿using M2BobPatcher.Engine;
-using M2BobPatcher.ExceptionHandler;
-using M2BobPatcher.Resources.TextResources;
-using M2BobPatcher.UI;
-using M2BobPatcher.UI.Wrappers;
+﻿using GenericAutoUpdater.Engine;
+using GenericAutoUpdater.ExceptionHandler;
+using GenericAutoUpdater.Resources.TextResources;
+using GenericAutoUpdater.UI;
+using GenericAutoUpdater.UI.Wrappers;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
 
-namespace M2BobPatcher {
+namespace GenericAutoUpdater {
     /// <summary>
     /// The class representing the main window and all its widgets' behaviour.
     /// </summary>
@@ -80,17 +80,17 @@ namespace M2BobPatcher {
         }
 
         /// <summary>
-        /// Opens M2bob website whenever the respective link is clicked.
+        /// Opens your website whenever the respective link is clicked.
         /// </summary>
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
-            Process.Start(MainWindowResources.M2BOB_WEBSITE);
+            Process.Start(MainWindowResources.WEBSITE);
         }
 
         /// <summary>
-        /// Starts M2bob and exits the AutoPatcher when clicked.
+        /// Starts your client's launcher and exits the AutoPatcher when clicked.
         /// </summary>
         private void starter_Click(object sender, EventArgs e) {
-            Process.Start(MainWindowResources.M2BOB_STARTER);
+            Process.Start(MainWindowResources.STARTER);
             Application.Exit();
         }
 
@@ -124,10 +124,10 @@ namespace M2BobPatcher {
         }
 
         /// <summary>
-        /// Opens M2bob website whenever the respective button is clicked.
+        /// Opens your website whenever the respective button is clicked.
         /// </summary>
         private void button1_Click(object sender, EventArgs e) {
-            Process.Start(MainWindowResources.M2BOB_WEBSITE);
+            Process.Start(MainWindowResources.WEBSITE);
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿using M2BobPatcher.Downloaders;
-using M2BobPatcher.ExceptionHandler;
-using M2BobPatcher.ExceptionHandler.Exceptions;
-using M2BobPatcher.FileSystem;
-using M2BobPatcher.Resources;
-using M2BobPatcher.Resources.Configs;
-using M2BobPatcher.Resources.TextResources;
-using M2BobPatcher.UI;
+﻿using GenericAutoUpdater.Downloaders;
+using GenericAutoUpdater.ExceptionHandler;
+using GenericAutoUpdater.ExceptionHandler.Exceptions;
+using GenericAutoUpdater.FileSystem;
+using GenericAutoUpdater.Resources;
+using GenericAutoUpdater.Resources.Configs;
+using GenericAutoUpdater.Resources.TextResources;
+using GenericAutoUpdater.UI;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 
-namespace M2BobPatcher.Engine {
+namespace GenericAutoUpdater.Engine {
     /// <summary>
     /// A pipeline-action-based engine class, with all its core logic behind the AutoPatcher.
     /// </summary>
@@ -37,7 +37,7 @@ namespace M2BobPatcher.Engine {
         private static BackgroundWorker BW;
 
         /// <summary>
-        /// The url to the actual server directory with the M2Bob files.
+        /// The url to the actual server directory with the files.
         /// </summary>
         private static string PatchDirectory;
 
@@ -62,7 +62,7 @@ namespace M2BobPatcher.Engine {
         }
 
         /// <summary>
-        /// Performs the required steps in order to try to fully patch M2Bob.
+        /// Performs the required steps in order to try to fully patch the client.
         /// The time it takes for it to patch is measured through a <c>Stopwatch</c>.
         /// Every current step's description is outputted to the respective <c>Label</c> in the UI Thread through the BackgroundWorker.
         /// </summary>
@@ -101,7 +101,7 @@ namespace M2BobPatcher.Engine {
         /// </summary>
         private static void GenerateServerMetadata(int step) {
             string[] metadataByLine = DownloadServerMetadataFile().Trim().Split(new[] { "\n" }, StringSplitOptions.None);
-            // The first line of the server's metadata file is the url to the actual server directory with the M2Bob files.
+            // Assume that the first line of the server's metadata file is the url to the actual server directory with the files.
             PatchDirectory = metadataByLine[0];
             ServerMetadata = new Dictionary<string, FileMetadata>((metadataByLine.Length - 1) / 2);
             // Every odd line number represents a file name, and every even line number its md5 hash.
@@ -137,7 +137,7 @@ namespace M2BobPatcher.Engine {
         /// </summary>
         private static string DownloadServerMetadataFile() {
             // There is no expected hash for the server metadata file.
-            return Utils.PerformPatchDirectorySanityCheck(HttpClientDownloader.DownloadData(BW, EngineConfigs.M2BOB_PATCH_METADATA, null));
+            return Utils.PerformPatchDirectorySanityCheck(HttpClientDownloader.DownloadData(BW, EngineConfigs.PATCH_METADATA, null));
         }
 
         /// <summary>

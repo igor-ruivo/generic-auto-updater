@@ -1,7 +1,7 @@
-﻿using M2BobPatcher.Hash;
-using M2BobPatcher.Resources;
-using M2BobPatcher.Resources.Configs;
-using M2BobPatcher.UI;
+﻿using GenericAutoUpdater.Hash;
+using GenericAutoUpdater.Resources;
+using GenericAutoUpdater.Resources.Configs;
+using GenericAutoUpdater.UI;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -9,7 +9,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace M2BobPatcher.Downloaders {
+namespace GenericAutoUpdater.Downloaders {
     /// <summary>
     /// An error-handler and user-friendly downloader class, used to download any file needed by the AutoPatcher through http.
     /// </summary>

@@ -1,4 +1,4 @@
-﻿namespace M2BobPatcher.UI {
+﻿namespace GenericAutoUpdater.UI {
     /// <summary>
     /// The class with the enums containing instances' descriptions of each used Widget.
     /// </summary>
