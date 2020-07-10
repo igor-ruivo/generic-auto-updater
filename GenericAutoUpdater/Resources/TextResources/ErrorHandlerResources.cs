@@ -26,12 +26,12 @@
         /// <summary>
         /// The text description of the window triggered whenever there is an unknown error.
         /// </summary>
-        public static readonly string UNKNOWN_ERROR = "An unknown error occurred. Please contact the staff and then try running the AutoUpdater again.";
+        public static readonly string UNKNOWN_ERROR = "An unknown error occurred. Please contact the staff and then try running the Auto-Updater again.";
 
         /// <summary>
         /// The text description of the window triggered whenever there is a network error.
         /// </summary>
-        public static readonly string TIMEOUT_DOWNLOADING_RESOURCE = "Couldn't connect to the AutoUpdater server. Please check if the website is online or check your internet connection.";
+        public static readonly string TIMEOUT_DOWNLOADING_RESOURCE = "Couldn't connect to the Auto-Updater server. Please check if the website is online or check your internet connection.";
 
         /// <summary>
         /// The text description of the window triggered whenever there is a consistency error.
