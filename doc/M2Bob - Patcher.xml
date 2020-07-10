@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>M2Bob - Patcher</name>
+        <name>Generic Auto-Updater</name>
     </assembly>
     <members>
         <member name="T:GenericAutoUpdater.Downloaders.HttpClientDownloader">
