@@ -1,7 +1,11 @@
-<a href="https://github.com/igor-ruivo/m2bobpatcher"><img src="https://i.imgur.com/GippTnp.png" title="AutoPatcher Main Window" alt="AutoPatcher Main Window"></a>
-# M2Bob - Patcher
+<a href="https://github.com/igor-ruivo/generic-auto-updater"><img src="https://i.imgur.com/UdteXJN.png" title="Generic Auto-Updater Main Window" alt="Generic Auto-Updater Main Window"></a>
+# Generic Auto-Updater
 
-A robust, user-friendly, clean and efficient AutoPacher for M2Bob.
+A robust, user-friendly, clean and efficient Auto-Updater for any client.
+
+### The Idea
+
+After finishing a stable beta version of the "Auto-Updater" to be used by a specific company, I decided to duplicate the repository and making a few tweaks in the copy to turn it public (and generic) in order for it to be used by anyone. And thus, the first version of the "Generic Auto-Updater" was born! - A robust, user-friendly, clean and efficient Auto-Updater for anyone who wishes to maintain their client's users always updated based on some server directory.
 
 ## Getting Started
 
@@ -11,8 +15,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ```
 Git;
-Visual Studio 2019 (administrator priviledges);
-Windows Forms App (.NET Framework);
+Visual Studio 2019 (administrator priviledges) with Windows Forms App (.NET Framework);
 .NET Framework 4.7.2.
 ```
 
@@ -21,7 +24,14 @@ Windows Forms App (.NET Framework);
 Clone this repository
 
 ```
-git clone https://github.com/igor-ruivo/m2bobpatcher.git
+git clone https://github.com/igor-ruivo/generic-auto-updater.git
+```
+
+Configure the Auto-Updater at your will
+
+```
+* Edit any strings, configurations and the icon in ./GenericAutoUpdater/Resources/*/*
+* Edit the logo-image that is embedded in .GenericAutoUpdater/UI/Screens/PatcherMainWindow.resx
 ```
 
 Build it with Visual Studio
@@ -33,21 +43,22 @@ Ctrl+Shift+B
 Run the debugger or execute the executable file
 
 ```
-./M2BobPatcher/bin/Debug/M2Bob - Patcher.exe
+./GenericAutoUpdater/bin/Debug/Generic Auto-Updater.exe
 ```
 
-The AutoPatcher will start.
+The Auto-Updater will start.
 
 ## Running the tests
 
 * Automated tests for this system will be added in the future.
-* [VirusTotal analysis](https://www.virustotal.com/gui/file/9fadc3498b16c79cbdf97a6cbf21c6293f2ecab595cde9f52cb269ee1789a82c/detection)
+* [VirusTotal analysis](https://www.virustotal.com/gui/file/ba65abac1f556990235cc8421c89b50fc53d08492be84c3d07885e0b73027cba/detection)
 
 ## Built With
 
 * [.NET Framework 4.7.2](https://dotnet.microsoft.com/download/dotnet-framework/net472) - The framework used;
-* [Visual Studio](https://visualstudio.microsoft.com/) - IDE;
-* [Paint 3D](https://www.microsoft.com/pt-pt/p/paint-3d/9nblggh5fv99) - Used for UI design.
+* [Visual Studio 2019](https://visualstudio.microsoft.com/) - IDE;
+* [Icon](https://icon-icons.com/pt/download/106672/ICO/128/);
+* [Image](https://www.nicepng.com/png/detail/246-2467547_your-logo-here-your-logo-here-logo-png.png).
 
 ## Contributing
 
@@ -55,10 +66,10 @@ You can contribute by submitting a pull-request.
 
 ## Versioning
 
-For the versions available, see the [tags on this repository](https://github.com/igor-ruivo/m2bobpatcher/tags). 
+For the versions available, see the [tags on this repository](https://github.com/igor-ruivo/generic-auto-updater/tags). 
 
 ## Authors
 
-* **Igor Ruivo** - *Full stack* - [Igor Ruivo](https://github.com/PurpleBooth)
+* **Igor Ruivo** - *Full stack* - [Igor Ruivo](https://www.linkedin.com/in/igor-ruivo/)
 
-See also the list of [contributors](https://github.com/igor-ruivo/m2bobpatcher/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/igor-ruivo/generic-auto-updater/contributors) who participated in this project.
