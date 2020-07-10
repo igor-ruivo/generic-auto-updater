@@ -1,4 +1,4 @@
-﻿namespace M2BobPatcher.Resources.TextResources {
+﻿namespace GenericAutoUpdater.Resources.TextResources {
     /// <summary>
     /// The class with the description of all handled runtime errors.
     /// </summary>
@@ -26,12 +26,12 @@
         /// <summary>
         /// The text description of the window triggered whenever there is an unknown error.
         /// </summary>
-        public static readonly string UNKNOWN_ERROR = "An unknown error occurred. Please contact M2Bob staff.";
+        public static readonly string UNKNOWN_ERROR = "An unknown error occurred. Please contact the staff and then try running the AutoUpdater again.";
 
         /// <summary>
         /// The text description of the window triggered whenever there is a network error.
         /// </summary>
-        public static readonly string TIMEOUT_DOWNLOADING_RESOURCE = "Couldn't connect to M2Bob AutoPatcher server. Please check if M2Bob website is online or check your internet connection.";
+        public static readonly string TIMEOUT_DOWNLOADING_RESOURCE = "Couldn't connect to the AutoUpdater server. Please check if the website is online or check your internet connection.";
 
         /// <summary>
         /// The text description of the window triggered whenever there is a consistency error.

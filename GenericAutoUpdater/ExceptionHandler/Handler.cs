@@ -1,5 +1,5 @@
-﻿using M2BobPatcher.ExceptionHandler.Exceptions;
-using M2BobPatcher.Resources.TextResources;
+﻿using GenericAutoUpdater.ExceptionHandler.Exceptions;
+using GenericAutoUpdater.Resources.TextResources;
 using System;
 using System.IO;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Security;
 using System.Text;
 using System.Windows.Forms;
 
-namespace M2BobPatcher.ExceptionHandler {
+namespace GenericAutoUpdater.ExceptionHandler {
     /// <summary>
     /// The class responsible for all exception handling during the patch.
     /// </summary>

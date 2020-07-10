@@ -1,4 +1,4 @@
-﻿namespace M2BobPatcher.UI.Wrappers {
+﻿namespace GenericAutoUpdater.UI.Wrappers {
     /// <summary>
     /// Used to represent a wrapper of a specific Widget.
     /// </summary>

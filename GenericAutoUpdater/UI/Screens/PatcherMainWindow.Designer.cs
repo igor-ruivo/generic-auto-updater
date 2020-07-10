@@ -1,4 +1,4 @@
-﻿namespace M2BobPatcher {
+﻿namespace GenericAutoUpdater {
     partial class PatcherMainWindow {
         /// <summary>
         /// Required designer variable.
@@ -68,7 +68,7 @@
             this.starter.Name = "starter";
             this.starter.Size = new System.Drawing.Size(91, 25);
             this.starter.TabIndex = 3;
-            this.starter.Text = "Start M2Bob!";
+            this.starter.Text = "Launch app!";
             this.starter.UseVisualStyleBackColor = true;
             this.starter.Click += new System.EventHandler(this.starter_Click);
             // 
@@ -127,7 +127,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(91, 25);
             this.button1.TabIndex = 8;
-            this.button1.Text = "M2Bob Website";
+            this.button1.Text = "Your Website";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 

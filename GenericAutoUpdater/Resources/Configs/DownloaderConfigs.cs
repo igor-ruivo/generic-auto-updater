@@ -1,4 +1,4 @@
-﻿namespace M2BobPatcher.Resources.Configs {
+﻿namespace GenericAutoUpdater.Resources.Configs {
     /// <summary>
     /// The class with the required configuration to be used by the downloader.
     /// </summary>

@@ -1,11 +1,11 @@
-﻿using M2BobPatcher.UI;
-using M2BobPatcher.UI.Wrappers;
+﻿using GenericAutoUpdater.UI;
+using GenericAutoUpdater.UI.Wrappers;
 using System;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
 
-namespace M2BobPatcher.Resources {
+namespace GenericAutoUpdater.Resources {
     /// <summary>
     /// A class with various utilities, used throughout all the patch.
     /// </summary>

@@ -1,9 +1,9 @@
-﻿using M2BobPatcher.ExceptionHandler;
-using M2BobPatcher.Resources.TextResources;
+﻿using GenericAutoUpdater.ExceptionHandler;
+using GenericAutoUpdater.Resources.TextResources;
 using System;
 using System.Windows.Forms;
 
-namespace M2BobPatcher {
+namespace GenericAutoUpdater {
     /// <summary>
     /// The class with the entry point for the Patcher.
     /// </summary>

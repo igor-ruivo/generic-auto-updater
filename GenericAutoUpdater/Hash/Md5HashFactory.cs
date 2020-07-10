@@ -2,7 +2,7 @@
 using System.IO;
 using System.Security.Cryptography;
 
-namespace M2BobPatcher.Hash {
+namespace GenericAutoUpdater.Hash {
     /// <summary>
     /// The class used to generate and manipulate md5 hashes.
     /// </summary>
