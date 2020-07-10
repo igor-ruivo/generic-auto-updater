@@ -58,7 +58,7 @@ The Auto-Updater will start.
 * [.NET Framework 4.7.2](https://dotnet.microsoft.com/download/dotnet-framework/net472) - The framework used;
 * [Visual Studio 2019](https://visualstudio.microsoft.com/) - IDE;
 * [Icon](https://icon-icons.com/pt/download/106672/ICO/128/);
-* [Image](https://www.nicepng.com/png/detail/246-2467547_your-logo-here-your-logo-here-logo-png.png);
+* [Image](https://www.nicepng.com/png/detail/246-2467547_your-logo-here-your-logo-here-logo-png.png).
 
 ## Contributing
 
