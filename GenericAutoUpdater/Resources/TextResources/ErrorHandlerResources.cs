@@ -36,7 +36,7 @@
         /// <summary>
         /// The text description of the window triggered whenever there is a consistency error.
         /// </summary>
-        public static readonly string AV_FALSE_POSITIVE = "One or more files or directories are missing or were tampered after applying the patch. Please check if your AntiVirus or Microsoft Defender are at fault and then run the AutoPatcher again.";
+        public static readonly string AV_FALSE_POSITIVE = "One or more files or directories are missing or were tampered after applying the patch. Please check if your AntiVirus or Microsoft Defender are at fault and then run the Auto-Updater again.";
 
         /// <summary>
         /// The text description of the window triggered whenever there is an IO error.

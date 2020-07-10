@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace GenericAutoUpdater.Downloaders {
     /// <summary>
-    /// An error-handler and user-friendly downloader class, used to download any file needed by the AutoPatcher through http.
+    /// An error-handler and user-friendly downloader class, used to download any file needed by the Auto-Updater through http.
     /// </summary>
     static class HttpClientDownloader {
         /// <summary>

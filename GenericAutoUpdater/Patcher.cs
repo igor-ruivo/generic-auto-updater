@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace GenericAutoUpdater {
     /// <summary>
-    /// The class with the entry point for the Patcher.
+    /// The class with the entry point for the Auto-Updater.
     /// </summary>
     static class Patcher {
         /// <summary>

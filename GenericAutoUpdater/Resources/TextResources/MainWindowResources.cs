@@ -14,14 +14,14 @@
         public static readonly string AUTHOR_WEBSITE = "https://www.linkedin.com/in/igor-ruivo/";
 
         /// <summary>
-        /// The current version of the AutoPatcher.
+        /// The current version of the Auto-Updater.
         /// </summary>
         public static readonly string CURRENT_VERSION = "v" + System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly().Location).FileVersion;
 
         /// <summary>
         /// The title of the main window.
         /// </summary>
-        public static readonly string MAIN_WINDOW_TITLE = "Generic Auto Updater {0}";
+        public static readonly string MAIN_WINDOW_TITLE = "Generic Auto-Updater {0}";
 
         /// <summary>
         /// Your client's launcher.
@@ -29,13 +29,13 @@
         public static readonly string STARTER = "your-exe.exe";
 
         /// <summary>
-        /// The text description of the window triggered whenever there is already another instance of the AutoPatcher running.
+        /// The text description of the window triggered whenever there is already another instance of the Auto-Updater running.
         /// </summary>
-        public static readonly string ALREADY_RUNNING = "Another instance of the AutoPatcher is already running.";
+        public static readonly string ALREADY_RUNNING = "Another instance of the Auto-Updater is already running.";
 
         /// <summary>
-        /// The title of the window triggered whenever there is already another instance of the AutoPatcher running.
+        /// The title of the window triggered whenever there is already another instance of the Auto-Updater running.
         /// </summary>
-        public static readonly string ALREADY_RUNNING_ERROR = "Error Starting AutoPatcher";
+        public static readonly string ALREADY_RUNNING_ERROR = "Error Starting Auto-Updater";
     }
 }

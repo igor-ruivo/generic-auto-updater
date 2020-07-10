@@ -6,7 +6,7 @@
     <members>
         <member name="T:GenericAutoUpdater.Downloaders.HttpClientDownloader">
             <summary>
-            An error-handler and user-friendly downloader class, used to download any file needed by the AutoPatcher through http.
+            An error-handler and user-friendly downloader class, used to download any file needed by the Auto-Updater through http.
             </summary>
         </member>
         <member name="F:GenericAutoUpdater.Downloaders.HttpClientDownloader.HttpClient">
@@ -32,7 +32,7 @@
         </member>
         <member name="T:GenericAutoUpdater.Engine.IPatcherEngine">
             <summary>
-            This interface represents the engine with all its core logic behind the AutoPatcher.
+            This interface represents the engine with all its core logic behind the Auto-Updater.
             It contains the public API calls that an external application may access regarding it.
             </summary>
         </member>
@@ -43,7 +43,7 @@
         </member>
         <member name="T:GenericAutoUpdater.Engine.PatcherEngine">
             <summary>
-            A pipeline-action-based engine class, with all its core logic behind the AutoPatcher.
+            A pipeline-action-based engine class, with all its core logic behind the Auto-Updater.
             </summary>
         </member>
         <member name="F:GenericAutoUpdater.Engine.PatcherEngine.LocalMetadata">
@@ -318,7 +318,7 @@
         </member>
         <member name="F:GenericAutoUpdater.Resources.TextResources.MainWindowResources.CURRENT_VERSION">
             <summary>
-            The current version of the AutoPatcher.
+            The current version of the Auto-Updater.
             </summary>
         </member>
         <member name="F:GenericAutoUpdater.Resources.TextResources.MainWindowResources.MAIN_WINDOW_TITLE">
@@ -333,12 +333,12 @@
         </member>
         <member name="F:GenericAutoUpdater.Resources.TextResources.MainWindowResources.ALREADY_RUNNING">
             <summary>
-            The text description of the window triggered whenever there is already another instance of the AutoPatcher running.
+            The text description of the window triggered whenever there is already another instance of the Auto-Updater running.
             </summary>
         </member>
         <member name="F:GenericAutoUpdater.Resources.TextResources.MainWindowResources.ALREADY_RUNNING_ERROR">
             <summary>
-            The title of the window triggered whenever there is already another instance of the AutoPatcher running.
+            The title of the window triggered whenever there is already another instance of the Auto-Updater running.
             </summary>
         </member>
         <member name="T:GenericAutoUpdater.Resources.TextResources.PatcherEngineResources">
@@ -388,12 +388,12 @@
         </member>
         <member name="F:GenericAutoUpdater.Resources.TextResources.PatcherEngineResources.FINISHED">
             <summary>
-            The text description that is used on the general label when the AutoPatcher finished with success.
+            The text description that is used on the general label when the Auto-Updater finished with success.
             </summary>
         </member>
         <member name="F:GenericAutoUpdater.Resources.TextResources.PatcherEngineResources.ALL_FILES_ANALYZED">
             <summary>
-            The text description that is used on the downloader label when the AutoPatcher finished with success.
+            The text description that is used on the downloader label when the Auto-Updater finished with success.
             </summary>
         </member>
         <member name="T:GenericAutoUpdater.Resources.Utils">
@@ -579,7 +579,7 @@
         </member>
         <member name="M:GenericAutoUpdater.PatcherMainWindow.starter_Click(System.Object,System.EventArgs)">
             <summary>
-            Starts your client's launcher and exits the AutoPatcher when clicked.
+            Starts your client's launcher and exits the Auto-Updater when clicked.
             </summary>
         </member>
         <member name="M:GenericAutoUpdater.PatcherMainWindow.author_LinkClicked(System.Object,System.Windows.Forms.LinkLabelLinkClickedEventArgs)">
@@ -621,7 +621,7 @@
         </member>
         <member name="T:GenericAutoUpdater.Patcher">
             <summary>
-            The class with the entry point for the Patcher.
+            The class with the entry point for the Auto-Updater.
             </summary>
         </member>
         <member name="F:GenericAutoUpdater.Patcher.mutex">

@@ -87,7 +87,7 @@ namespace GenericAutoUpdater {
         }
 
         /// <summary>
-        /// Starts your client's launcher and exits the AutoPatcher when clicked.
+        /// Starts your client's launcher and exits the Auto-Updater when clicked.
         /// </summary>
         private void starter_Click(object sender, EventArgs e) {
             Process.Start(MainWindowResources.STARTER);

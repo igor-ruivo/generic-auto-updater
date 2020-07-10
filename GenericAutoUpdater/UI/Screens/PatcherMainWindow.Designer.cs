@@ -90,7 +90,7 @@
             this.author.Size = new System.Drawing.Size(110, 13);
             this.author.TabIndex = 7;
             this.author.TabStop = true;
-            this.author.Text = "Patcher by Igor Ruivo";
+            this.author.Text = "Auto-Updater by Igor Ruivo";
             this.author.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.author.VisitedLinkColor = System.Drawing.Color.Black;
             this.author.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.author_LinkClicked);
