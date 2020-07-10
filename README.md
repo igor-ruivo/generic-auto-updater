@@ -40,7 +40,7 @@ hash2
 filenameN
 hashN
 ```
-Meaning that the first line should be the actual URL to the server directory containing the files, and for the following lines, every even line number contains a file name and every odd line number contains the respective file's md5 hash. You can change this implementation adapting it to your own server metadata, or do the opposite.
+Meaning that the first line should be the actual URL to the server directory containing the files, and for the following lines, every even line number contains a relative path from the URL at line 1 to a file and every odd line number contains the respective file's md5 hash. You can change this implementation adapting it to your own server metadata, or do the opposite.
 
 3. Configure the Auto-Updater at your will
 
