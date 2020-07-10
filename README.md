@@ -21,26 +21,41 @@ Visual Studio 2019 (administrator priviledges) with Windows Forms App (.NET Fram
 
 ### Installing
 
-Clone this repository
+1. Clone this repository
 
 ```
 git clone https://github.com/igor-ruivo/generic-auto-updater.git
 ```
 
-Configure the Auto-Updater at your will
+2. Configure the Auto-Updater at your will
 
 ```
-* Edit any strings, configurations and the icon in ./GenericAutoUpdater/Resources/*/*
-* Edit the logo-image that is embedded in .GenericAutoUpdater/UI/Screens/PatcherMainWindow.resx
+Edit any strings, configurations and the icon in ./GenericAutoUpdater/Resources/*/*
+Edit the logo-image that is embedded in .GenericAutoUpdater/UI/Screens/PatcherMainWindow.resx
 ```
 
-Build it with Visual Studio
+3. Read the documentation!
+
+For instance, keep in mind that the engine is expecting a server metadata file with a specific structure, like so:
+
+```
+http://your-directory-with-files/
+filename1
+hash1
+filename2
+hash2
+filenameN
+hashN
+```
+Meaning that the first line should be the actual URL to the server directory containing the files, and for the following lines, every even line number contains a file name and every odd line number contains the respective file's md5 hash. You can change this implementation adapting it to your own server metadata, or do the opposite.
+
+4. Build it with Visual Studio
 
 ```
 Ctrl+Shift+B
 ```
 
-Run the debugger or execute the executable file
+5. Run the debugger or execute the executable file
 
 ```
 ./GenericAutoUpdater/bin/Debug/Generic Auto-Updater.exe
