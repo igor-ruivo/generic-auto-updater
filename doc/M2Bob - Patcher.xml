@@ -427,11 +427,6 @@
             The class with the required configuration to be used by the engine.
             </summary>
         </member>
-        <member name="F:M2BobPatcher.Resources.Configs.EngineConfigs.M2BOB_PATCH_ROUTER">
-            <summary>
-            M2Bob's router page, which redirects the browser to the patch metadata file.
-            </summary>
-        </member>
         <member name="F:M2BobPatcher.Resources.Configs.EngineConfigs.M2BOB_PATCH_METADATA">
             <summary>
             The link to M2Bob's metadata file.
