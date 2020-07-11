@@ -11,7 +11,7 @@
         /// <summary>
         /// The author main website.
         /// </summary>
-        public static readonly string AUTHOR_WEBSITE = "https://www.linkedin.com/in/igor-ruivo/";
+        public static readonly string AUTHOR_WEBSITE = "https://github.com/igor-ruivo/generic-auto-updater";
 
         /// <summary>
         /// The current version of the Auto-Updater.
