@@ -67,7 +67,7 @@ The Auto-Updater will start.
 ## Running the tests
 
 * Automated tests for this system will be added in the future.
-* [VirusTotal analysis](https://www.virustotal.com/gui/file/4797f9ba50a8a9a6c906308fac7d361c2e275383910e5c9d6e0cbea1f5baa7fd/detection)
+* [VirusTotal analysis](https://www.virustotal.com/gui/file/68d7fbd90c0d63dd60707c105a74051a5bed688d76e1a868e7a42c97f0887527/detection)
 
 ## Built With
 
