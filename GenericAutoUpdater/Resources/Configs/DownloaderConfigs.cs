@@ -27,5 +27,11 @@
         /// How many logs to the UI Thread will the downloader always omit between performed reads.
         /// </summary>
         public static readonly int INFORM_PROGRESS_EVERY_X_READS = 10;
+
+        /// <summary>
+        /// The weight of a measured speed sample on the current file's average download speed.
+        /// Use a value from the interval [0, 1].
+        /// </summary>
+        public static readonly float SAMPLE_SPEED_WEIGHT = 0.125f;
     }
 }

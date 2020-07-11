@@ -1,6 +1,4 @@
-﻿using GenericAutoUpdater.ExceptionHandler.Exceptions;
-using GenericAutoUpdater.Resources.TextResources;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -8,6 +6,8 @@ using System.Net.Http;
 using System.Security;
 using System.Text;
 using System.Windows.Forms;
+using GenericAutoUpdater.ExceptionHandler.Exceptions;
+using GenericAutoUpdater.Resources.TextResources;
 
 namespace GenericAutoUpdater.ExceptionHandler {
     /// <summary>

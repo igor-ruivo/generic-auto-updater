@@ -1,13 +1,15 @@
-﻿using GenericAutoUpdater.Hash;
-using GenericAutoUpdater.Resources;
-using GenericAutoUpdater.Resources.Configs;
-using GenericAutoUpdater.UI;
-using System;
+﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using GenericAutoUpdater.Hash;
+using GenericAutoUpdater.Resources;
+using GenericAutoUpdater.Resources.Configs;
+using GenericAutoUpdater.Resources.TextResources;
+using GenericAutoUpdater.UI;
 
 namespace GenericAutoUpdater.Downloaders {
     /// <summary>
@@ -32,8 +34,7 @@ namespace GenericAutoUpdater.Downloaders {
                     Task<byte[]> data = Download(bw, address, expectedHash);
                     data.Wait();
                     return data.Result;
-                }
-                catch (Exception ex) {
+                } catch (Exception ex) {
                     // This kind of Exception is thrown when the Download's contentStream is closed by force due to a read timeout. No need to sleep in this case.
                     if (ex is ObjectDisposedException || ex is AggregateException exception && Utils.AggregateContainsObjectDisposedException(exception))
                         throw;
@@ -52,10 +53,12 @@ namespace GenericAutoUpdater.Downloaders {
         /// This method also logs the download progress to the respective progress bar through the BackgroundWorker (bw), whenever it assumes it is necessary.
         /// </summary>
         private static async Task<byte[]> Download(BackgroundWorker bw, string address, string expectedHash) {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             Utils.Progress(bw, 0, ProgressiveWidgetsEnum.ProgressBar.DownloadProgressBar);
             using (HttpResponseMessage response = HttpClient.GetAsync(address, HttpCompletionOption.ResponseHeadersRead).Result) {
                 response.EnsureSuccessStatusCode();
-                float fileSize = (float)response.Content.Headers.ContentLength;
+                long fileSize = (long)response.Content.Headers.ContentLength;
                 using (Stream contentStream = await response.Content.ReadAsStreamAsync()) {
                     using (MemoryStream ms = new MemoryStream()) {
                         long totalRead = 0;
@@ -63,6 +66,7 @@ namespace GenericAutoUpdater.Downloaders {
                         byte[] buffer = new byte[DownloaderConfigs.BUFFER_SIZE];
                         bool moreLeftToRead = true;
                         int lastMark = 0;
+                        float speedAverage = 0;
                         do {
                             // A CancellationTokenSource is used to close the contentStream by force if it doesn't finish some ReadAsync()
                             // under a specific amount of time (DownloaderConfigs.TIMEOUT_MS_WAITING_FOR_READ),
@@ -77,14 +81,19 @@ namespace GenericAutoUpdater.Downloaders {
                                     totalRead += read;
                                     totalReads++;
                                     // It only attempts to log the download progress every x reads (DownloaderConfigs.INFORM_PROGRESS_EVERY_X_READS), due to performance reasons.
-                                    if (totalReads % DownloaderConfigs.INFORM_PROGRESS_EVERY_X_READS == 0 && totalRead / fileSize * 100 > lastMark) {
-                                        lastMark = Convert.ToInt32(totalRead / fileSize * 100);
-                                        Utils.Progress(bw, lastMark, ProgressiveWidgetsEnum.ProgressBar.DownloadProgressBar);
+                                    if (totalReads % DownloaderConfigs.INFORM_PROGRESS_EVERY_X_READS == 0) {
+                                        speedAverage = RecalculateSpeedAverage((float)totalRead / sw.ElapsedMilliseconds, speedAverage);
+                                        Utils.Log(bw, string.Format(DownloaderResources.DOWNLOAD_DATA, Utils.BytesToString(totalRead, 2), Utils.BytesToString(fileSize, 2), Utils.BytesToString(Convert.ToInt64(speedAverage * 1000), 1)), ProgressiveWidgetsEnum.Label.DownloadSpeedLogger);
+                                        if ((float)totalRead / fileSize * 100 > lastMark) {
+                                            lastMark = Convert.ToInt32((float)totalRead / fileSize * 100);
+                                            Utils.Progress(bw, lastMark, ProgressiveWidgetsEnum.ProgressBar.DownloadProgressBar);
+                                        }
                                     }
                                 }
                             }
                         }
                         while (moreLeftToRead);
+                        sw.Stop();
                         byte[] result = ms.ToArray();
                         if (expectedHash == null)
                             Utils.PerformPatchDirectorySanityCheck(result);
@@ -96,6 +105,15 @@ namespace GenericAutoUpdater.Downloaders {
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Recalculates the average speed of the current download based on the new speed sample just measured.
+        /// It weights the new speed sample using a previously defined ratio (DownloaderConfigs.SAMPLE_SPEED_WEIGHT).
+        /// </summary>
+        private static float RecalculateSpeedAverage(float sample, float speedAverage) {
+            return speedAverage == 0 ? sample :
+                sample * DownloaderConfigs.SAMPLE_SPEED_WEIGHT + speedAverage * (1 - DownloaderConfigs.SAMPLE_SPEED_WEIGHT);
         }
     }
 }

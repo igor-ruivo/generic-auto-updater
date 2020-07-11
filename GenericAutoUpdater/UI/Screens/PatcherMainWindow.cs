@@ -1,12 +1,12 @@
-﻿using GenericAutoUpdater.Engine;
+﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Windows.Forms;
+using GenericAutoUpdater.Engine;
 using GenericAutoUpdater.ExceptionHandler;
 using GenericAutoUpdater.Resources.TextResources;
 using GenericAutoUpdater.UI;
 using GenericAutoUpdater.UI.Wrappers;
-using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Windows.Forms;
 
 namespace GenericAutoUpdater {
     /// <summary>
@@ -51,6 +51,13 @@ namespace GenericAutoUpdater {
                         case ProgressiveWidgetsEnum.Label.DownloadLogger:
                             downloaderDisplay.Text = lw.Value;
                             break;
+                        case ProgressiveWidgetsEnum.Label.FileCountLogger:
+                            filecount.Left = loggerDisplay.Location.X + loggerDisplay.Size.Width;
+                            filecount.Text = lw.Value;
+                            break;
+                        case ProgressiveWidgetsEnum.Label.DownloadSpeedLogger:
+                            speed.Text = lw.Value;
+                            break;
                         default:
                             throw new NotImplementedException();
                     }
@@ -65,6 +72,8 @@ namespace GenericAutoUpdater {
         /// </summary>
         private void setupWindowProperties() {
             Text = string.Format(MainWindowResources.MAIN_WINDOW_TITLE, MainWindowResources.CURRENT_VERSION);
+            filecount.Text = string.Empty;
+            speed.Text = string.Empty;
             loggerDisplay.Text = PatcherEngineResources.STARTING;
             downloaderDisplay.Text = PatcherEngineResources.STARTING;
             FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -109,8 +118,7 @@ namespace GenericAutoUpdater {
             IPatcherEngine engine = new PatcherEngine(bw);
             try {
                 engine.Patch();
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 Handler.Handle(ex);
             }
         }

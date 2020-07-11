@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using GenericAutoUpdater.Downloaders;
+﻿using GenericAutoUpdater.Downloaders;
 using GenericAutoUpdater.ExceptionHandler;
 using GenericAutoUpdater.ExceptionHandler.Exceptions;
 using GenericAutoUpdater.FileSystem;
@@ -14,6 +6,14 @@ using GenericAutoUpdater.Resources;
 using GenericAutoUpdater.Resources.Configs;
 using GenericAutoUpdater.Resources.TextResources;
 using GenericAutoUpdater.UI;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading;
 
 namespace GenericAutoUpdater.Engine {
     /// <summary>
@@ -85,7 +85,7 @@ namespace GenericAutoUpdater.Engine {
         private static void DownloadContent(int step, List<string> content, bool isMissingContent) {
             LogDownloadingEvent(content.Count, isMissingContent);
             for (int i = 0; i < content.Count; i++) {
-                Utils.Log(BW, content[i], ProgressiveWidgetsEnum.Label.DownloadLogger); Utils.Log(BW, string.Format(PatcherEngineResources.FILE_COUNT, i + 1, content.Count, Convert.ToInt32((i + 1f) / content.Count * 100)), ProgressiveWidgetsEnum.Label.FileCountLogger);
+                Utils.Log(BW, content[i], ProgressiveWidgetsEnum.Label.DownloadLogger);
                 // The expected hash of the file to be downloaded is already saved in the ServerMetadata.
                 FileSystemExplorer.FetchFile(BW, content[i], PatchDirectory + content[i], ServerMetadata[content[i]].Hash);
                 Utils.Progress(BW, Convert.ToInt32(GetCurrentStepProgress(step) + (i + 1f) / content.Count * (1f / Pipeline.Length * 100)), ProgressiveWidgetsEnum.ProgressBar.WholeProgressBar);
@@ -93,8 +93,6 @@ namespace GenericAutoUpdater.Engine {
             // Give time to AntiVirus for it to delete or tamper any of the recently downloaded files.
             Thread.Sleep(EngineConfigs.MS_TO_WAIT_FOR_AV_FALSE_POSITIVES);
             GenerateLocalMetadata();
-            Utils.Log(BW, string.Empty, ProgressiveWidgetsEnum.Label.FileCountLogger);
-            Utils.Log(BW, string.Empty, ProgressiveWidgetsEnum.Label.DownloadSpeedLogger);
         }
 
         /// <summary>
@@ -178,8 +176,7 @@ namespace GenericAutoUpdater.Engine {
         private static void LogDownloadingEvent(int nResources, bool isMissingContent) {
             if (nResources == 0)
                 return;
-            string message = isMissingContent ? PatcherEngineResources.DOWNLOADING_MISSING_CONTENT :
-                PatcherEngineResources.DOWNLOADING_OUTDATED_CONTENT;
+            string message = isMissingContent ? PatcherEngineResources.DOWNLOADING_MISSING_CONTENT : PatcherEngineResources.DOWNLOADING_OUTDATED_CONTENT;
             Utils.Log(BW, message, ProgressiveWidgetsEnum.Label.InformativeLogger);
         }
 

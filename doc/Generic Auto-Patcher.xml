@@ -30,6 +30,12 @@
             This method also logs the download progress to the respective progress bar through the BackgroundWorker (bw), whenever it assumes it is necessary.
             </summary>
         </member>
+        <member name="M:GenericAutoUpdater.Downloaders.HttpClientDownloader.RecalculateSpeedAverage(System.Single,System.Single)">
+            <summary>
+            Recalculates the average speed of the current download based on the new speed sample just measured.
+            It weights the new speed sample using a previously defined ratio (DownloaderConfigs.SAMPLE_SPEED_WEIGHT).
+            </summary>
+        </member>
         <member name="T:GenericAutoUpdater.Engine.IPatcherEngine">
             <summary>
             This interface represents the engine with all its core logic behind the Auto-Updater.
@@ -301,6 +307,16 @@
             The text description of the window triggered whenever there is an IO error.
             </summary>
         </member>
+        <member name="T:GenericAutoUpdater.Resources.TextResources.DownloaderResources">
+            <summary>
+            The class with the description of all the downloader's text resources.
+            </summary>
+        </member>
+        <member name="F:GenericAutoUpdater.Resources.TextResources.DownloaderResources.DOWNLOAD_DATA">
+            <summary>
+            The text description of the current download speed.
+            </summary>
+        </member>
         <member name="T:GenericAutoUpdater.Resources.TextResources.MainWindowResources">
             <summary>
             The class with the text resources of all main window's textual fields.
@@ -396,6 +412,11 @@
             The text description that is used on the downloader label when the Auto-Updater finished with success.
             </summary>
         </member>
+        <member name="F:GenericAutoUpdater.Resources.TextResources.PatcherEngineResources.FILE_COUNT">
+            <summary>
+            The text description that is used on the file count label when the Auto-Updater is downloading resources.
+            </summary>
+        </member>
         <member name="T:GenericAutoUpdater.Resources.Utils">
             <summary>
             A class with various utilities, used throughout all the patch.
@@ -420,6 +441,11 @@
         <member name="M:GenericAutoUpdater.Resources.Utils.Progress(System.ComponentModel.BackgroundWorker,System.Int32,GenericAutoUpdater.UI.ProgressiveWidgetsEnum.ProgressBar)">
             <summary>
             Requests the UI Thread, through the BackgroundWorker (bw), to log the received progress in the specified ProgressBar (progressBar).
+            </summary>
+        </member>
+        <member name="M:GenericAutoUpdater.Resources.Utils.BytesToString(System.Int64,System.Int32)">
+            <summary>
+            Converts a byte number into a more readable unit.
             </summary>
         </member>
         <member name="T:GenericAutoUpdater.Resources.Configs.EngineConfigs">
@@ -465,6 +491,12 @@
         <member name="F:GenericAutoUpdater.Resources.Configs.DownloaderConfigs.INFORM_PROGRESS_EVERY_X_READS">
             <summary>
             How many logs to the UI Thread will the downloader always omit between performed reads.
+            </summary>
+        </member>
+        <member name="F:GenericAutoUpdater.Resources.Configs.DownloaderConfigs.SAMPLE_SPEED_WEIGHT">
+            <summary>
+            The weight of a measured speed sample on the current file's average download speed.
+            Use a value from the interval [0, 1].
             </summary>
         </member>
         <member name="T:GenericAutoUpdater.UI.Wrappers.IWidgetWrapper">
@@ -530,6 +562,16 @@
         <member name="F:GenericAutoUpdater.UI.ProgressiveWidgetsEnum.Label.DownloadLogger">
             <summary>
             An instance description of the downloader logger.
+            </summary>
+        </member>
+        <member name="F:GenericAutoUpdater.UI.ProgressiveWidgetsEnum.Label.FileCountLogger">
+            <summary>
+            An instance description of the file count logger.
+            </summary>
+        </member>
+        <member name="F:GenericAutoUpdater.UI.ProgressiveWidgetsEnum.Label.DownloadSpeedLogger">
+            <summary>
+            An instance description of the download speed logger.
             </summary>
         </member>
         <member name="T:GenericAutoUpdater.UI.ProgressiveWidgetsEnum.ProgressBar">

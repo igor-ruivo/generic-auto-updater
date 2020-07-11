@@ -1,9 +1,9 @@
-﻿using GenericAutoUpdater.UI;
-using GenericAutoUpdater.UI.Wrappers;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
+using GenericAutoUpdater.UI;
+using GenericAutoUpdater.UI.Wrappers;
 
 namespace GenericAutoUpdater.Resources {
     /// <summary>
@@ -45,6 +45,19 @@ namespace GenericAutoUpdater.Resources {
         /// </summary>
         public static void Progress(BackgroundWorker bw, int progress, ProgressiveWidgetsEnum.ProgressBar progressBar) {
             bw.ReportProgress(0, new ProgressBarWrapper(progressBar, progress));
+        }
+
+        /// <summary>
+        /// Converts a byte number into a more readable unit.
+        /// </summary>
+        public static string BytesToString(long byteCount, int decimalPlaces) {
+            string[] suf = { " B", " KB", " MB", " GB", " TB", " PB", " EB" };
+            if (byteCount == 0)
+                return "0" + suf[0];
+            long bytes = Math.Abs(byteCount);
+            int index = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1000)));
+            double num = Math.Round(bytes / Math.Pow(1000, index), decimalPlaces);
+            return (Math.Sign(byteCount) * num).ToString() + suf[index];
         }
     }
 }

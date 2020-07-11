@@ -84,6 +84,7 @@
     <Compile Include="FileSystem\IFileMetadata.cs" />
     <Compile Include="Hash\Md5HashFactory.cs" />
     <Compile Include="Resources\TextResources\ErrorHandlerResources.cs" />
+    <Compile Include="Resources\TextResources\DownloaderResources.cs" />
     <Compile Include="UI\Wrappers\IWidgetWrapper.cs" />
     <Compile Include="UI\Wrappers\LabelWrapper.cs" />
     <Compile Include="UI\Wrappers\ProgressBarWrapper.cs" />

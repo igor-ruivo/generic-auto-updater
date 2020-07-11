@@ -15,7 +15,17 @@
             /// <summary>
             /// An instance description of the downloader logger.
             /// </summary>
-            DownloadLogger
+            DownloadLogger,
+
+            /// <summary>
+            /// An instance description of the file count logger.
+            /// </summary>
+            FileCountLogger,
+
+            /// <summary>
+            /// An instance description of the download speed logger.
+            /// </summary>
+            DownloadSpeedLogger
         };
 
         /// <summary>
