@@ -1,4 +1,4 @@
-<a href="https://github.com/igor-ruivo/generic-auto-updater"><img src="https://i.imgur.com/UdteXJN.png" title="Generic Auto-Updater Main Window" alt="Generic Auto-Updater Main Window"></a>
+<a href="https://github.com/igor-ruivo/generic-auto-updater"><img src="https://i.imgur.com/CiK4UzA.png" title="Generic Auto-Updater Main Window" alt="Generic Auto-Updater Main Window"></a>
 # Generic Auto-Updater
 
 A robust, user-friendly, clean and efficient Auto-Updater for any client.
@@ -26,6 +26,7 @@ Visual Studio 2019 (administrator priviledges) with Windows Forms App (.NET Fram
 ```
 git clone https://github.com/igor-ruivo/generic-auto-updater.git
 ```
+... or fork it / use it as a template.
 
 2. Read the documentation!
 
@@ -66,7 +67,7 @@ The Auto-Updater will start.
 ## Running the tests
 
 * Automated tests for this system will be added in the future.
-* [VirusTotal analysis](https://www.virustotal.com/gui/file/ba65abac1f556990235cc8421c89b50fc53d08492be84c3d07885e0b73027cba/detection)
+* [VirusTotal analysis](https://www.virustotal.com/gui/file/4797f9ba50a8a9a6c906308fac7d361c2e275383910e5c9d6e0cbea1f5baa7fd/detection)
 
 ## Built With
 

@@ -33,6 +33,8 @@
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.speed = new System.Windows.Forms.Label();
+            this.filecount = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -40,14 +42,14 @@
             // 
             // wholeProgressBar
             // 
-            this.wholeProgressBar.Location = new System.Drawing.Point(12, 92);
+            this.wholeProgressBar.Location = new System.Drawing.Point(12, 100);
             this.wholeProgressBar.Name = "wholeProgressBar";
             this.wholeProgressBar.Size = new System.Drawing.Size(542, 10);
             this.wholeProgressBar.TabIndex = 1;
             // 
             // fileProgressBar
             // 
-            this.fileProgressBar.Location = new System.Drawing.Point(12, 130);
+            this.fileProgressBar.Location = new System.Drawing.Point(12, 138);
             this.fileProgressBar.Name = "fileProgressBar";
             this.fileProgressBar.Size = new System.Drawing.Size(542, 10);
             this.fileProgressBar.TabIndex = 2;
@@ -66,7 +68,7 @@
             // loggerDisplay
             // 
             this.loggerDisplay.AutoSize = true;
-            this.loggerDisplay.Location = new System.Drawing.Point(13, 76);
+            this.loggerDisplay.Location = new System.Drawing.Point(13, 84);
             this.loggerDisplay.Name = "loggerDisplay";
             this.loggerDisplay.Size = new System.Drawing.Size(36, 13);
             this.loggerDisplay.TabIndex = 5;
@@ -74,8 +76,9 @@
             // 
             // downloaderDisplay
             // 
+			this.downloaderDisplay.AutoEllipsis = true;
             this.downloaderDisplay.AutoSize = true;
-            this.downloaderDisplay.Location = new System.Drawing.Point(13, 114);
+            this.downloaderDisplay.Location = new System.Drawing.Point(13, 122);
             this.downloaderDisplay.Name = "downloaderDisplay";
             this.downloaderDisplay.Size = new System.Drawing.Size(62, 13);
             this.downloaderDisplay.TabIndex = 6;
@@ -106,9 +109,9 @@
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.author);
             this.groupBox1.Controls.Add(this.starter);
-            this.groupBox1.Location = new System.Drawing.Point(-1, 146);
+            this.groupBox1.Location = new System.Drawing.Point(-1, 170);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(568, 85);
+            this.groupBox1.Size = new System.Drawing.Size(568, 69);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             // 
@@ -131,12 +134,33 @@
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
+			// speed
+            // 
+            this.speed.AutoSize = true;
+            this.speed.Location = new System.Drawing.Point(13, 151);
+            this.speed.Name = "speed";
+            this.speed.Size = new System.Drawing.Size(36, 13);
+            this.speed.TabIndex = 10;
+            this.speed.Text = "speed";
+            // 
+            // filecount
+            // 
+            this.filecount.AutoEllipsis = true;
+            this.filecount.AutoSize = true;
+            this.filecount.Location = new System.Drawing.Point(55, 84);
+            this.filecount.Name = "filecount";
+            this.filecount.Size = new System.Drawing.Size(47, 13);
+            this.filecount.TabIndex = 11;
+            this.filecount.Text = "filecount";
+            // 
             // PatcherMainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ClientSize = new System.Drawing.Size(566, 211);
+            this.ClientSize = new System.Drawing.Size(566, 233);
+            this.Controls.Add(this.filecount);
+            this.Controls.Add(this.speed);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.wholeProgressBar);
             this.Controls.Add(this.pictureBox1);
@@ -164,6 +188,8 @@
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label speed;
+        private System.Windows.Forms.Label filecount;
         private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
