@@ -31,7 +31,7 @@ namespace GenericAutoUpdater.FileSystem {
         /// </summary>
         public static void FetchFile(BackgroundWorker bw, string path, string resource, string expectedHash) {
             new FileInfo(path).Directory.Create();
-            File.WriteAllBytes(path, HttpClientDownloader.DownloadData(bw, resource, expectedHash));
+            HttpClientDownloader.DownloadData(bw, resource, expectedHash, path);
         }
         /// <summary>
         /// Checks if a file exists.

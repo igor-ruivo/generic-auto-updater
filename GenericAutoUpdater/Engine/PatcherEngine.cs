@@ -138,8 +138,8 @@ namespace GenericAutoUpdater.Engine {
         /// Returns it as a string.
         /// </summary>
         private static string DownloadServerMetadataFile() {
-            // There is no expected hash for the server metadata file.
-            return Utils.PerformPatchDirectorySanityCheck(HttpClientDownloader.DownloadData(BW, EngineConfigs.PATCH_METADATA, null));
+            // There is no expected hash for the server metadata file, and it should be downloaded directly into memory.
+            return Utils.PerformPatchDirectorySanityCheck(HttpClientDownloader.DownloadData(BW, EngineConfigs.PATCH_METADATA, null, string.Empty));
         }
 
         /// <summary>
