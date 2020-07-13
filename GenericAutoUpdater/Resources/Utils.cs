@@ -9,11 +9,11 @@ namespace GenericAutoUpdater.Resources {
     /// </summary>
     static class Utils {
         /// <summary>
-        /// Checks if the received <c>AggregateException</c> contains at least one <c>ObjectDisposedException</c>.
+        /// Checks if the received <c>AggregateException</c> contains at least one exception of the type of the exception received in the second parameter (another).
         /// </summary>
-        public static bool AggregateContainsObjectDisposedException(AggregateException ex) {
+        public static bool AggregateContainsSpecificException(AggregateException ex, Exception another) {
             foreach (Exception exception in ex.InnerExceptions)
-                if (exception is ObjectDisposedException)
+                if (exception.GetType() == another.GetType())
                     return true;
             return false;
         }

@@ -74,6 +74,16 @@
             When the status code isn't a Server Error, there is no point in retrying the Download, thus a <c>HttpRequestException</c> is trown - denied of a retry.
             </summary>
         </member>
+        <member name="M:GenericAutoUpdater.Downloaders.HttpClientDownloader.SetupDefaultHeaders">
+            <summary>
+            Sets up the default headers of the HttpClient to be used when performing HTTP operations.
+            </summary>
+        </member>
+        <member name="M:GenericAutoUpdater.Downloaders.HttpClientDownloader.ExceptionTypeShouldRetry(System.Exception)">
+            <summary>
+            This method returns true if the received exception is eligible for a retry, or false otherwise.
+            </summary>
+        </member>
         <member name="T:GenericAutoUpdater.Downloaders.IDownloader">
             <summary>
             This interface declares the calls that every downloader should at least implement.
@@ -511,9 +521,9 @@
             A class with various utilities, used throughout all the patch.
             </summary>
         </member>
-        <member name="M:GenericAutoUpdater.Resources.Utils.AggregateContainsObjectDisposedException(System.AggregateException)">
+        <member name="M:GenericAutoUpdater.Resources.Utils.AggregateContainsSpecificException(System.AggregateException,System.Exception)">
             <summary>
-            Checks if the received <c>AggregateException</c> contains at least one <c>ObjectDisposedException</c>.
+            Checks if the received <c>AggregateException</c> contains at least one exception of the type of the exception received in the second parameter (another).
             </summary>
         </member>
         <member name="M:GenericAutoUpdater.Resources.Utils.Log(System.ComponentModel.BackgroundWorker,System.String,GenericAutoUpdater.UI.ProgressiveWidgetsEnum.Label)">

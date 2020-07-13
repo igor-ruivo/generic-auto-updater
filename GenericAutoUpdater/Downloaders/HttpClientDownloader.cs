@@ -20,7 +20,7 @@ namespace GenericAutoUpdater.Downloaders {
         /// <summary>
         /// The downloader client itself.
         /// </summary>
-        private static readonly HttpClient HttpClient = new HttpClient();
+        private static HttpClient HttpClient = null;
 
         /// <summary>
         /// The <c>IHasher</c> used to compute the hash of every downloaded file, if there is an expectedHash to compare it to.
@@ -38,6 +38,11 @@ namespace GenericAutoUpdater.Downloaders {
         public HttpClientDownloader(BackgroundWorker bw, IHasher hasher) {
             BW = bw;
             Hasher = hasher;
+            HttpClientHandler handler = new HttpClientHandler() {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            };
+            HttpClient = new HttpClient(handler);
+            SetupDefaultHeaders();
         }
 
         /// <summary>
@@ -75,10 +80,7 @@ namespace GenericAutoUpdater.Downloaders {
                     data.Wait();
                     return data.Result;
                 } catch (Exception ex) {
-                    // This kind of Exception is thrown when a HTTP status code in the range of [300 - 499] is received. No point in retrying.
-                    if (ex is HttpRequestException ||
-                        // This kind of Exception is thrown when the Download's contentStream is closed by force due to a read timeout. No need to sleep in this case.
-                        ex is ObjectDisposedException || ex is AggregateException exception && Utils.AggregateContainsObjectDisposedException(exception))
+                    if (!ExceptionTypeShouldRetry(ex))
                         throw;
                     Thread.Sleep(DownloaderConfigs.INTERVAL_MS_BETWEEN_DOWNLOAD_RETRIES);
                     if (++tries == DownloaderConfigs.MAX_DOWNLOAD_RETRIES_PER_FILE)
@@ -103,7 +105,7 @@ namespace GenericAutoUpdater.Downloaders {
                 if (!response.IsSuccessStatusCode)
                     HandleStatusCode(response);
                 response.EnsureSuccessStatusCode();
-                long fileSize = (long)response.Content.Headers.ContentLength;
+                long fileSize = response.Content.Headers.ContentLength.GetValueOrDefault();
                 using (Stream contentStream = await response.Content.ReadAsStreamAsync()) {
                     long totalRead = 0;
                     long totalReads = 0;
@@ -144,8 +146,7 @@ namespace GenericAutoUpdater.Downloaders {
                             while (moreLeftToRead);
                         }
                         sw.Stop();
-                        if (expectedHash == null && totalRead != fileSize ||
-                            expectedHash != null && !Hasher.GeneratedHashFromFile(file).Equals(expectedHash))
+                        if (fileSize != 0 && totalRead != fileSize || expectedHash != null && !Hasher.GeneratedHashFromFile(file).Equals(expectedHash))
                             throw new InvalidDataException();
                         Utils.Progress(BW, 100, ProgressiveWidgetsEnum.ProgressBar.DownloadProgressBar);
                         return file == null ? memoryStream.ToArray() : null;
@@ -177,6 +178,26 @@ namespace GenericAutoUpdater.Downloaders {
                     default:
                         throw new HttpRequestException();
                 }
+        }
+
+        /// <summary>
+        /// Sets up the default headers of the HttpClient to be used when performing HTTP operations.
+        /// </summary>
+        private void SetupDefaultHeaders() {
+            HttpClient.DefaultRequestHeaders.Add("Accept", "text/html,application/xhtml+xml,application/xml");
+            HttpClient.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate");
+            HttpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0");
+            HttpClient.DefaultRequestHeaders.Add("Accept-Charset", "ISO-8859-1");
+        }
+
+        /// <summary>
+        /// This method returns true if the received exception is eligible for a retry, or false otherwise.
+        /// </summary>
+        private bool ExceptionTypeShouldRetry(Exception ex) {
+            // When a HTTP status code in the range of [300 - 499] is received there is no point in retrying.
+            // When the Download's contentStream is closed by force due to a read timeout there is no point in retrying.
+            return !(ex is AggregateException exception && (Utils.AggregateContainsSpecificException(exception, new ObjectDisposedException("")) || Utils.AggregateContainsSpecificException(exception, new HttpRequestException()))
+                        || ex is HttpRequestException || ex is ObjectDisposedException);
         }
     }
 }

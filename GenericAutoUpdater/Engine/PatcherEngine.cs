@@ -118,11 +118,11 @@ namespace GenericAutoUpdater.Engine {
         private static void GenerateServerMetadata(int step) {
             string[] metadataByLine = Encoding.Default.GetString(Downloader.DownloadDataToMemory(EngineConfigs.PATCH_METADATA)).Trim().Split(new[] { "\n" }, StringSplitOptions.None);
             // Assume that the first line of the server's metadata file is the url to the actual server directory with the files.
-            PatchDirectory = metadataByLine[0];
+            PatchDirectory = metadataByLine[0].Trim();
             ServerMetadata = new Dictionary<string, FileMetadata>((metadataByLine.Length - 1) / 2);
             // Every odd line number represents a file name, and every even line number its md5 hash.
             for (int i = 1; i < metadataByLine.Length; i += 2)
-                ServerMetadata[metadataByLine[i]] = new FileMetadata(metadataByLine[i], metadataByLine[i + 1]);
+                ServerMetadata[metadataByLine[i].Trim()] = new FileMetadata(metadataByLine[i].Trim(), metadataByLine[i + 1].Trim());
         }
 
         /// <summary>
