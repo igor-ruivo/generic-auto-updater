@@ -1,7 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.IO;
-using System.Text;
 using GenericAutoUpdater.UI;
 using GenericAutoUpdater.UI.Wrappers;
 
@@ -10,19 +8,6 @@ namespace GenericAutoUpdater.Resources {
     /// A class with various utilities, used throughout all the patch.
     /// </summary>
     static class Utils {
-        /// <summary>
-        /// Performs a sanity check on the received <c>byte[]</c>, assuming it corresponds to the downloaded server metadata file.
-        /// Returns the received data as a string if everything goes right, and throws an <c>InvalidDataException()</c> otherwise.
-        /// </summary>
-        public static string PerformPatchDirectorySanityCheck(byte[] data) {
-            string serverMetadata = Encoding.Default.GetString(data);
-            string patchDirectory = serverMetadata.Trim().Split(new[] { "\n" }, StringSplitOptions.None)[0];
-            // Make sure that the first line of the file is really an url.
-            if (!Uri.TryCreate(patchDirectory, UriKind.Absolute, out Uri uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps))
-                throw new InvalidDataException();
-            return Encoding.Default.GetString(data);
-        }
-
         /// <summary>
         /// Checks if the received <c>AggregateException</c> contains at least one <c>ObjectDisposedException</c>.
         /// </summary>

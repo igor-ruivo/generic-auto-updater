@@ -5,11 +5,13 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using GenericAutoUpdater.Downloaders;
 using GenericAutoUpdater.ExceptionHandler;
 using GenericAutoUpdater.ExceptionHandler.Exceptions;
 using GenericAutoUpdater.FileSystem;
+using GenericAutoUpdater.Hash;
 using GenericAutoUpdater.Resources;
 using GenericAutoUpdater.Resources.Configs;
 using GenericAutoUpdater.Resources.TextResources;
@@ -37,6 +39,16 @@ namespace GenericAutoUpdater.Engine {
         private static BackgroundWorker BW;
 
         /// <summary>
+        /// The <c>IDownloader</c>, used to download resources.
+        /// </summary>
+        private static IDownloader Downloader;
+
+        /// <summary>
+        /// The <c>IHasher</c>, used to compute any hash operation whenever appropriate.
+        /// </summary>
+        private static IHasher Hasher;
+
+        /// <summary>
         /// The url to the actual server directory with the files.
         /// </summary>
         private static string PatchDirectory;
@@ -59,6 +71,8 @@ namespace GenericAutoUpdater.Engine {
         /// </summary>
         public PatcherEngine(BackgroundWorker bw) {
             BW = bw;
+            Hasher = new Md5Hasher();
+            Downloader = new HttpClientDownloader(BW, Hasher);
         }
 
         /// <summary>
@@ -87,7 +101,7 @@ namespace GenericAutoUpdater.Engine {
             for (int i = 0; i < content.Count; i++) {
                 Utils.Log(BW, content[i], ProgressiveWidgetsEnum.Label.DownloadLogger); Utils.Log(BW, string.Format(PatcherEngineResources.FILE_COUNT, i + 1, content.Count, Convert.ToInt32((i + 1f) / content.Count * 100)), ProgressiveWidgetsEnum.Label.FileCountLogger);
                 // The expected hash of the file to be downloaded is already saved in the ServerMetadata.
-                FileSystemExplorer.FetchFile(BW, content[i], PatchDirectory + content[i], ServerMetadata[content[i]].Hash);
+                FileSystemExplorer.FetchFile(Downloader, content[i], PatchDirectory + content[i], ServerMetadata[content[i]].Hash);
                 Utils.Progress(BW, Convert.ToInt32(GetCurrentStepProgress(step) + (i + 1f) / content.Count * (1f / Pipeline.Length * 100)), ProgressiveWidgetsEnum.ProgressBar.WholeProgressBar);
             }
             // Give time to AntiVirus for it to delete or tamper any of the recently downloaded files.
@@ -98,11 +112,11 @@ namespace GenericAutoUpdater.Engine {
         }
 
         /// <summary>
-        /// Invokes the <c>DownloadServerMetadataFile()</c> method, receiving a previously checked server's metadata file.
+        /// This method downloads the server's metadata file into memory.
         /// It then parses it, and stores its content in the ServerMetadata global variable.
         /// </summary>
         private static void GenerateServerMetadata(int step) {
-            string[] metadataByLine = DownloadServerMetadataFile().Trim().Split(new[] { "\n" }, StringSplitOptions.None);
+            string[] metadataByLine = Encoding.Default.GetString(Downloader.DownloadDataToMemory(EngineConfigs.PATCH_METADATA)).Trim().Split(new[] { "\n" }, StringSplitOptions.None);
             // Assume that the first line of the server's metadata file is the url to the actual server directory with the files.
             PatchDirectory = metadataByLine[0];
             ServerMetadata = new Dictionary<string, FileMetadata>((metadataByLine.Length - 1) / 2);
@@ -134,21 +148,12 @@ namespace GenericAutoUpdater.Engine {
         }
 
         /// <summary>
-        /// Downloads and validates the server metadata file.
-        /// Returns it as a string.
-        /// </summary>
-        private static string DownloadServerMetadataFile() {
-            // There is no expected hash for the server metadata file, and it should be downloaded directly into memory.
-            return Utils.PerformPatchDirectorySanityCheck(HttpClientDownloader.DownloadData(BW, EngineConfigs.PATCH_METADATA, null, string.Empty));
-        }
-
-        /// <summary>
         /// Asks the FileSystemExplorer for a fresh copy of the local metadata performed in a concurrent way.
         /// </summary>
         private static void GenerateLocalMetadata() {
             // The local metadata refreshed is based only on the contents available in the server metadata.
             // Do it with a concurrency level equal to half the number of processors.
-            LocalMetadata = FileSystemExplorer.GenerateLocalMetadata(ServerMetadata.Keys.ToArray(), Math.Max(1, Environment.ProcessorCount / 2));
+            LocalMetadata = FileSystemExplorer.GenerateLocalMetadata(ServerMetadata.Keys.ToArray(), Hasher, Math.Max(1, Environment.ProcessorCount / 2));
         }
 
         /// <summary>

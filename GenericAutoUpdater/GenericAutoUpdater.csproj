@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Downloaders\HttpClientDownloader.cs" />
+    <Compile Include="Downloaders\IDownloader.cs" />
     <Compile Include="Engine\IPatcherEngine.cs" />
     <Compile Include="Engine\PatcherEngine.cs" />
     <Compile Include="ExceptionHandler\Exceptions\DataTamperedException.cs" />
@@ -82,7 +83,8 @@
     <Compile Include="FileSystem\FileMetadata.cs" />
     <Compile Include="FileSystem\FileSystemExplorer.cs" />
     <Compile Include="FileSystem\IFileMetadata.cs" />
-    <Compile Include="Hash\Md5HashFactory.cs" />
+    <Compile Include="Hash\IHasher.cs" />
+    <Compile Include="Hash\Md5Hasher.cs" />
     <Compile Include="Resources\TextResources\ErrorHandlerResources.cs" />
     <Compile Include="Resources\TextResources\DownloaderResources.cs" />
     <Compile Include="UI\Wrappers\IWidgetWrapper.cs" />

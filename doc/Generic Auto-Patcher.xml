@@ -14,7 +14,36 @@
             The downloader client itself.
             </summary>
         </member>
-        <member name="M:GenericAutoUpdater.Downloaders.HttpClientDownloader.DownloadData(System.ComponentModel.BackgroundWorker,System.String,System.String,System.String)">
+        <member name="F:GenericAutoUpdater.Downloaders.HttpClientDownloader.Hasher">
+            <summary>
+            The <c>IHasher</c> used to compute the hash of every downloaded file, if there is an expectedHash to compare it to.
+            </summary>
+        </member>
+        <member name="F:GenericAutoUpdater.Downloaders.HttpClientDownloader.BW">
+            <summary>
+            The <c>BackgroundWorker</c> used to inform the UI Thread of the current download's progress.
+            </summary>
+        </member>
+        <member name="M:GenericAutoUpdater.Downloaders.HttpClientDownloader.#ctor(System.ComponentModel.BackgroundWorker,GenericAutoUpdater.Hash.IHasher)">
+            <summary>
+            Initializes a new instance of the <c>HttpClientDownloader</c> class with the specified <c>BackgroundWorker</c> and with the specified <c>IHasher</c>.
+            </summary>
+        </member>
+        <member name="M:GenericAutoUpdater.Downloaders.HttpClientDownloader.DownloadDataToMemory(System.String,System.String)">
+            <summary>
+            This method tries to download a specific file (<c>address</c>) a pre-defined number of times (<c>DownloaderConfigs.MAX_DOWNLOAD_RETRIES_PER_FILE</c>).
+            If an expectedHash is used in this call, the hash of the downloaded file is compared to the expected hash received, triggering an InvalidDataException if they differ.
+            It returns the downloaded content as a <c>byte[]</c>.
+            </summary>
+        </member>
+        <member name="M:GenericAutoUpdater.Downloaders.HttpClientDownloader.DownloadDataToFile(System.String,System.String,System.String)">
+            <summary>
+            This method tries to download a specific file (<c>address</c>) a pre-defined number of times (<c>DownloaderConfigs.MAX_DOWNLOAD_RETRIES_PER_FILE</c>).
+            If an expectedHash is used in this call, the hash of the downloaded file is compared to the expected hash received, triggering an InvalidDataException if they differ.
+            The downloaded content is saved in the disk, in the specified directory (filePath).
+            </summary>
+        </member>
+        <member name="M:GenericAutoUpdater.Downloaders.HttpClientDownloader.DownloadData(System.String,System.String,System.String)">
             <summary>
             This method tries to download a specific file (<c>address</c>) a pre-defined number of times (<c>DownloaderConfigs.MAX_DOWNLOAD_RETRIES_PER_FILE</c>).
             It is also responsible for putting the BackgroundWorker Thread to sleep a pre-defined amount of time (<c>DownloaderConfigs.INTERVAL_MS_BETWEEN_DOWNLOAD_RETRIES</c>) between each download retry.
@@ -23,13 +52,12 @@
             If there is a file path specified (i.e., different from string.Empty), this method returns null after the Download is finished.
             </summary>
         </member>
-        <member name="M:GenericAutoUpdater.Downloaders.HttpClientDownloader.Download(System.ComponentModel.BackgroundWorker,System.String,System.String,System.String)">
+        <member name="M:GenericAutoUpdater.Downloaders.HttpClientDownloader.Download(System.String,System.String,System.String)">
             <summary>
             This method tries to download a specific file from a specific url (<c>address</c>).
-            If no file path was received (i.e., file parameter equals empty string), this method returns an in-memory byte[] with the downloaded file.
+            If no file path was received (i.e., file parameter is null), this method returns an in-memory byte[] with the downloaded file.
             If there is a file path in the parameter path, the download is performed directly into a file with the same name and relative path as the one in the address and this method returns null.
-            If it completes the download, it checks if the hash of the downloaded file equals the expected hash of that same file (expectedHash), throwing an <c>InvalidDataException</c> if it doesn't.
-            If the expected hash is null, it assumes that the downloaded file is the server metadata and executes the respective sanity check on it, throwing an <c>InvalidDataException</c> if something is wrong with it.
+            If it completes the download and an expectedHash was received (i.e., the respective parameter isn't null), it checks if the hash of the downloaded file equals the expected hash of that same file (expectedHash), throwing an <c>InvalidDataException</c> if it doesn't.
             This method also logs the download progress to the respective progress bar through the BackgroundWorker (bw), whenever it assumes it is necessary.
             </summary>
         </member>
@@ -37,6 +65,31 @@
             <summary>
             Recalculates the average speed of the current download based on the new speed sample just measured.
             It weights the new speed sample using a previously defined ratio (DownloaderConfigs.SAMPLE_SPEED_WEIGHT).
+            </summary>
+        </member>
+        <member name="M:GenericAutoUpdater.Downloaders.HttpClientDownloader.HandleStatusCode(System.Net.Http.HttpResponseMessage)">
+            <summary>
+            Handles the received status code of the HTTP request performed. This method is only called when the status code isn't a Success Status code.
+            When the status code is a Server Error, the download flow is continued so that a retry is done, if the limit of retries hasn't yet been reached.
+            When the status code isn't a Server Error, there is no point in retrying the Download, thus a <c>HttpRequestException</c> is trown - denied of a retry.
+            </summary>
+        </member>
+        <member name="T:GenericAutoUpdater.Downloaders.IDownloader">
+            <summary>
+            This interface declares the calls that every downloader should at least implement.
+            </summary>
+        </member>
+        <member name="M:GenericAutoUpdater.Downloaders.IDownloader.DownloadDataToMemory(System.String,System.String)">
+            <summary>
+            The Downloader API call to download a specific file (address) directly into memory.
+            If an expectedHash is specfied, the downloaded file's hash is compared with this hash, throwing an InvalidDataException if they don't match.
+            It returns the downloaded content as a <c>byte[]</c>.
+            </summary>
+        </member>
+        <member name="M:GenericAutoUpdater.Downloaders.IDownloader.DownloadDataToFile(System.String,System.String,System.String)">
+            <summary>
+            The Downloader API call to download a specific file (address) to the disk in the path specified by filePath.
+            If an expectedHash is specfied, the downloaded file's hash is compared with this hash, throwing an InvalidDataException if they don't match.
             </summary>
         </member>
         <member name="T:GenericAutoUpdater.Engine.IPatcherEngine">
@@ -71,6 +124,16 @@
             The <c>BackgroundWorker</c> instance, used to contact the UI Thread.
             </summary>
         </member>
+        <member name="F:GenericAutoUpdater.Engine.PatcherEngine.Downloader">
+            <summary>
+            The <c>IDownloader</c>, used to download resources.
+            </summary>
+        </member>
+        <member name="F:GenericAutoUpdater.Engine.PatcherEngine.Hasher">
+            <summary>
+            The <c>IHasher</c>, used to compute any hash operation whenever appropriate.
+            </summary>
+        </member>
         <member name="F:GenericAutoUpdater.Engine.PatcherEngine.PatchDirectory">
             <summary>
             The url to the actual server directory with the files.
@@ -103,7 +166,7 @@
         </member>
         <member name="M:GenericAutoUpdater.Engine.PatcherEngine.GenerateServerMetadata(System.Int32)">
             <summary>
-            Invokes the <c>DownloadServerMetadataFile()</c> method, receiving a previously checked server's metadata file.
+            This method downloads the server's metadata file into memory.
             It then parses it, and stores its content in the ServerMetadata global variable.
             </summary>
         </member>
@@ -115,12 +178,6 @@
         <member name="M:GenericAutoUpdater.Engine.PatcherEngine.CalculateOutdatedContent">
             <summary>
             Returns a list containing the server files' names which their md5 hash differs from the respective local files' md5 hash.
-            </summary>
-        </member>
-        <member name="M:GenericAutoUpdater.Engine.PatcherEngine.DownloadServerMetadataFile">
-            <summary>
-            Downloads and validates the server metadata file.
-            Returns it as a string.
             </summary>
         </member>
         <member name="M:GenericAutoUpdater.Engine.PatcherEngine.GenerateLocalMetadata">
@@ -221,13 +278,13 @@
             The class responsible for any IO related task.
             </summary>
         </member>
-        <member name="M:GenericAutoUpdater.FileSystem.FileSystemExplorer.GenerateLocalMetadata(System.String[],System.Int32)">
+        <member name="M:GenericAutoUpdater.FileSystem.FileSystemExplorer.GenerateLocalMetadata(System.String[],GenericAutoUpdater.Hash.IHasher,System.Int32)">
             <summary>
             Returns a refreshed version of the local metadata.
             This method accomplishes this by reading from the disk all the files whose name match those in filePaths and calculating their md5 hashes concurrently.
             </summary>
         </member>
-        <member name="M:GenericAutoUpdater.FileSystem.FileSystemExplorer.FetchFile(System.ComponentModel.BackgroundWorker,System.String,System.String,System.String)">
+        <member name="M:GenericAutoUpdater.FileSystem.FileSystemExplorer.FetchFile(GenericAutoUpdater.Downloaders.IDownloader,System.String,System.String,System.String)">
             <summary>
             Tries to download and write a specific file (resource) to the disk in a defined path.
             This method creates the respective parent directory, if needed.
@@ -243,30 +300,53 @@
             Used to represent the metadata of a file.
             </summary>
         </member>
-        <member name="T:GenericAutoUpdater.Hash.Md5HashFactory">
+        <member name="T:GenericAutoUpdater.Hash.IHasher">
+            <summary>
+            This interface declares the calls that every hasher should at least implement.
+            </summary>
+        </member>
+        <member name="M:GenericAutoUpdater.Hash.IHasher.GeneratedHashFromByteArray(System.Byte[])">
+            <summary>
+            Computes the hash of the received <c>byte[]</c> array and returns it as a string.
+            Invokes <c>NormalizeMd5()</c> for the conversion.
+            </summary>
+        </member>
+        <member name="M:GenericAutoUpdater.Hash.IHasher.GeneratedHashFromStream(System.IO.Stream)">
+            <summary>
+            Computes the hash of the received <c>Stream</c> array and returns it as a string.
+            Invokes <c>NormalizeMd5()</c> for the conversion.
+            </summary>
+        </member>
+        <member name="M:GenericAutoUpdater.Hash.IHasher.GeneratedHashFromFile(System.String)">
+            <summary>
+            Computes the hash of the file with the received name and returns it as a string.
+            Invokes <c>NormalizeMd5()</c> for the conversion.
+            </summary>
+        </member>
+        <member name="T:GenericAutoUpdater.Hash.Md5Hasher">
             <summary>
             The class used to generate and manipulate md5 hashes.
             </summary>
         </member>
-        <member name="M:GenericAutoUpdater.Hash.Md5HashFactory.GeneratedMd5HashFromByteArray(System.Byte[])">
+        <member name="M:GenericAutoUpdater.Hash.Md5Hasher.GeneratedHashFromByteArray(System.Byte[])">
             <summary>
             Computes the md5 hash of the received <c>byte[]</c> array and returns it as a string.
             Invokes <c>NormalizeMd5()</c> for the conversion.
             </summary>
         </member>
-        <member name="M:GenericAutoUpdater.Hash.Md5HashFactory.GeneratedMd5HashFromStream(System.IO.Stream)">
+        <member name="M:GenericAutoUpdater.Hash.Md5Hasher.GeneratedHashFromStream(System.IO.Stream)">
             <summary>
             Computes the md5 hash of the received <c>Stream</c> and returns it as a string.
             Invokes <c>NormalizeMd5()</c> for the conversion.
             </summary>
         </member>
-        <member name="M:GenericAutoUpdater.Hash.Md5HashFactory.GeneratedMd5HashFromFile(System.String)">
+        <member name="M:GenericAutoUpdater.Hash.Md5Hasher.GeneratedHashFromFile(System.String)">
             <summary>
             Computes the md5 hash of the file with the received name and returns it as a string.
             Invokes <c>NormalizeMd5()</c> for the conversion.
             </summary>
         </member>
-        <member name="M:GenericAutoUpdater.Hash.Md5HashFactory.NormalizeMd5(System.Byte[])">
+        <member name="M:GenericAutoUpdater.Hash.Md5Hasher.NormalizeMd5(System.Byte[])">
             <summary>
             Converts the <c>byte[]</c> md5 hash received into a string.
             </summary>
@@ -429,12 +509,6 @@
         <member name="T:GenericAutoUpdater.Resources.Utils">
             <summary>
             A class with various utilities, used throughout all the patch.
-            </summary>
-        </member>
-        <member name="M:GenericAutoUpdater.Resources.Utils.PerformPatchDirectorySanityCheck(System.Byte[])">
-            <summary>
-            Performs a sanity check on the received <c>byte[]</c>, assuming it corresponds to the downloaded server metadata file.
-            Returns the received data as a string if everything goes right, and throws an <c>InvalidDataException()</c> otherwise.
             </summary>
         </member>
         <member name="M:GenericAutoUpdater.Resources.Utils.AggregateContainsObjectDisposedException(System.AggregateException)">
