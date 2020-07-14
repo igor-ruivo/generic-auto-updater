@@ -20,7 +20,7 @@ namespace GenericAutoUpdater.Downloaders {
         /// <summary>
         /// The downloader client itself.
         /// </summary>
-        private static HttpClient HttpClient = null;
+        private static HttpClient HttpClient;
 
         /// <summary>
         /// The <c>IHasher</c> used to compute the hash of every downloaded file, if there is an expectedHash to compare it to.
@@ -38,10 +38,9 @@ namespace GenericAutoUpdater.Downloaders {
         public HttpClientDownloader(BackgroundWorker bw, IHasher hasher) {
             BW = bw;
             Hasher = hasher;
-            HttpClientHandler handler = new HttpClientHandler() {
+            HttpClient = new HttpClient(new HttpClientHandler() {
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
-            };
-            HttpClient = new HttpClient(handler);
+            });
             SetupDefaultHeaders();
         }
 
@@ -114,7 +113,7 @@ namespace GenericAutoUpdater.Downloaders {
                     int lastMark = 0;
                     float speedAverage = 0;
                     using (MemoryStream memoryStream = file != null ? null : new MemoryStream()) {
-                        using (FileStream fileStream = file == null ? null : File.OpenWrite(file)) {
+                        using (FileStream fileStream = file == null ? null : File.Open(file, FileMode.Create)) {
                             do {
                                 // A CancellationTokenSource is used to close the contentStream by force if it doesn't finish some ReadAsync()
                                 // under a specific amount of time (DownloaderConfigs.TIMEOUT_MS_WAITING_FOR_READ),
