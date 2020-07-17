@@ -6,12 +6,12 @@
         /// <summary>
         /// The number of attempts to successfully download a file before throwing a specific Exception.
         /// </summary>
-        public static readonly int MAX_DOWNLOAD_RETRIES_PER_FILE = 5;
+        public static readonly int MAX_DOWNLOAD_RETRIES_PER_FILE = 3;
 
         /// <summary>
-        /// The time (in milliseconds) that the downloader will spend sleeping before retrying a failed download.
+        /// The base time (in milliseconds) that the downloader will spend sleeping before retrying a failed download.
         /// </summary>
-        public static readonly int INTERVAL_MS_BETWEEN_DOWNLOAD_RETRIES = 1000;
+        public static readonly int BASE_MS_SLEEP_TIME_BETWEEN_DOWNLOAD_RETRIES = 1000;
 
         /// <summary>
         /// The time (in milliseconds) that the downloader will spend waiting for the current read request to be completed before closing the stream by force, thus throwing an <c>ObjectDisposedException</c>.

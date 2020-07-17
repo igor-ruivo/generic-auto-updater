@@ -36,11 +36,11 @@
         /// <summary>
         /// The text description of the window triggered whenever there is a consistency error.
         /// </summary>
-        public static readonly string AV_FALSE_POSITIVE = "One or more files or directories are missing or were tampered after applying the patch. Please check if your AntiVirus or Microsoft Defender are at fault and then run the Auto-Updater again.";
+        public static readonly string AV_FALSE_POSITIVE = "One or more files or directories are missing or were tampered while applying the patch. Please check if your AntiVirus or Microsoft Defender are at fault and then run the Auto-Updater again.";
 
         /// <summary>
         /// The text description of the window triggered whenever there is an IO error.
         /// </summary>
-        public static readonly string ERROR_IO_EXPLORER = "An error occurred while trying to write a file or directory in its destination path. Please check if you have permission to apply the patch in this current directory, or if this current directory is being used by another process, or if its path is too long.";
+        public static readonly string ERROR_IO_EXPLORER = "An error occurred while trying to write a file or directory in its destination path. Please check if your AntiVirus blocked any of the downloaded files, or if you have permission to apply the patch in this current directory, or if this current directory is being used by another process, or if its path is too long.";
     }
 }

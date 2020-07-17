@@ -1,12 +1,12 @@
-﻿using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Windows.Forms;
-using GenericAutoUpdater.Engine;
+﻿using GenericAutoUpdater.Engine;
 using GenericAutoUpdater.ExceptionHandler;
 using GenericAutoUpdater.Resources.TextResources;
 using GenericAutoUpdater.UI;
 using GenericAutoUpdater.UI.Wrappers;
+using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace GenericAutoUpdater {
     /// <summary>
@@ -118,7 +118,8 @@ namespace GenericAutoUpdater {
             IPatcherEngine engine = new PatcherEngine(bw);
             try {
                 engine.Patch();
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 Handler.Handle(ex);
             }
         }

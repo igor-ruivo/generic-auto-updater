@@ -1,8 +1,8 @@
-﻿using System.Collections.Concurrent;
+﻿using GenericAutoUpdater.Downloaders;
+using GenericAutoUpdater.Hash;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Threading.Tasks;
-using GenericAutoUpdater.Downloaders;
-using GenericAutoUpdater.Hash;
 
 namespace GenericAutoUpdater.FileSystem {
     /// <summary>

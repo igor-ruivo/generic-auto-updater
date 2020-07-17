@@ -1,4 +1,9 @@
-﻿using System;
+﻿using GenericAutoUpdater.Hash;
+using GenericAutoUpdater.Resources;
+using GenericAutoUpdater.Resources.Configs;
+using GenericAutoUpdater.Resources.TextResources;
+using GenericAutoUpdater.UI;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -6,11 +11,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using GenericAutoUpdater.Hash;
-using GenericAutoUpdater.Resources;
-using GenericAutoUpdater.Resources.Configs;
-using GenericAutoUpdater.Resources.TextResources;
-using GenericAutoUpdater.UI;
 
 namespace GenericAutoUpdater.Downloaders {
     /// <summary>
@@ -78,10 +78,11 @@ namespace GenericAutoUpdater.Downloaders {
                         return null;
                     data.Wait();
                     return data.Result;
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                     if (!ExceptionTypeShouldRetry(ex))
                         throw;
-                    Thread.Sleep(DownloaderConfigs.INTERVAL_MS_BETWEEN_DOWNLOAD_RETRIES);
+                    Thread.Sleep(ComputeNextSleepTime(DownloaderConfigs.BASE_MS_SLEEP_TIME_BETWEEN_DOWNLOAD_RETRIES, tries));
                     if (++tries == DownloaderConfigs.MAX_DOWNLOAD_RETRIES_PER_FILE)
                         throw;
                     continue;
@@ -195,8 +196,17 @@ namespace GenericAutoUpdater.Downloaders {
         private bool ExceptionTypeShouldRetry(Exception ex) {
             // When a HTTP status code in the range of [300 - 499] is received there is no point in retrying.
             // When the Download's contentStream is closed by force due to a read timeout there is no point in retrying.
-            return !(ex is AggregateException exception && (Utils.AggregateContainsSpecificException(exception, new ObjectDisposedException("")) || Utils.AggregateContainsSpecificException(exception, new HttpRequestException()))
-                        || ex is HttpRequestException || ex is ObjectDisposedException);
+            // There is no point in retrying IOExceptions.
+            return !(ex is AggregateException exception && (Utils.AggregateContainsSpecificException(exception, new ObjectDisposedException("")) || Utils.AggregateContainsSpecificException(exception, new HttpRequestException()) || Utils.AggregateContainsSpecificException(exception, new IOException()))
+                        || ex is HttpRequestException || ex is ObjectDisposedException || ex is IOException);
+        }
+
+        /// <summary>
+        /// This method calculates the next sleep time by multiplying the base sleep time (DownloaderConfigs.BASE_MS_SLEEP_TIME_BETWEEN_DOWNLOAD_RETRIES) by a random floating-point number in the interval [0, 1[.
+        /// It then applies a exponential backoff strategy to the wait time.
+        /// </summary>
+        private int ComputeNextSleepTime(int baseTimer, int tries) {
+            return Convert.ToInt32(Math.Pow(2, tries) * baseTimer * (1 + new Random().NextDouble()));
         }
     }
 }

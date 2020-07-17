@@ -84,6 +84,12 @@
             This method returns true if the received exception is eligible for a retry, or false otherwise.
             </summary>
         </member>
+        <member name="M:GenericAutoUpdater.Downloaders.HttpClientDownloader.ComputeNextSleepTime(System.Int32,System.Int32)">
+            <summary>
+            This method calculates the next sleep time by multiplying the base sleep time (DownloaderConfigs.BASE_MS_SLEEP_TIME_BETWEEN_DOWNLOAD_RETRIES) by a random floating-point number in the interval [0, 1[.
+            It then applies a exponential backoff strategy to the wait time.
+            </summary>
+        </member>
         <member name="T:GenericAutoUpdater.Downloaders.IDownloader">
             <summary>
             This interface declares the calls that every downloader should at least implement.
@@ -257,10 +263,15 @@
             Any un-cased exception triggers an unknown error prompt.
             </summary>
         </member>
-        <member name="M:GenericAutoUpdater.ExceptionHandler.Handler.ShowError(System.String,System.String)">
+        <member name="M:GenericAutoUpdater.ExceptionHandler.Handler.ShowError(System.String,System.String,System.String)">
             <summary>
-            Informs the user, through a <c>MessageBox</c> whose text and caption are received in argument, that something went wrong while patching.
+            Informs the user, through a <c>MessageBox</c> (whose text and caption are received in arguments), that something went wrong while patching.
             Exits the application terminating all Threads after the user clicks in the OK button.
+            </summary>
+        </member>
+        <member name="M:GenericAutoUpdater.ExceptionHandler.Handler.BuildErrorMessage(System.String,System.String)">
+            <summary>
+            Builds the error message displayed to the user through the <c>ShowError</c> method.
             </summary>
         </member>
         <member name="T:GenericAutoUpdater.FileSystem.FileMetadata">
@@ -566,9 +577,9 @@
             The number of attempts to successfully download a file before throwing a specific Exception.
             </summary>
         </member>
-        <member name="F:GenericAutoUpdater.Resources.Configs.DownloaderConfigs.INTERVAL_MS_BETWEEN_DOWNLOAD_RETRIES">
+        <member name="F:GenericAutoUpdater.Resources.Configs.DownloaderConfigs.BASE_MS_SLEEP_TIME_BETWEEN_DOWNLOAD_RETRIES">
             <summary>
-            The time (in milliseconds) that the downloader will spend sleeping before retrying a failed download.
+            The base time (in milliseconds) that the downloader will spend sleeping before retrying a failed download.
             </summary>
         </member>
         <member name="F:GenericAutoUpdater.Resources.Configs.DownloaderConfigs.TIMEOUT_MS_WAITING_FOR_READ">

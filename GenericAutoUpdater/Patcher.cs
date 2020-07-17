@@ -1,7 +1,7 @@
-﻿using System;
-using System.Windows.Forms;
-using GenericAutoUpdater.ExceptionHandler;
+﻿using GenericAutoUpdater.ExceptionHandler;
 using GenericAutoUpdater.Resources.TextResources;
+using System;
+using System.Windows.Forms;
 
 namespace GenericAutoUpdater {
     /// <summary>
@@ -28,12 +28,15 @@ namespace GenericAutoUpdater {
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
                     Application.Run(new PatcherMainWindow());
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                     Handler.Handle(ex);
-                } finally {
+                }
+                finally {
                     mutex.ReleaseMutex();
                 }
-            } else
+            }
+            else
                 MessageBox.Show(MainWindowResources.ALREADY_RUNNING, MainWindowResources.ALREADY_RUNNING_ERROR, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
     }

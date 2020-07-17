@@ -1,7 +1,7 @@
-﻿using System;
-using System.ComponentModel;
-using GenericAutoUpdater.UI;
+﻿using GenericAutoUpdater.UI;
 using GenericAutoUpdater.UI.Wrappers;
+using System;
+using System.ComponentModel;
 
 namespace GenericAutoUpdater.Resources {
     /// <summary>

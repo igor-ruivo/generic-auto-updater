@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using GenericAutoUpdater.Downloaders;
+﻿using GenericAutoUpdater.Downloaders;
 using GenericAutoUpdater.ExceptionHandler;
 using GenericAutoUpdater.ExceptionHandler.Exceptions;
 using GenericAutoUpdater.FileSystem;
@@ -16,6 +7,15 @@ using GenericAutoUpdater.Resources;
 using GenericAutoUpdater.Resources.Configs;
 using GenericAutoUpdater.Resources.TextResources;
 using GenericAutoUpdater.UI;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading;
 
 namespace GenericAutoUpdater.Engine {
     /// <summary>
