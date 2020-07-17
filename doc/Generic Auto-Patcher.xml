@@ -305,10 +305,11 @@
             This method accomplishes this by reading from the disk all the files whose name match those in filePaths and calculating their md5 hashes concurrently.
             </summary>
         </member>
-        <member name="M:GenericAutoUpdater.FileSystem.FileSystemExplorer.FetchFile(GenericAutoUpdater.Downloaders.IDownloader,System.String,System.String,System.String)">
+        <member name="M:GenericAutoUpdater.FileSystem.FileSystemExplorer.FetchFile(GenericAutoUpdater.Downloaders.IDownloader,System.String,System.String,System.Boolean,System.String)">
             <summary>
             Tries to download and write a specific file (resource) to the disk in a defined path.
             This method creates the respective parent directory, if needed.
+            If the download is due to an update, this method downloads the updated file but only replaces the legacy file with it when there is evidence that the download was successful.
             </summary>
         </member>
         <member name="M:GenericAutoUpdater.FileSystem.FileSystemExplorer.FileExists(System.String)">
@@ -370,6 +371,67 @@
         <member name="M:GenericAutoUpdater.Hash.Md5Hasher.NormalizeMd5(System.Byte[])">
             <summary>
             Converts the <c>byte[]</c> md5 hash received into a string.
+            </summary>
+        </member>
+        <member name="T:GenericAutoUpdater.Resources.Configs.FileSystemExplorerConfigs">
+            <summary>
+            The class with the required configuration to be used by the file system explorer.
+            </summary>
+        </member>
+        <member name="F:GenericAutoUpdater.Resources.Configs.FileSystemExplorerConfigs.INCOMPLETE_DOWNLOADED_FILE_EXT">
+            <summary>
+            The extension given to files currently being downloaded to perform an update.
+            </summary>
+        </member>
+        <member name="T:GenericAutoUpdater.Resources.Configs.EngineConfigs">
+            <summary>
+            The class with the required configuration to be used by the engine.
+            </summary>
+        </member>
+        <member name="F:GenericAutoUpdater.Resources.Configs.EngineConfigs.PATCH_METADATA">
+            <summary>
+            The link to the server's metadata file.
+            </summary>
+        </member>
+        <member name="F:GenericAutoUpdater.Resources.Configs.EngineConfigs.MS_TO_WAIT_FOR_AV_FALSE_POSITIVES">
+            <summary>
+            The time (in milliseconds) that the engine will spend sleeping before performing any consistency checks.
+            </summary>
+        </member>
+        <member name="T:GenericAutoUpdater.Resources.Configs.DownloaderConfigs">
+            <summary>
+            The class with the required configuration to be used by the downloader.
+            </summary>
+        </member>
+        <member name="F:GenericAutoUpdater.Resources.Configs.DownloaderConfigs.MAX_DOWNLOAD_RETRIES_PER_FILE">
+            <summary>
+            The number of attempts to successfully download a file before throwing a specific Exception.
+            </summary>
+        </member>
+        <member name="F:GenericAutoUpdater.Resources.Configs.DownloaderConfigs.BASE_MS_SLEEP_TIME_BETWEEN_DOWNLOAD_RETRIES">
+            <summary>
+            The base time (in milliseconds) that the downloader will spend sleeping before retrying a failed download.
+            </summary>
+        </member>
+        <member name="F:GenericAutoUpdater.Resources.Configs.DownloaderConfigs.TIMEOUT_MS_WAITING_FOR_READ">
+            <summary>
+            The time (in milliseconds) that the downloader will spend waiting for the current read request to be completed before closing the stream by force, thus throwing an <c>ObjectDisposedException</c>.
+            </summary>
+        </member>
+        <member name="F:GenericAutoUpdater.Resources.Configs.DownloaderConfigs.BUFFER_SIZE">
+            <summary>
+            The downloader's buffer size, in bytes.
+            </summary>
+        </member>
+        <member name="F:GenericAutoUpdater.Resources.Configs.DownloaderConfigs.INFORM_PROGRESS_EVERY_X_READS">
+            <summary>
+            How many logs to the UI Thread will the downloader always omit between performed reads.
+            </summary>
+        </member>
+        <member name="F:GenericAutoUpdater.Resources.Configs.DownloaderConfigs.SAMPLE_SPEED_WEIGHT">
+            <summary>
+            The weight of a measured speed sample on the current file's average download speed.
+            Use a value from the interval [0, 1].
             </summary>
         </member>
         <member name="T:GenericAutoUpdater.Resources.TextResources.ErrorHandlerResources">
@@ -550,57 +612,6 @@
         <member name="M:GenericAutoUpdater.Resources.Utils.BytesToString(System.Int64,System.Int32)">
             <summary>
             Converts a byte number into a more readable unit.
-            </summary>
-        </member>
-        <member name="T:GenericAutoUpdater.Resources.Configs.EngineConfigs">
-            <summary>
-            The class with the required configuration to be used by the engine.
-            </summary>
-        </member>
-        <member name="F:GenericAutoUpdater.Resources.Configs.EngineConfigs.PATCH_METADATA">
-            <summary>
-            The link to the server's metadata file.
-            </summary>
-        </member>
-        <member name="F:GenericAutoUpdater.Resources.Configs.EngineConfigs.MS_TO_WAIT_FOR_AV_FALSE_POSITIVES">
-            <summary>
-            The time (in milliseconds) that the engine will spend sleeping before performing any consistency checks.
-            </summary>
-        </member>
-        <member name="T:GenericAutoUpdater.Resources.Configs.DownloaderConfigs">
-            <summary>
-            The class with the required configuration to be used by the downloader.
-            </summary>
-        </member>
-        <member name="F:GenericAutoUpdater.Resources.Configs.DownloaderConfigs.MAX_DOWNLOAD_RETRIES_PER_FILE">
-            <summary>
-            The number of attempts to successfully download a file before throwing a specific Exception.
-            </summary>
-        </member>
-        <member name="F:GenericAutoUpdater.Resources.Configs.DownloaderConfigs.BASE_MS_SLEEP_TIME_BETWEEN_DOWNLOAD_RETRIES">
-            <summary>
-            The base time (in milliseconds) that the downloader will spend sleeping before retrying a failed download.
-            </summary>
-        </member>
-        <member name="F:GenericAutoUpdater.Resources.Configs.DownloaderConfigs.TIMEOUT_MS_WAITING_FOR_READ">
-            <summary>
-            The time (in milliseconds) that the downloader will spend waiting for the current read request to be completed before closing the stream by force, thus throwing an <c>ObjectDisposedException</c>.
-            </summary>
-        </member>
-        <member name="F:GenericAutoUpdater.Resources.Configs.DownloaderConfigs.BUFFER_SIZE">
-            <summary>
-            The downloader's buffer size, in bytes.
-            </summary>
-        </member>
-        <member name="F:GenericAutoUpdater.Resources.Configs.DownloaderConfigs.INFORM_PROGRESS_EVERY_X_READS">
-            <summary>
-            How many logs to the UI Thread will the downloader always omit between performed reads.
-            </summary>
-        </member>
-        <member name="F:GenericAutoUpdater.Resources.Configs.DownloaderConfigs.SAMPLE_SPEED_WEIGHT">
-            <summary>
-            The weight of a measured speed sample on the current file's average download speed.
-            Use a value from the interval [0, 1].
             </summary>
         </member>
         <member name="T:GenericAutoUpdater.UI.Wrappers.IWidgetWrapper">

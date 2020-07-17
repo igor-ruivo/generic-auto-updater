@@ -101,7 +101,7 @@ namespace GenericAutoUpdater.Engine {
             for (int i = 0; i < content.Count; i++) {
                 Utils.Log(BW, content[i], ProgressiveWidgetsEnum.Label.DownloadLogger); Utils.Log(BW, string.Format(PatcherEngineResources.FILE_COUNT, i + 1, content.Count, Convert.ToInt32((i + 1f) / content.Count * 100)), ProgressiveWidgetsEnum.Label.FileCountLogger);
                 // The expected hash of the file to be downloaded is already saved in the ServerMetadata.
-                FileSystemExplorer.FetchFile(Downloader, content[i], PatchDirectory + content[i], ServerMetadata[content[i]].Hash);
+                FileSystemExplorer.FetchFile(Downloader, content[i], PatchDirectory + content[i], isMissingContent, ServerMetadata[content[i]].Hash);
                 Utils.Progress(BW, Convert.ToInt32(GetCurrentStepProgress(step) + (i + 1f) / content.Count * (1f / Pipeline.Length * 100)), ProgressiveWidgetsEnum.ProgressBar.WholeProgressBar);
             }
             // Give time to AntiVirus for it to delete or tamper any of the recently downloaded files.
