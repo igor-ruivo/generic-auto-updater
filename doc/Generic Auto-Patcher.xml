@@ -309,12 +309,19 @@
             <summary>
             Tries to download and write a specific file (resource) to the disk in a defined path.
             This method creates the respective parent directory, if needed.
-            If the download is due to an update, this method downloads the updated file but only replaces the legacy file with it when there is evidence that the download was successful.
+            If the download is due to an update, this method downloads the updated file appending to it a special extension, preserving the legacy file.
             </summary>
         </member>
         <member name="M:GenericAutoUpdater.FileSystem.FileSystemExplorer.FileExists(System.String)">
             <summary>
             Checks if a file exists.
+            </summary>
+        </member>
+        <member name="M:GenericAutoUpdater.FileSystem.FileSystemExplorer.ApplyUpdate(System.Collections.Generic.List{System.String})">
+            <summary>
+            This method is responsible for renaming all files updated by removing their special extension regarding their incompletion.
+            It starts by checking if the downloaded files still exist in the disk. If any of them don't, it throws a <c>FileNotFoundException</c>.
+            However, if all of them exist, the legacy version of each of them is deleted, and the updated version gets the respective legacy file name.
             </summary>
         </member>
         <member name="T:GenericAutoUpdater.FileSystem.IFileMetadata">

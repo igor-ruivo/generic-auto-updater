@@ -106,6 +106,8 @@ namespace GenericAutoUpdater.Engine {
             }
             // Give time to AntiVirus for it to delete or tamper any of the recently downloaded files.
             Thread.Sleep(EngineConfigs.MS_TO_WAIT_FOR_AV_FALSE_POSITIVES);
+            if (!isMissingContent)
+                FileSystemExplorer.ApplyUpdate(content);
             GenerateLocalMetadata();
             Utils.Log(BW, string.Empty, ProgressiveWidgetsEnum.Label.FileCountLogger);
             Utils.Log(BW, string.Empty, ProgressiveWidgetsEnum.Label.DownloadSpeedLogger);
