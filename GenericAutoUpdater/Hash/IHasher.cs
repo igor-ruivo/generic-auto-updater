@@ -4,7 +4,7 @@ namespace GenericAutoUpdater.Hash {
     /// <summary>
     /// This interface declares the calls that every hasher should at least implement.
     /// </summary>
-    interface IHasher {
+    public interface IHasher {
         /// <summary>
         /// Computes the hash of the received <c>byte[]</c> array and returns it as a string.
         /// Invokes <c>NormalizeMd5()</c> for the conversion.

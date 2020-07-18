@@ -2,7 +2,7 @@
     /// <summary>
     /// This interface declares the calls that every downloader should at least implement.
     /// </summary>
-    interface IDownloader {
+    public interface IDownloader {
         /// <summary>
         /// The Downloader API call to download a specific file (address) directly into memory.
         /// If an expectedHash is specfied, the downloaded file's hash is compared with this hash, throwing an InvalidDataException if they don't match.

@@ -360,3 +360,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# generic-auto-patcher
+# Files downloaded while testing
+Tests/TestDownloadedFiles/*

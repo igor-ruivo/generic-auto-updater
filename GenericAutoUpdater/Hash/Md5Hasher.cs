@@ -6,7 +6,7 @@ namespace GenericAutoUpdater.Hash {
     /// <summary>
     /// The class used to generate and manipulate md5 hashes.
     /// </summary>
-    class Md5Hasher : IHasher {
+    public class Md5Hasher : IHasher {
         /// <summary>
         /// Computes the md5 hash of the received <c>byte[]</c> array and returns it as a string.
         /// Invokes <c>NormalizeMd5()</c> for the conversion.

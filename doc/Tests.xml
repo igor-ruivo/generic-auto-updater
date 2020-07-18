@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Tests</name>
+    </assembly>
+    <members>
+        <member name="T:Tests.HttpClientDownloaderTests">
+            <summary>
+            The class containing all tests regarding the HttpClientDownloader.
+            </summary>
+        </member>
+        <member name="F:Tests.HttpClientDownloaderTests.httpListener">
+            <summary>
+            The HttpListener used as the local server.
+            </summary>
+        </member>
+        <member name="F:Tests.HttpClientDownloaderTests.EndpointUrl">
+            <summary>
+            The Endpoint's Url to access the server.
+            </summary>
+        </member>
+        <member name="F:Tests.HttpClientDownloaderTests.ServerFilesDirectory">
+            <summary>
+            The local directory where the server files are kept.
+            </summary>
+        </member>
+        <member name="F:Tests.HttpClientDownloaderTests.DownloadedFilesDirectory">
+            <summary>
+            The local directory to where the downloaded files are written.
+            </summary>
+        </member>
+        <member name="F:Tests.HttpClientDownloaderTests.Downloader">
+            <summary>
+            The <c>IDownloader</c>, used to download resources.
+            </summary>
+        </member>
+        <member name="F:Tests.HttpClientDownloaderTests.Hasher">
+            <summary>
+            The <c>IHasher</c>, used to compute any hash operation whenever appropriate.
+            </summary>
+        </member>
+        <member name="F:Tests.HttpClientDownloaderTests.Server">
+            <summary>
+            The thread running the Server.
+            </summary>
+        </member>
+        <member name="M:Tests.HttpClientDownloaderTests.ClassInit(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext)">
+            <summary>
+            This method performs any setup required before running the tests.
+            It acts as a constructor for this test class.
+            </summary>
+        </member>
+        <member name="M:Tests.HttpClientDownloaderTests.ClassCleanup">
+            <summary>
+            This method performs any cleanup required after running the tests.
+            It is responsible for stopping the Server and thus killing the thread it lived on.
+            </summary>
+        </member>
+        <member name="M:Tests.HttpClientDownloaderTests.DownloadDataToMemoryTest">
+            <summary>
+            Tests the DownloadDataToMemory method by downloading a small file to memory and asserting the equality between the original file hash and the hash of the byte[] obtained from the download.
+            </summary>
+        </member>
+        <member name="M:Tests.HttpClientDownloaderTests.DownloadDataToDiskTest">
+            <summary>
+            Tests the DownloadDataToFile method by downloading a small file to the disk and asserting the equality between the original file hash and the hash of the downloaded file.
+            </summary>
+        </member>
+        <member name="M:Tests.HttpClientDownloaderTests.ServerThread">
+            <summary>
+            This method is run on the server thread.
+            Acts as a server, waiting for any request through the HttpListener.
+            Expects a request on a file present in the local file's directory. Whenever it receives one, it reads the file and writes its content in the request's OutputStream.
+            </summary>
+        </member>
+    </members>
+</doc>
