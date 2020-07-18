@@ -1,4 +1,4 @@
-<a href="https://github.com/igor-ruivo/generic-auto-updater"><img src="https://i.imgur.com/a4Jic7Q.gif" title="Generic Auto-Updater Main Window" alt="Generic Auto-Updater Main Window"></a>
+<a href="https://github.com/igor-ruivo/generic-auto-updater"><img src="https://i.imgur.com/gU7Z8Lx.gif" title="Generic Auto-Updater Main Window" alt="Generic Auto-Updater Main Window"></a>
 # Generic Auto-Updater
 
 A robust, user-friendly, clean and efficient Auto-Updater for any client.
@@ -67,7 +67,7 @@ The Auto-Updater will start.
 ## Running the tests
 
 * Automated tests for this system will be added in the future.
-* [VirusTotal analysis](https://www.virustotal.com/gui/file/20f479721db765d14e75a7ad3288fea3b9b1732786864ec12d1fad9609f29c1e/detection)
+* [VirusTotal analysis](https://www.virustotal.com/gui/file/b67205bad0b7ca9a5819e3c2d1c778d57b69c20cefab832e2076fa87ff287a24/detection)
 
 ## Built With
 
