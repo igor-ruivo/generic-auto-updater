@@ -4,6 +4,36 @@
         <name>Tests</name>
     </assembly>
     <members>
+        <member name="T:Tests.Enums.HttpClientDownloaderTestsEnum">
+            <summary>
+            The class with the enums used in the HttpClientDownloaderTest class.
+            </summary>
+        </member>
+        <member name="T:Tests.Enums.HttpClientDownloaderTestsEnum.ServerBehaviours">
+            <summary>
+            The enum containing the different possible server behaviours.
+            </summary>
+        </member>
+        <member name="F:Tests.Enums.HttpClientDownloaderTestsEnum.ServerBehaviours.Normal">
+            <summary>
+            A server with normal latency and behaviour.
+            </summary>
+        </member>
+        <member name="F:Tests.Enums.HttpClientDownloaderTestsEnum.ServerBehaviours.Latency">
+            <summary>
+            A server with tolerable simulated random latency.
+            </summary>
+        </member>
+        <member name="F:Tests.Enums.HttpClientDownloaderTestsEnum.ServerBehaviours.TimeoutDuringRead">
+            <summary>
+            A server which forces a timeout during a read.
+            </summary>
+        </member>
+        <member name="F:Tests.Enums.HttpClientDownloaderTestsEnum.ServerBehaviours.Inconsistent">
+            <summary>
+            A server whose response to requests are inconsistent.
+            </summary>
+        </member>
         <member name="T:Tests.HttpClientDownloaderTests">
             <summary>
             The class containing all tests regarding the HttpClientDownloader.
@@ -66,11 +96,49 @@
             Tests the DownloadDataToFile method by downloading a small file to the disk and asserting the equality between the original file hash and the hash of the downloaded file.
             </summary>
         </member>
+        <member name="M:Tests.HttpClientDownloaderTests.DownloadWithLatencyTest">
+            <summary>
+            Tests if a download is successful even if the server has considerable latency.
+            </summary>
+        </member>
+        <member name="M:Tests.HttpClientDownloaderTests.DownloadWithTimeoutTest">
+            <summary>
+            Tests if an IOException is thrown whenever there is a read timeout on the downloader.
+            Assures the downloader never gets stuck and that the CancellationToken works.
+            </summary>
+        </member>
+        <member name="M:Tests.HttpClientDownloaderTests.DownloadInconsistentTest">
+            <summary>
+            Tests if an InvalidDataException is thrown whenever the downloader detects inconsistency between the expected hash and the downloaded file's hash.
+            </summary>
+        </member>
         <member name="M:Tests.HttpClientDownloaderTests.ServerThread">
             <summary>
             This method is run on the server thread.
             Acts as a server, waiting for any request through the HttpListener.
             Expects a request on a file present in the local file's directory. Whenever it receives one, it reads the file and writes its content in the request's OutputStream.
+            The request must contain a query parameter named behaviour, with the desired behaviour to be simulated by this server while answering the respective request.
+            </summary>
+        </member>
+        <member name="M:Tests.HttpClientDownloaderTests.NormalBehaviour(System.Net.HttpListenerContext,System.Byte[],System.String)">
+            <summary>
+            Simulates a normal behaviour in a server while answering the request, without induced latency or errors.
+            </summary>
+        </member>
+        <member name="M:Tests.HttpClientDownloaderTests.LatencyBehaviour(System.Net.HttpListenerContext,System.Byte[],System.String)">
+            <summary>
+            Simulates random tolerable latency in the server while answering the request.
+            </summary>
+        </member>
+        <member name="M:Tests.HttpClientDownloaderTests.TimeoutBehaviour(System.Net.HttpListenerContext,System.Byte[],System.String)">
+            <summary>
+            Simulates a timeout in the server while answering the request.
+            This is meant to trigger the CancellationToken that exists in the HttpClientDownloader class.
+            </summary>
+        </member>
+        <member name="M:Tests.HttpClientDownloaderTests.InconsistentBehaviour(System.Net.HttpListenerContext,System.Byte[],System.String)">
+            <summary>
+            Simulates an inconsistency in the server while answering the request.
             </summary>
         </member>
     </members>

@@ -1,11 +1,14 @@
 ﻿using GenericAutoUpdater.Downloaders;
 using GenericAutoUpdater.Hash;
+using GenericAutoUpdater.Resources;
 using GenericAutoUpdater.Resources.Configs;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.ComponentModel;
 using System.IO;
 using System.Net;
 using System.Threading;
+using static Tests.Enums.HttpClientDownloaderTestsEnum;
 
 namespace Tests {
     /// <summary>
@@ -91,7 +94,7 @@ namespace Tests {
         public void DownloadDataToMemoryTest() {
             string filename = "SmallFile.txt";
             string expectedHash = Hasher.GeneratedHashFromFile(ServerFilesDirectory + filename);
-            byte[] smallFile = Downloader.DownloadDataToMemory(EndpointUrl + filename);
+            byte[] smallFile = Downloader.DownloadDataToMemory(EndpointUrl + filename + "?behaviour=" + (int)ServerBehaviours.Normal);
             Assert.AreEqual(expectedHash, Hasher.GeneratedHashFromByteArray(smallFile));
         }
 
@@ -102,45 +105,188 @@ namespace Tests {
         public void DownloadDataToDiskTest() {
             string filename = "SmallFile.txt";
             string expectedHash = Hasher.GeneratedHashFromFile(ServerFilesDirectory + filename);
-            Downloader.DownloadDataToFile(EndpointUrl + filename, DownloadedFilesDirectory + filename, expectedHash);
+            Downloader.DownloadDataToFile(EndpointUrl + filename + "?behaviour=" + (int)ServerBehaviours.Normal, DownloadedFilesDirectory + filename, expectedHash);
             Assert.AreEqual(expectedHash, Hasher.GeneratedHashFromFile(DownloadedFilesDirectory + filename));
+        }
+
+        /// <summary>
+        /// Tests if a download is successful even if the server has considerable latency.
+        /// </summary>
+        [TestMethod]
+        public void DownloadWithLatencyTest() {
+            string filename = "20kb.dat";
+            string expectedHash = Hasher.GeneratedHashFromFile(ServerFilesDirectory + filename);
+            Downloader.DownloadDataToFile(EndpointUrl + filename + "?behaviour=" + (int)ServerBehaviours.Latency, DownloadedFilesDirectory + filename, expectedHash);
+            Assert.AreEqual(expectedHash, Hasher.GeneratedHashFromFile(DownloadedFilesDirectory + filename));
+        }
+
+        /// <summary>
+        /// Tests if an IOException is thrown whenever there is a read timeout on the downloader.
+        /// Assures the downloader never gets stuck and that the CancellationToken works.
+        /// </summary>
+        [TestMethod]
+        public void DownloadWithTimeoutTest() {
+            string filename = "20kb.dat";
+            string expectedHash = Hasher.GeneratedHashFromFile(ServerFilesDirectory + filename);
+            try {
+                Downloader.DownloadDataToFile(EndpointUrl + filename + "?behaviour=" + (int)ServerBehaviours.TimeoutDuringRead, DownloadedFilesDirectory + filename, expectedHash);
+            }
+            catch (Exception ex) {
+                if (ex is IOException || ex is AggregateException exception && Utils.AggregateContainsSpecificException(exception, new IOException()))
+                    return;
+                Assert.Fail();
+            }
+        }
+
+        /// <summary>
+        /// Tests if an InvalidDataException is thrown whenever the downloader detects inconsistency between the expected hash and the downloaded file's hash.
+        /// </summary>
+        [TestMethod]
+        public void DownloadInconsistentTest() {
+            string filename = "SmallFile.txt";
+            string expectedHash = Hasher.GeneratedHashFromFile(ServerFilesDirectory + filename);
+            try {
+                Downloader.DownloadDataToFile(EndpointUrl + filename + "?behaviour=" + (int)ServerBehaviours.Inconsistent, DownloadedFilesDirectory + filename, expectedHash);
+            }
+            catch (Exception ex) {
+                if (ex is InvalidDataException || ex is AggregateException exception && Utils.AggregateContainsSpecificException(exception, new InvalidDataException()))
+                    return;
+                Assert.Fail();
+            }
         }
 
         /// <summary>
         /// This method is run on the server thread.
         /// Acts as a server, waiting for any request through the HttpListener.
         /// Expects a request on a file present in the local file's directory. Whenever it receives one, it reads the file and writes its content in the request's OutputStream.
+        /// The request must contain a query parameter named behaviour, with the desired behaviour to be simulated by this server while answering the respective request.
         /// </summary>
         private static void ServerThread() {
             while (true) {
                 HttpListenerContext context = httpListener.GetContext();
+                int behaviour = int.Parse(context.Request.QueryString["behaviour"]);
                 string file = ServerFilesDirectory + context.Request.Url.LocalPath;
                 if (!File.Exists(file)) {
                     context.Response.StatusCode = 404;
                     context.Response.Close();
                     continue;
                 }
-                long totalRead = 0;
-                long totalReads = 0;
                 byte[] buffer = new byte[DownloaderConfigs.BUFFER_SIZE];
-                bool moreLeftToRead = true;
-                using (FileStream fileStream = File.OpenRead(file)) {
-                    context.Response.ContentLength64 = fileStream.Length;
-                    do {
-                        int read = fileStream.Read(buffer, 0, buffer.Length);
-                        if (read == 0)
-                            moreLeftToRead = false;
-                        else {
-                            context.Response.OutputStream.Write(buffer, 0, read);
-                            totalRead += read;
-                            totalReads++;
-                        }
-                    }
-                    while (moreLeftToRead);
+                switch (behaviour) {
+                    case (int)ServerBehaviours.Normal:
+                        NormalBehaviour(context, buffer, file);
+                        break;
+                    case (int)ServerBehaviours.Latency:
+                        LatencyBehaviour(context, buffer, file);
+                        break;
+                    case (int)ServerBehaviours.TimeoutDuringRead:
+                        TimeoutBehaviour(context, buffer, file);
+                        break;
+                    case (int)ServerBehaviours.Inconsistent:
+                        InconsistentBehaviour(context, buffer, file);
+                        break;
+                    default:
+                        NormalBehaviour(context, buffer, file);
+                        break;
                 }
-                if (totalRead != new FileInfo(file).Length)
-                    context.Response.StatusCode = 500;
                 context.Response.Close();
+            }
+        }
+
+        /// <summary>
+        /// Simulates a normal behaviour in a server while answering the request, without induced latency or errors.
+        /// </summary>
+        private static void NormalBehaviour(HttpListenerContext context, byte[] buffer, string file) {
+            long totalRead = 0;
+            long totalReads = 0;
+            bool moreLeftToRead = true;
+            using (FileStream fileStream = File.OpenRead(file)) {
+                context.Response.ContentLength64 = fileStream.Length;
+                do {
+                    int read = fileStream.Read(buffer, 0, buffer.Length);
+                    if (read == 0)
+                        moreLeftToRead = false;
+                    else {
+                        context.Response.OutputStream.Write(buffer, 0, read);
+                        totalRead += read;
+                        totalReads++;
+                    }
+                }
+                while (moreLeftToRead);
+            }
+        }
+
+        /// <summary>
+        /// Simulates random tolerable latency in the server while answering the request.
+        /// </summary>
+        private static void LatencyBehaviour(HttpListenerContext context, byte[] buffer, string file) {
+            long totalRead = 0;
+            long totalReads = 0;
+            bool moreLeftToRead = true;
+            using (FileStream fileStream = File.OpenRead(file)) {
+                context.Response.ContentLength64 = fileStream.Length;
+                do {
+                    Thread.Sleep(new Random().Next(0, DownloaderConfigs.TIMEOUT_MS_WAITING_FOR_READ / 2));
+                    int read = fileStream.Read(buffer, 0, buffer.Length);
+                    if (read == 0)
+                        moreLeftToRead = false;
+                    else {
+                        context.Response.OutputStream.Write(buffer, 0, read);
+                        totalRead += read;
+                        totalReads++;
+                    }
+                }
+                while (moreLeftToRead);
+            }
+        }
+
+        /// <summary>
+        /// Simulates a timeout in the server while answering the request.
+        /// This is meant to trigger the CancellationToken that exists in the HttpClientDownloader class.
+        /// </summary>
+        private static void TimeoutBehaviour(HttpListenerContext context, byte[] buffer, string file) {
+            long totalRead = 0;
+            long totalReads = 0;
+            bool moreLeftToRead = true;
+            using (FileStream fileStream = File.OpenRead(file)) {
+                context.Response.ContentLength64 = fileStream.Length;
+                do {
+                    int read = fileStream.Read(buffer, 0, buffer.Length);
+                    if (read == 0)
+                        moreLeftToRead = false;
+                    else {
+                        if (totalReads == 1)
+                            Thread.Sleep(DownloaderConfigs.TIMEOUT_MS_WAITING_FOR_READ * 3);
+                        context.Response.OutputStream.Write(buffer, 0, read);
+                        totalRead += read;
+                        totalReads++;
+                    }
+                }
+                while (moreLeftToRead);
+            }
+        }
+
+        /// <summary>
+        /// Simulates an inconsistency in the server while answering the request.
+        /// </summary>
+        private static void InconsistentBehaviour(HttpListenerContext context, byte[] buffer, string file) {
+            long totalRead = 0;
+            long totalReads = 0;
+            bool moreLeftToRead = true;
+            using (FileStream fileStream = File.OpenRead(file)) {
+                context.Response.ContentLength64 = fileStream.Length;
+                do {
+                    int read = fileStream.Read(buffer, 0, buffer.Length);
+                    if (read == 0)
+                        moreLeftToRead = false;
+                    else {
+                        Array.Reverse(buffer);
+                        context.Response.OutputStream.Write(buffer, 0, read);
+                        totalRead += read;
+                        totalReads++;
+                    }
+                }
+                while (moreLeftToRead);
             }
         }
     }

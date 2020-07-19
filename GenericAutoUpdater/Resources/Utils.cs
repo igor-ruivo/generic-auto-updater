@@ -7,7 +7,7 @@ namespace GenericAutoUpdater.Resources {
     /// <summary>
     /// A class with various utilities, used throughout all the patch.
     /// </summary>
-    static class Utils {
+    public static class Utils {
         /// <summary>
         /// Checks if the received <c>AggregateException</c> contains at least one exception of the type of the exception received in the second parameter (another).
         /// </summary>
