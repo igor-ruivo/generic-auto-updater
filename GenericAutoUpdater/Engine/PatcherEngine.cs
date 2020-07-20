@@ -118,6 +118,7 @@ namespace GenericAutoUpdater.Engine {
         /// It then parses it, and stores its content in the ServerMetadata global variable.
         /// </summary>
         private static void GenerateServerMetadata(int step) {
+            Utils.Log(BW, PatcherEngineResources.FETCHING, ProgressiveWidgetsEnum.Label.DownloadLogger);
             string[] metadataByLine = Encoding.Default.GetString(Downloader.DownloadDataToMemory(EngineConfigs.PATCH_METADATA)).Trim().Split(new[] { "\n" }, StringSplitOptions.None);
             // Assume that the first line of the server's metadata file is the url to the actual server directory with the files.
             PatchDirectory = metadataByLine[0].Trim();

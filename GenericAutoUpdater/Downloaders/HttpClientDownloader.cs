@@ -132,7 +132,7 @@ namespace GenericAutoUpdater.Downloaders {
                                         totalRead += read;
                                         totalReads++;
                                         // It only attempts to log the download progress every x reads (DownloaderConfigs.INFORM_PROGRESS_EVERY_X_READS), due to performance reasons.
-                                        if (totalReads % DownloaderConfigs.INFORM_PROGRESS_EVERY_X_READS == 0) {
+                                        if (fileSize != 0 && totalReads % DownloaderConfigs.INFORM_PROGRESS_EVERY_X_READS == 0) {
                                             speedAverage = RecalculateSpeedAverage((float)totalRead / sw.ElapsedMilliseconds, speedAverage);
                                             Utils.Log(BW, string.Format(DownloaderResources.DOWNLOAD_DATA, Utils.BytesToString(totalRead, 2), Utils.BytesToString(fileSize, 2), Utils.BytesToString(Convert.ToInt64(speedAverage * 1000), 1)), ProgressiveWidgetsEnum.Label.DownloadSpeedLogger);
                                             if ((float)totalRead / fileSize * 100 > lastMark) {

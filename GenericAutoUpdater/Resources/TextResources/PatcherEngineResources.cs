@@ -39,9 +39,19 @@
         public static readonly string PARSING_SERVER_METADATA = "Parsing server metadata.";
 
         /// <summary>
-        /// The text description that is used on both existing labels at start-up.
+        /// The text description that is used on the downloader label at start-up.
         /// </summary>
-        public static readonly string STARTING = "Fetching server metadata.";
+        public static readonly string STARTING_DOWNLOADER_LOGGER = "Ready to fetch server metadata.";
+
+        /// <summary>
+        /// The text description that is used on the downloader label while fetching server metadata.
+        /// </summary>
+        public static readonly string FETCHING = "Fetching server metadata.";
+
+        /// <summary>
+        /// The text description that is used on the main logger label at start-up.
+        /// </summary>
+        public static readonly string STARTING_MAIN_LOGGER = "Ready to start patching.";
 
         /// <summary>
         /// The text description that is used on the general label when the Auto-Updater finished with success.

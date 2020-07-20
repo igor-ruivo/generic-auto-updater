@@ -74,8 +74,8 @@ namespace GenericAutoUpdater {
             Text = string.Format(MainWindowResources.MAIN_WINDOW_TITLE, MainWindowResources.CURRENT_VERSION);
             filecount.Text = string.Empty;
             speed.Text = string.Empty;
-            loggerDisplay.Text = PatcherEngineResources.STARTING;
-            downloaderDisplay.Text = PatcherEngineResources.STARTING;
+            loggerDisplay.Text = PatcherEngineResources.STARTING_MAIN_LOGGER;
+            downloaderDisplay.Text = PatcherEngineResources.STARTING_DOWNLOADER_LOGGER;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
         }
@@ -86,13 +86,6 @@ namespace GenericAutoUpdater {
         private void loadWindow(object sender, EventArgs e) {
             setupWindowProperties();
             backgroundWorker1.RunWorkerAsync();
-        }
-
-        /// <summary>
-        /// Opens your website whenever the respective link is clicked.
-        /// </summary>
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
-            Process.Start(MainWindowResources.WEBSITE);
         }
 
         /// <summary>
