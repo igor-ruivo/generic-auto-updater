@@ -120,25 +120,79 @@
             The request must contain a query parameter named behaviour, with the desired behaviour to be simulated by this server while answering the respective request.
             </summary>
         </member>
-        <member name="M:Tests.HttpClientDownloaderTests.NormalBehaviour(System.Net.HttpListenerContext,System.Byte[],System.String)">
+        <member name="T:Tests.DownloaderTests.Server.IBehaviour">
             <summary>
-            Simulates a normal behaviour in a server while answering the request, without induced latency or errors.
+            This interface represents the behaviour of a server regarding the download mechanism.
             </summary>
         </member>
-        <member name="M:Tests.HttpClientDownloaderTests.LatencyBehaviour(System.Net.HttpListenerContext,System.Byte[],System.String)">
+        <member name="M:Tests.DownloaderTests.Server.IBehaviour.ComputeBehaviour(System.Net.HttpListenerContext,System.Byte[],System.String)">
+            <summary>
+            Computes the behaviour of a server regarding the download mechanism.
+            </summary>
+        </member>
+        <member name="T:Tests.DownloaderTests.Server.LatencyBehaviour">
+            <summary>
+            This class modules the behaviour of a server with latency behaviour.
+            </summary>
+        </member>
+        <member name="M:Tests.DownloaderTests.Server.LatencyBehaviour.ComputeBehaviour(System.Net.HttpListenerContext,System.Byte[],System.String)">
             <summary>
             Simulates random tolerable latency in the server while answering the request.
             </summary>
         </member>
-        <member name="M:Tests.HttpClientDownloaderTests.TimeoutBehaviour(System.Net.HttpListenerContext,System.Byte[],System.String)">
+        <member name="M:Tests.DownloaderTests.Server.LatencyBehaviour.IsThisKind(System.Int32)">
+            <summary>
+            Returns true if the received behaviour corresponds to the behaviour moduled by this class.
+            Returns false otherwise.
+            </summary>
+        </member>
+        <member name="T:Tests.DownloaderTests.Server.InconsistentBehaviour">
+            <summary>
+            This class modules the behaviour of a server with inconsistent behaviour.
+            </summary>
+        </member>
+        <member name="M:Tests.DownloaderTests.Server.InconsistentBehaviour.ComputeBehaviour(System.Net.HttpListenerContext,System.Byte[],System.String)">
+            <summary>
+            Simulates an inconsistency in the server while answering the request.
+            </summary>
+        </member>
+        <member name="M:Tests.DownloaderTests.Server.InconsistentBehaviour.IsThisKind(System.Int32)">
+            <summary>
+            Returns true if the received behaviour corresponds to the behaviour moduled by this class.
+            Returns false otherwise.
+            </summary>
+        </member>
+        <member name="T:Tests.DownloaderTests.Server.TimeoutBehaviour">
+            <summary>
+            This class modules the behaviour of a server with timeout behaviour.
+            </summary>
+        </member>
+        <member name="M:Tests.DownloaderTests.Server.TimeoutBehaviour.ComputeBehaviour(System.Net.HttpListenerContext,System.Byte[],System.String)">
             <summary>
             Simulates a timeout in the server while answering the request.
             This is meant to trigger the CancellationToken that exists in the HttpClientDownloader class.
             </summary>
         </member>
-        <member name="M:Tests.HttpClientDownloaderTests.InconsistentBehaviour(System.Net.HttpListenerContext,System.Byte[],System.String)">
+        <member name="M:Tests.DownloaderTests.Server.TimeoutBehaviour.IsThisKind(System.Int32)">
             <summary>
-            Simulates an inconsistency in the server while answering the request.
+            Returns true if the received behaviour corresponds to the behaviour moduled by this class.
+            Returns false otherwise.
+            </summary>
+        </member>
+        <member name="T:Tests.DownloaderTests.Server.NormalBehaviour">
+            <summary>
+            This class modules the behaviour of a server with normal behaviour.
+            </summary>
+        </member>
+        <member name="M:Tests.DownloaderTests.Server.NormalBehaviour.ComputeBehaviour(System.Net.HttpListenerContext,System.Byte[],System.String)">
+            <summary>
+            Simulates a normal behaviour in a server while answering the request, without induced latency or errors.
+            </summary>
+        </member>
+        <member name="M:Tests.DownloaderTests.Server.NormalBehaviour.IsThisKind(System.Int32)">
+            <summary>
+            Returns true if the received behaviour corresponds to the behaviour moduled by this class.
+            Returns false otherwise.
             </summary>
         </member>
     </members>

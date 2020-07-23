@@ -25,12 +25,12 @@ namespace GenericAutoUpdater.Downloaders {
         /// <summary>
         /// The <c>IHasher</c> used to compute the hash of every downloaded file, if there is an expectedHash to compare it to.
         /// </summary>
-        private readonly IHasher Hasher;
+        private static IHasher Hasher;
 
         /// <summary>
         /// The <c>BackgroundWorker</c> used to inform the UI Thread of the current download's progress.
         /// </summary>
-        private readonly BackgroundWorker BW;
+        private static BackgroundWorker BW;
 
         /// <summary>
         /// Initializes a new instance of the <c>HttpClientDownloader</c> class with the specified <c>BackgroundWorker</c> and with the specified <c>IHasher</c>.
@@ -69,7 +69,7 @@ namespace GenericAutoUpdater.Downloaders {
         /// If no file path was received in argument (i.e., string.Empty), it waits for the returned Download's <c>Task</c> to finish before returning the downloaded content as an in-memory <c>byte[]</c>.
         /// If there is a file path specified (i.e., different from string.Empty), this method returns null after the Download is finished.
         /// </summary>
-        private byte[] DownloadData(string address, string expectedHash, string filePath = null) {
+        private static byte[] DownloadData(string address, string expectedHash, string filePath = null) {
             int tries = 0;
             while (true) {
                 try {
@@ -97,7 +97,7 @@ namespace GenericAutoUpdater.Downloaders {
         /// If it completes the download and an expectedHash was received (i.e., the respective parameter isn't null), it checks if the hash of the downloaded file equals the expected hash of that same file (expectedHash), throwing an <c>InvalidDataException</c> if it doesn't.
         /// This method also logs the download progress to the respective progress bar through the BackgroundWorker (bw), whenever it assumes it is necessary.
         /// </summary>
-        private async Task<byte[]> Download(string address, string expectedHash, string file) {
+        private static async Task<byte[]> Download(string address, string expectedHash, string file) {
             Stopwatch sw = new Stopwatch();
             sw.Start();
             Utils.Progress(BW, 0, ProgressiveWidgetsEnum.ProgressBar.DownloadProgressBar);
@@ -183,7 +183,7 @@ namespace GenericAutoUpdater.Downloaders {
         /// <summary>
         /// Sets up the default headers of the HttpClient to be used when performing HTTP operations.
         /// </summary>
-        private void SetupDefaultHeaders() {
+        private static void SetupDefaultHeaders() {
             HttpClient.DefaultRequestHeaders.Add("Accept", "text/html,application/xhtml+xml,application/xml");
             HttpClient.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate");
             HttpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0");
@@ -193,7 +193,7 @@ namespace GenericAutoUpdater.Downloaders {
         /// <summary>
         /// This method returns true if the received exception is eligible for a retry, or false otherwise.
         /// </summary>
-        private bool ExceptionTypeShouldRetry(Exception ex) {
+        private static bool ExceptionTypeShouldRetry(Exception ex) {
             // When a HTTP status code in the range of [300 - 499] is received there is no point in retrying.
             // When the Download's contentStream is closed by force due to a read timeout there is no point in retrying.
             // There is no point in retrying IOExceptions.
@@ -203,9 +203,9 @@ namespace GenericAutoUpdater.Downloaders {
 
         /// <summary>
         /// This method calculates the next sleep time by multiplying the base sleep time (DownloaderConfigs.BASE_MS_SLEEP_TIME_BETWEEN_DOWNLOAD_RETRIES) by a random floating-point number in the interval [0, 1[.
-        /// It then applies a exponential backoff strategy to the wait time.
+        /// It then applies an exponential backoff strategy to the wait time.
         /// </summary>
-        private int ComputeNextSleepTime(int baseTimer, int tries) {
+        private static int ComputeNextSleepTime(int baseTimer, int tries) {
             return Convert.ToInt32(Math.Pow(2, tries) * baseTimer * (1 + new Random().NextDouble()));
         }
     }

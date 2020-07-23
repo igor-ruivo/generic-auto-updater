@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Net;
 using System.Threading;
+using Tests.DownloaderTests.Server;
 using static Tests.Enums.HttpClientDownloaderTestsEnum;
 
 namespace Tests {
@@ -172,121 +173,15 @@ namespace Tests {
                     continue;
                 }
                 byte[] buffer = new byte[DownloaderConfigs.BUFFER_SIZE];
-                switch (behaviour) {
-                    case (int)ServerBehaviours.Normal:
-                        NormalBehaviour(context, buffer, file);
-                        break;
-                    case (int)ServerBehaviours.Latency:
-                        LatencyBehaviour(context, buffer, file);
-                        break;
-                    case (int)ServerBehaviours.TimeoutDuringRead:
-                        TimeoutBehaviour(context, buffer, file);
-                        break;
-                    case (int)ServerBehaviours.Inconsistent:
-                        InconsistentBehaviour(context, buffer, file);
-                        break;
-                    default:
-                        NormalBehaviour(context, buffer, file);
-                        break;
-                }
+                if (NormalBehaviour.IsThisKind(behaviour))
+                    new NormalBehaviour().ComputeBehaviour(context, buffer, file);
+                if (LatencyBehaviour.IsThisKind(behaviour))
+                    new LatencyBehaviour().ComputeBehaviour(context, buffer, file);
+                if (TimeoutBehaviour.IsThisKind(behaviour))
+                    new TimeoutBehaviour().ComputeBehaviour(context, buffer, file);
+                if (InconsistentBehaviour.IsThisKind(behaviour))
+                    new InconsistentBehaviour().ComputeBehaviour(context, buffer, file);
                 context.Response.Close();
-            }
-        }
-
-        /// <summary>
-        /// Simulates a normal behaviour in a server while answering the request, without induced latency or errors.
-        /// </summary>
-        private static void NormalBehaviour(HttpListenerContext context, byte[] buffer, string file) {
-            long totalRead = 0;
-            long totalReads = 0;
-            bool moreLeftToRead = true;
-            using (FileStream fileStream = File.OpenRead(file)) {
-                context.Response.ContentLength64 = fileStream.Length;
-                do {
-                    int read = fileStream.Read(buffer, 0, buffer.Length);
-                    if (read == 0)
-                        moreLeftToRead = false;
-                    else {
-                        context.Response.OutputStream.Write(buffer, 0, read);
-                        totalRead += read;
-                        totalReads++;
-                    }
-                }
-                while (moreLeftToRead);
-            }
-        }
-
-        /// <summary>
-        /// Simulates random tolerable latency in the server while answering the request.
-        /// </summary>
-        private static void LatencyBehaviour(HttpListenerContext context, byte[] buffer, string file) {
-            long totalRead = 0;
-            long totalReads = 0;
-            bool moreLeftToRead = true;
-            using (FileStream fileStream = File.OpenRead(file)) {
-                context.Response.ContentLength64 = fileStream.Length;
-                do {
-                    Thread.Sleep(new Random().Next(0, DownloaderConfigs.TIMEOUT_MS_WAITING_FOR_READ / 2));
-                    int read = fileStream.Read(buffer, 0, buffer.Length);
-                    if (read == 0)
-                        moreLeftToRead = false;
-                    else {
-                        context.Response.OutputStream.Write(buffer, 0, read);
-                        totalRead += read;
-                        totalReads++;
-                    }
-                }
-                while (moreLeftToRead);
-            }
-        }
-
-        /// <summary>
-        /// Simulates a timeout in the server while answering the request.
-        /// This is meant to trigger the CancellationToken that exists in the HttpClientDownloader class.
-        /// </summary>
-        private static void TimeoutBehaviour(HttpListenerContext context, byte[] buffer, string file) {
-            long totalRead = 0;
-            long totalReads = 0;
-            bool moreLeftToRead = true;
-            using (FileStream fileStream = File.OpenRead(file)) {
-                context.Response.ContentLength64 = fileStream.Length;
-                do {
-                    int read = fileStream.Read(buffer, 0, buffer.Length);
-                    if (read == 0)
-                        moreLeftToRead = false;
-                    else {
-                        if (totalReads == 1)
-                            Thread.Sleep(DownloaderConfigs.TIMEOUT_MS_WAITING_FOR_READ * 3);
-                        context.Response.OutputStream.Write(buffer, 0, read);
-                        totalRead += read;
-                        totalReads++;
-                    }
-                }
-                while (moreLeftToRead);
-            }
-        }
-
-        /// <summary>
-        /// Simulates an inconsistency in the server while answering the request.
-        /// </summary>
-        private static void InconsistentBehaviour(HttpListenerContext context, byte[] buffer, string file) {
-            long totalRead = 0;
-            long totalReads = 0;
-            bool moreLeftToRead = true;
-            using (FileStream fileStream = File.OpenRead(file)) {
-                context.Response.ContentLength64 = fileStream.Length;
-                do {
-                    int read = fileStream.Read(buffer, 0, buffer.Length);
-                    if (read == 0)
-                        moreLeftToRead = false;
-                    else {
-                        Array.Reverse(buffer);
-                        context.Response.OutputStream.Write(buffer, 0, read);
-                        totalRead += read;
-                        totalReads++;
-                    }
-                }
-                while (moreLeftToRead);
             }
         }
     }

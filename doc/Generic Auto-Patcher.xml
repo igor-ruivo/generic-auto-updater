@@ -87,7 +87,7 @@
         <member name="M:GenericAutoUpdater.Downloaders.HttpClientDownloader.ComputeNextSleepTime(System.Int32,System.Int32)">
             <summary>
             This method calculates the next sleep time by multiplying the base sleep time (DownloaderConfigs.BASE_MS_SLEEP_TIME_BETWEEN_DOWNLOAD_RETRIES) by a random floating-point number in the interval [0, 1[.
-            It then applies a exponential backoff strategy to the wait time.
+            It then applies an exponential backoff strategy to the wait time.
             </summary>
         </member>
         <member name="T:GenericAutoUpdater.Downloaders.IDownloader">

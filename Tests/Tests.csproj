@@ -22,8 +22,8 @@
     </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>none</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -53,8 +53,13 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enums\HttpClientDownloaderTestsEnum.cs" />
-    <Compile Include="HttpClientDownloaderTests.cs" />
+    <Compile Include="DownloaderTests\HttpClientDownloaderTestsEnum.cs" />
+    <Compile Include="DownloaderTests\HttpClientDownloaderTests.cs" />
+    <Compile Include="DownloaderTests\Server\IBehaviour.cs" />
+    <Compile Include="DownloaderTests\Server\LatencyBehaviour.cs" />
+    <Compile Include="DownloaderTests\Server\InconsistentBehaviour.cs" />
+    <Compile Include="DownloaderTests\Server\TimeoutBehaviour.cs" />
+    <Compile Include="DownloaderTests\Server\NormalBehaviour.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -68,6 +73,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\BinaryResources\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Enums\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
