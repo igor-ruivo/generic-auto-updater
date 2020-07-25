@@ -28,8 +28,7 @@ namespace GenericAutoUpdater {
         /// </summary>
         private void BackgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e) {
             switch (e.UserState) {
-                // The assignment to these local variables is needed.
-                case ProgressBarWrapper c1:
+                case ProgressBarWrapper _:
                     ProgressBarWrapper pbw = (ProgressBarWrapper)e.UserState;
                     switch (pbw.ProgressBar) {
                         case ProgressiveWidgetsEnum.ProgressBar.WholeProgressBar:
@@ -42,7 +41,7 @@ namespace GenericAutoUpdater {
                             throw new NotImplementedException();
                     }
                     break;
-                case LabelWrapper c2:
+                case LabelWrapper _:
                     LabelWrapper lw = (LabelWrapper)e.UserState;
                     switch (lw.Label) {
                         case ProgressiveWidgetsEnum.Label.InformativeLogger:

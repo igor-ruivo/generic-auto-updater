@@ -6,7 +6,7 @@
         /// <summary>
         /// The file name of the file.
         /// </summary>
-        private string Filename;
+        private readonly string Filename;
 
         /// <summary>
         /// The md5 hash of the file.

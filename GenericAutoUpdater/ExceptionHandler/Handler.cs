@@ -23,23 +23,22 @@ namespace GenericAutoUpdater.ExceptionHandler {
                 case AggregateException e1:
                     Handle(e1.InnerExceptions.First());
                     break;
-                // The assignment to these local variables is needed.
-                case FileNotFoundException e1:
-                case DirectoryNotFoundException e2:
-                case DataTamperedException e3:
+                case FileNotFoundException _:
+                case DirectoryNotFoundException _:
+                case DataTamperedException _:
                     ShowError(ErrorHandlerResources.AV_FALSE_POSITIVE, ErrorHandlerResources.ERROR_TITLE_AV);
                     break;
-                case WebException e1:
-                case HttpRequestException e2:
-                case InvalidDataException e3:
-                case DecoderFallbackException e4:
-                case ObjectDisposedException e5:
+                case WebException _:
+                case HttpRequestException _:
+                case InvalidDataException _:
+                case DecoderFallbackException _:
+                case ObjectDisposedException _:
                     ShowError(ErrorHandlerResources.TIMEOUT_DOWNLOADING_RESOURCE, ErrorHandlerResources.ERROR_TITLE_NETWORKING);
                     break;
-                case SecurityException e1:
-                case UnauthorizedAccessException e2:
-                case PathTooLongException e3:
-                case IOException e4:
+                case SecurityException _:
+                case UnauthorizedAccessException _:
+                case PathTooLongException _:
+                case IOException _:
                     ShowError(ErrorHandlerResources.ERROR_IO_EXPLORER, ErrorHandlerResources.ERROR_TITLE_EXPLORER, ex.Message);
                     break;
                 default:

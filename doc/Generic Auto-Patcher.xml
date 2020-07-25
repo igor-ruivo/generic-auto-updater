@@ -793,12 +793,6 @@
             The class with the entry point for the Auto-Updater.
             </summary>
         </member>
-        <member name="F:GenericAutoUpdater.Patcher.mutex">
-            <summary>
-            The <c>Mutex</c> that provides atomic guarantee that only one application instance is running at most at any given moment.
-            Its name is the same as the assembly's GUID.
-            </summary>
-        </member>
         <member name="M:GenericAutoUpdater.Patcher.Main">
             <summary>
             The main entry point for the application.
