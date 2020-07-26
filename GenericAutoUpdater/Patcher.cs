@@ -44,7 +44,6 @@ namespace GenericAutoUpdater {
                     Handler.Handle(ex);
                 }
                 finally {
-                    mutex.ReleaseMutex();
                     if (hasHandle)
                         mutex.ReleaseMutex();
                 }
