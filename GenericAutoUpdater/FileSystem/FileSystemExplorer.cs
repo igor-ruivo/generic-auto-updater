@@ -13,7 +13,7 @@ namespace GenericAutoUpdater.FileSystem {
     static class FileSystemExplorer {
         /// <summary>
         /// Returns a refreshed version of the local metadata.
-        /// This method accomplishes this by reading from the disk all the files whose name match those in filePaths and calculating their md5 hashes concurrently.
+        /// This method accomplishes this by reading from the disk all the files whose name match those in filePaths and calculating their hashes concurrently.
         /// </summary>
         public static ConcurrentDictionary<string, FileMetadata> GenerateLocalMetadata(string[] filesPaths, IHasher hasher, int concurrencyLevel) {
             ConcurrentDictionary<string, FileMetadata> metadata = new ConcurrentDictionary<string, FileMetadata>(filesPaths.Length, concurrencyLevel);

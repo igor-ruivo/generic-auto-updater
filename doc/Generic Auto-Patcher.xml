@@ -193,7 +193,7 @@
         </member>
         <member name="M:GenericAutoUpdater.Engine.PatcherEngine.CalculateOutdatedContent">
             <summary>
-            Returns a list containing the server files' names which their md5 hash differs from the respective local files' md5 hash.
+            Returns a list containing the server files' names which their hash differs from the respective local files' hash.
             </summary>
         </member>
         <member name="M:GenericAutoUpdater.Engine.PatcherEngine.GenerateLocalMetadata">
@@ -286,7 +286,7 @@
         </member>
         <member name="P:GenericAutoUpdater.FileSystem.FileMetadata.Hash">
             <summary>
-            The md5 hash of the file.
+            The hash of the file.
             </summary>
         </member>
         <member name="M:GenericAutoUpdater.FileSystem.FileMetadata.#ctor(System.String,System.String)">
@@ -302,7 +302,7 @@
         <member name="M:GenericAutoUpdater.FileSystem.FileSystemExplorer.GenerateLocalMetadata(System.String[],GenericAutoUpdater.Hash.IHasher,System.Int32)">
             <summary>
             Returns a refreshed version of the local metadata.
-            This method accomplishes this by reading from the disk all the files whose name match those in filePaths and calculating their md5 hashes concurrently.
+            This method accomplishes this by reading from the disk all the files whose name match those in filePaths and calculating their hashes concurrently.
             </summary>
         </member>
         <member name="M:GenericAutoUpdater.FileSystem.FileSystemExplorer.FetchFile(GenericAutoUpdater.Downloaders.IDownloader,System.String,System.String,System.Boolean,System.String)">

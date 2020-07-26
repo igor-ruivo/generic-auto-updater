@@ -123,7 +123,7 @@ namespace GenericAutoUpdater.Engine {
             // Assume that the first line of the server's metadata file is the url to the actual server directory with the files.
             PatchDirectory = metadataByLine[0].Trim();
             ServerMetadata = new Dictionary<string, FileMetadata>((metadataByLine.Length - 1) / 2);
-            // Every odd line number represents a file name, and every even line number its md5 hash.
+            // Every odd line number represents a file name, and every even line number its hash.
             for (int i = 1; i < metadataByLine.Length; i += 2)
                 ServerMetadata[metadataByLine[i].Trim()] = new FileMetadata(metadataByLine[i].Trim(), metadataByLine[i + 1].Trim());
         }
@@ -140,7 +140,7 @@ namespace GenericAutoUpdater.Engine {
         }
 
         /// <summary>
-        /// Returns a list containing the server files' names which their md5 hash differs from the respective local files' md5 hash.
+        /// Returns a list containing the server files' names which their hash differs from the respective local files' hash.
         /// </summary>
         private static List<string> CalculateOutdatedContent() {
             List<string> outdatedFiles = new List<string>();

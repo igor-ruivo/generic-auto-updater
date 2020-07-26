@@ -41,7 +41,7 @@ hash2
 filenameN
 hashN
 ```
-Meaning that the first line should be the actual URL to the server directory containing the files, and for the following lines, every even line number contains a relative path from the URL at line 1 to a file and every odd line number contains the respective file's md5 hash. You can change this implementation adapting it to your own server metadata, or do the opposite.
+Meaning that the first line should be the actual URL to the server directory containing the files, and for the following lines, every even line number contains a relative path from the URL at line 1 to a file and every odd line number contains the respective file's hash. You can change this implementation adapting it to your own server metadata, or do the opposite.
 
 3. Configure the Auto-Updater at your will
 
@@ -66,8 +66,8 @@ The Auto-Updater will start.
 
 ## Running the tests
 
-* Automated tests for this system will be added in the future.
-* [VirusTotal analysis](https://www.virustotal.com/gui/file/b67205bad0b7ca9a5819e3c2d1c778d57b69c20cefab832e2076fa87ff287a24/detection)
+* You can run the tests with Test Explorer.
+* Check [this tutorial](https://docs.microsoft.com/en-us/visualstudio/test/run-unit-tests-with-test-explorer?view=vs-2019).
 
 ## Built With
 

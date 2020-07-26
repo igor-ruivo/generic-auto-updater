@@ -9,7 +9,7 @@
         private readonly string Filename;
 
         /// <summary>
-        /// The md5 hash of the file.
+        /// The hash of the file.
         /// </summary>
         public string Hash { get; }
 
