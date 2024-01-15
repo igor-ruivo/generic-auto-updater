@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericAutoUpdater", "Gener
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{9B3BFD7E-F6EA-4036-A5D5-AEE0E4967570}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetadataBuilder", "MetadataBuilder\MetadataBuilder.csproj", "{358E069B-8088-46F5-8496-3ED11F749411}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{9B3BFD7E-F6EA-4036-A5D5-AEE0E4967570}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B3BFD7E-F6EA-4036-A5D5-AEE0E4967570}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B3BFD7E-F6EA-4036-A5D5-AEE0E4967570}.Release|Any CPU.Build.0 = Release|Any CPU
+		{358E069B-8088-46F5-8496-3ED11F749411}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{358E069B-8088-46F5-8496-3ED11F749411}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{358E069B-8088-46F5-8496-3ED11F749411}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{358E069B-8088-46F5-8496-3ED11F749411}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
